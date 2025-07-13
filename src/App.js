@@ -4,6 +4,8 @@ import { selectIsLoggedIn } from './features/auth/authSlice';
 import LoginPage from './components/LoginPage';
 import MainPage from './components/MainPage';
 import ServiceInquiry from './components/ServiceInquiry';
+import CustomerMaster from './components/CustomerMaster';
+import ItemMaster from './components/ItemMaster';
 // import TravelAssistantPage from './components/TravelAssistantPage';
 // import Dashboard from './features/Dashboard';
 // import UserProfile from './features/UserProfile';
@@ -46,6 +48,8 @@ function App() {
             {/* <Route index element={<Dashboard />} /> */}
            <Route path="travel-assistant" element={<h1 >ddd</h1>} />
            <Route path="service-inquiry" element={<ServiceInquiry />} />
+           <Route path="customer-master" element={<CustomerMaster />} />
+           <Route path="item-master" element={<ItemMaster />} />
             {/* <Route path="profile" element={<UserProfile />} />
             <Route path="new-itinerary" element={<NewItinerary />} />  */}
           </Route>
