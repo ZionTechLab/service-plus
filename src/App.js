@@ -6,6 +6,8 @@ import MainPage from './components/MainPage';
 import ServiceInquiry from './components/ServiceInquiry';
 import CustomerMaster from './components/CustomerMaster';
 import ItemMaster from './components/ItemMaster';
+import InquiryList from './components/InquiryList';
+import InquiryView from './components/InquiryView';
 // import TravelAssistantPage from './components/TravelAssistantPage';
 // import Dashboard from './features/Dashboard';
 // import UserProfile from './features/UserProfile';
@@ -50,6 +52,8 @@ function App() {
            <Route path="service-inquiry" element={<ServiceInquiry />} />
            <Route path="customer-master" element={<CustomerMaster />} />
            <Route path="item-master" element={<ItemMaster />} />
+           <Route path="inquiry-list" element={<InquiryList />} />
+           <Route path="inquiry/:id" element={<InquiryView />} />
             {/* <Route path="profile" element={<UserProfile />} />
             <Route path="new-itinerary" element={<NewItinerary />} />  */}
           </Route>

@@ -43,7 +43,13 @@ function ServiceInquiry() {
     validationSchema,
     onSubmit: (values, { resetForm }) => {
       const inquiries = JSON.parse(localStorage.getItem('inquiries')) || [];
-      inquiries.push(values);
+      const newInquiry = {
+        ...values,
+        id: new Date().getTime(),
+        status: 'new',
+        log: [{ status: 'new', timestamp: new Date() }],
+      };
+      inquiries.push(newInquiry);
       localStorage.setItem('inquiries', JSON.stringify(inquiries));
       resetForm();
     },

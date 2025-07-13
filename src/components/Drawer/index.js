@@ -35,6 +35,9 @@ const Drawer = forwardRef(({ isOpen, onClose }, ref) => {
           <li>
             <Link to="/main/item-master" onClick={onClose}>Item Master</Link>
           </li>
+          <li>
+            <Link to="/main/inquiry-list" onClick={onClose}>Inquiry List</Link>
+          </li>
         </ul>
       </nav>
     </aside>
