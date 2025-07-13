@@ -6,7 +6,7 @@ function CustomerMaster() {
   return (
     <div>
       <h1>Customer Master</h1>
-      <Link to="/add-customer">
+      <Link to="/main/add-customer">
         <button>Add Customer</button>
       </Link>
       <table>

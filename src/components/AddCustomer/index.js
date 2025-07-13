@@ -25,7 +25,7 @@ function AddCustomer() {
       customers.push(newCustomer);
       localStorage.setItem('customers', JSON.stringify(customers));
       resetForm();
-      navigate('/customer-master');
+      navigate('/main/add-customer');
     },
   });
 

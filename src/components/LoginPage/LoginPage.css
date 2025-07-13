@@ -17,7 +17,7 @@
     text-align: center;
   }
 
-  h1 {
+/*   h1 {
     color: var(--theme-text-primary);
     margin-bottom: 30px;
     font-size: 28px;
@@ -48,4 +48,4 @@
   button[type="submit"]:disabled {
     background-color: var(--theme-disabled-bg);
     cursor: not-allowed;
-  }
+  } */
