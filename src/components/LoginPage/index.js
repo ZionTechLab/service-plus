@@ -3,6 +3,7 @@ import { useDispatch } from "react-redux";
 import { useFormik } from "formik";
 import * as Yup from "yup";
 import { loginSuccess } from "../../features/auth/authSlice";
+import InputField from "../InputField";
 import "./LoginPage.css";
 
 const fields = {
@@ -67,23 +68,5 @@ function LoginPage() {
   );
 }
 
-function InputField({ name, type, placeholder, formik }) {
-  return (
-    <div className="form-group">
-      <input
-        id={name}
-        name={name}
-        type={type}
-        className="login-input"
-        placeholder={placeholder}
-        {...formik.getFieldProps(name)}
-        autoComplete="off"
-      />
-      {formik.touched[name] && formik.errors[name] && (
-      <small> <div className="error-message">{formik.errors[name]}</div></small> 
-      )}
-    </div>
-  );
-}
 
 export default LoginPage;
