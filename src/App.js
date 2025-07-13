@@ -9,6 +9,7 @@ import ItemMaster from './components/ItemMaster';
 import InquiryList from './components/InquiryList';
 import InquiryView from './components/InquiryView';
 import AddCustomer from './components/AddCustomer';
+import AddItem from './components/AddItem';
 // import TravelAssistantPage from './components/TravelAssistantPage';
 // import Dashboard from './features/Dashboard';
 // import UserProfile from './features/UserProfile';
@@ -56,6 +57,7 @@ function App() {
            <Route path="inquiry-list" element={<InquiryList />} />
            <Route path="inquiry/:id" element={<InquiryView />} />
            <Route path="add-customer" element={<AddCustomer />} />
+           <Route path="add-item" element={<AddItem />} />
             {/* <Route path="profile" element={<UserProfile />} />
             <Route path="new-itinerary" element={<NewItinerary />} />  */}
           </Route>
