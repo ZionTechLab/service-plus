@@ -23,7 +23,9 @@ const Drawer = forwardRef(({ isOpen, onClose }, ref) => {
           <li>
             <Link to="/main/new-itinerary" onClick={onClose}>New Itinerary</Link>
           </li>
-         
+          <li>
+            <Link to="/main/service-inquiry" onClick={onClose}>Service Inquiry</Link>
+          </li>
         </ul>
       </nav>
     </aside>
