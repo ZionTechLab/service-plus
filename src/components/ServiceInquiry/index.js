@@ -2,7 +2,6 @@ import React from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
 import InputField from '../InputField';
-import './ServiceInquiry.css';
 
 const inquiryTypes = {
   QUOTATION: 'quotation',
@@ -42,8 +41,11 @@ function ServiceInquiry() {
   const formik = useFormik({
     initialValues,
     validationSchema,
-    onSubmit: (values) => {
-      console.log(values);
+    onSubmit: (values, { resetForm }) => {
+      const inquiries = JSON.parse(localStorage.getItem('inquiries')) || [];
+      inquiries.push(values);
+      localStorage.setItem('inquiries', JSON.stringify(inquiries));
+      resetForm();
     },
   });
 
