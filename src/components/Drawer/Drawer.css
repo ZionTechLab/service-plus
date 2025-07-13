@@ -1,0 +1,66 @@
+.drawer {
+  position: fixed;
+  top: 0;
+  left: -250px;
+  width: 250px;
+  height: 100vh;
+  background-color: white; /* Use theme page background */
+  box-shadow: 2px 0 5px rgba(0,0,0,0.2);
+  transition: left 0.3s ease-in-out;
+  z-index: 1000;
+  display: flex;
+  flex-direction: column;
+  font-family: var(--theme-font-family);
+  color: var(--theme-text-dark); /* Default text color for drawer content */
+}
+
+.drawer.open {
+  left: 0;
+}
+
+.drawer-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px;
+  border-bottom: 1px solid var(--theme-bg-secondary); /* Use a subtle theme border */
+}
+
+.drawer-header h3 {
+  margin: 0;
+  font-size: 1.2em;
+  color: var(--theme-text-dark); /* Ensure heading color */
+}
+
+.close-drawer-btn {
+  background: none;
+  border: none;
+  font-size: 24px;
+  cursor: pointer;
+  padding: 5px;
+  color: var(--theme-text-dark); /* Ensure button color */
+  width:40px
+}
+
+.close-drawer-btn:hover {
+  color: var(--theme-secondary-accent); /* Accent color on hover */
+}
+
+.drawer-nav ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.drawer-nav li a {
+  display: block;
+  padding: 12px 15px;
+  text-decoration: none;
+  color: var(--theme-text-dark); /* Default link color */
+  border-bottom: 1px solid var(--theme-bg-secondary); /* Subtle separator */
+}
+
+.drawer-nav li a:hover {
+  background-color: var(--theme-bg-secondary); /* Subtle hover background */
+  color: var(--theme-primary-accent); /* Accent color for text on hover */
+}

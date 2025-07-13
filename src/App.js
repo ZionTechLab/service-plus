@@ -1,24 +1,67 @@
-import logo from './logo.svg';
+import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { selectIsLoggedIn } from './features/auth/authSlice';
+import LoginPage from './components/LoginPage';
+import MainPage from './components/MainPage';
+// import TravelAssistantPage from './components/TravelAssistantPage';
+// import Dashboard from './features/Dashboard';
+// import UserProfile from './features/UserProfile';
+// import NewItinerary from './features/NewItinerary';
 import './App.css';
 
+// Protected route wrapper
+const ProtectedRoute = ({ isLoggedIn, children }) => {
+  return isLoggedIn ? children : <Navigate to="/login" replace />;
+};
+
+// Public route wrapper
+const PublicRoute = ({ isLoggedIn, children }) => {
+  return isLoggedIn ? <Navigate to="/main" replace /> : children;
+};
+
 function App() {
+  const isLoggedIn =useSelector(selectIsLoggedIn);
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
-    </div>
+    <Router>
+      <div className="App">
+        <Routes>
+          <Route path="/login" 
+          element={
+              <PublicRoute isLoggedIn={isLoggedIn}>
+                <LoginPage />
+              </PublicRoute>
+            }
+          />
+
+          <Route
+            path="/main"
+            element={
+              <ProtectedRoute isLoggedIn={isLoggedIn}>
+                <MainPage />
+              </ProtectedRoute>
+            }
+          >
+            {/* <Route index element={<Dashboard />} /> */}
+           <Route path="travel-assistant" element={<h1 >ddd</h1>} />
+            {/* <Route path="profile" element={<UserProfile />} />
+            <Route path="new-itinerary" element={<NewItinerary />} />  */}
+          </Route>
+
+          {/* Root Route */}
+          <Route
+            path="/"
+            element={
+              isLoggedIn ? (
+                <Navigate to="/main/travel-assistant" replace />
+              ) : (
+                <Navigate to="/login" replace />
+              )
+            }
+          />
+        </Routes>
+      </div>
+    </Router>
   );
 }
 

@@ -1,0 +1,15 @@
+.overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background-color: rgba(0, 0, 0, 0.5); /* Semi-transparent black */
+  z-index: 999; /* Below drawer (z-index: 1000), above other content */
+  cursor: pointer; /* Indicate it's clickable */
+  transition: opacity 0.3s ease-in-out; /* Optional: fade in/out */
+}
+
+/* Optional: if you want to animate the overlay's appearance along with the drawer */
+/* You might need to conditionally apply a class for opacity based on isOpen state */
+/* For simplicity, a basic transition on background or opacity is often enough */

@@ -1,0 +1,21 @@
+.app-footer {
+  background-color: var(--theme-bg-secondary); 
+  /* color: var(--theme-text-dark);  */
+  text-align: center;
+  padding: 10px 0;
+  font-size: 0.9em;
+  font-family: var(--theme-font-family);
+  border-top: var(--theme-border); 
+   position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: var(--theme-footer-height)
+}
+
+p {
+  margin: 5px 0;
+}
+
+
+

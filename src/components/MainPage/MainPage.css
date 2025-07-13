@@ -1,0 +1,22 @@
+.main-page-layout {
+  display: flex;
+  flex-direction: column;
+  height: 100%; 
+}
+
+.main-content-area {
+  /* display: flex;  */
+  /* flex-grow: 1;   */
+  position: relative; 
+  overflow-y: auto;   
+  overflow-x: hidden;
+  min-height: 0;  
+}
+
+.content {
+  flex-grow: 1; 
+  padding: 20px;
+
+  height: calc(100vh - var(--theme-footer-height)-var(--theme-header-height)); 
+}
+
