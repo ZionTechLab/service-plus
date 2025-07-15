@@ -1,7 +1,6 @@
-import React from 'react';
 import { useFormik } from 'formik';
 import * as Yup from 'yup';
-import InputField from '../InputField';
+import InputField from "../../helpers/InputField";
 import { useNavigate } from 'react-router-dom';
 
 const initialValues = {

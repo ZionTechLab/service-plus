@@ -1,20 +1,31 @@
-// import { useFormik } from "formik";
 import * as Yup from "yup";
-import InputField from "../InputField";
+import InputField from "../../helpers/InputField";
 import {useFormikBuilder} from "../../helpers/formikBuilder";
-const inquiryTypes = {
-  QUOTATION: "quotation",
-  TECHNICAL_SUPPORT: "technical_support",
-  COMPLAIN: "complain",
-  REPAIR: "repair",
-  NEW_ORDER: "new_order",
-};
 
-const priorities = {
-  LOW: "low",
-  MEDIUM: "medium",
-  HIGH: "high",
-};
+const inquiryTypes =
+
+[
+  {key:1,value: "quotation"},
+  {key:2,value: "technical_support"},
+  {key:3,value: "complain"},
+  {key:4,value: "repair"},
+  {key:5,value: "new_order"},
+];
+
+// const priorities = {
+//   LOW: "low",
+//   MEDIUM: "medium",
+//   HIGH: "high",
+// };
+
+const priorities =[
+  {key:1,value:"low"},
+    {key:2,value:"medium"},
+      {key:3,value:"high"}
+
+]
+
+
 
 const fields = {
   firstName: {
@@ -51,7 +62,7 @@ const fields = {
     name: "serviceType",
     type: "select", // assuming it's a dropdown
     placeholder: "Service Type",
-    options: Object.values(inquiryTypes),
+    dataBinding: {data:inquiryTypes,keyField:'key',valueField:'value'},//Object.values(inquiryTypes),
     initialValue: inquiryTypes.QUOTATION,
     validation: Yup.string(), // optional validation
   },
@@ -59,7 +70,7 @@ const fields = {
     name: "priority",
     type: "select", // assuming dropdown
     placeholder: "Priority",
-    options: Object.values(priorities),
+      dataBinding: {data:priorities,keyField:'key',valueField:'value'},// options: Object.values(priorities),
     initialValue: priorities.MEDIUM,
     validation: Yup.string(), // optional
   },

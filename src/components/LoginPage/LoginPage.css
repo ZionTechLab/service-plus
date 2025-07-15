@@ -16,36 +16,3 @@
     max-width: 400px;
     text-align: center;
   }
-
-/*   h1 {
-    color: var(--theme-text-primary);
-    margin-bottom: 30px;
-    font-size: 28px;
-  }
-
-  form {
-    display: flex;
-    flex-direction: column;
-  }
-
-  button[type="submit"] {
-    background-color: var(--theme-primary-color);
-    color: white;
-    padding: 15px;
-    border: none;
-    border-radius: var(--theme-border-radius-small);
-    cursor: pointer;
-    font-size: 16px;
-    font-weight: bold;
-    margin-top: 10px;
-    transition: background-color 0.3s ease;
-  }
-
-  button[type="submit"]:hover {
-    background-color: var(--theme-primary-dark);
-  }
-
-  button[type="submit"]:disabled {
-    background-color: var(--theme-disabled-bg);
-    cursor: not-allowed;
-  } */

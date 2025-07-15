@@ -1,9 +1,8 @@
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { useFormik } from "formik";
 import * as Yup from "yup";
 import { loginSuccess } from "../../features/auth/authSlice";
-import InputField from "../InputField";
+import InputField from "../../helpers/InputField";
 import "./LoginPage.css";
 import {useFormikBuilder} from "../../helpers/formikBuilder";
 
@@ -29,15 +28,6 @@ const fields = {
   },
 };
 
-// const initialValues = Object.fromEntries(
-//   Object.entries(fields).map(([key, field]) => [key, field.initialValue])
-// );
-// const validationSchema = Yup.object(
-//   Object.fromEntries(
-//     Object.entries(fields).map(([key, field]) => [key, field.validation])
-//   )
-// );
-
 function LoginPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
@@ -51,26 +41,21 @@ function LoginPage() {
     };
 
     const formik = useFormikBuilder(fields, handleInquirySubmit);
-  // const formik = useFormik({
-  //   initialValues,
-  //   validationSchema,
-  //   onSubmit: (values) => {
-  //     const userData = { name: values.fullName, id: "123" };
-  //     if(userData.name === "voyaadmin" && values.password === "voya@admin") 
-
-  //     dispatch(loginSuccess(userData));
-  //     navigate("/main/travel-assistant", { replace: true });
-  //   },
-  // });
 
   return (
     <div className="LoginPage">
     <div className="container">
       <h1>Travel Assistant</h1>
+
+
+
+
       <form onSubmit={formik.handleSubmit} noValidate>
+
+
         <InputField {...fields.fullName} formik={formik} />
         <InputField {...fields.password} formik={formik} />
-        <button type="submit">SIGN IN</button>
+        <button className="form-control btn btn-primary" type="submit">SIGN IN</button>
       </form>
     </div>
    </div>
