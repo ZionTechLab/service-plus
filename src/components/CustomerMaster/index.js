@@ -30,7 +30,7 @@ function CustomerMaster() {
         <button>Add Customer</button>
       </Link> 
       <DataTable name="User Export" data={sampleData} columns={columns} />
-      <table>
+      {/* <table>
         <thead>
           <tr>
             <th>ID</th>
@@ -47,7 +47,7 @@ function CustomerMaster() {
             </tr>
           ))}
         </tbody>
-      </table>
+      </table> */}
     </div>
   );
 }
