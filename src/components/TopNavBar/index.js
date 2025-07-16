@@ -1,47 +1,38 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutSuccess, selectUser } from '../../features/auth/authSlice';
 import { useNavigate } from 'react-router-dom';
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import './TopNavBar.css';
 
 function TopNavBar({ onToggleDrawer }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector(selectUser);
-  const [theme, setTheme] = useState('light');
 
   const handleLogout = () => {
     dispatch(logoutSuccess());
     navigate('/login', { replace: true });
   };
 
-  const toggleTheme = () => {
-    const newTheme = theme === 'light' ? 'dark' : 'light';
-    setTheme(newTheme);
-    document.documentElement.setAttribute('data-bs-theme', newTheme);
-  };
-
-  useEffect(() => {
-    document.documentElement.setAttribute('data-bs-theme', theme);
-  }, [theme]);
-
   return (
-    <nav className="top-nav-bar ">
-
-      <div className="nav-left">
-        <button onClick={onToggleDrawer} className="drawer-toggle-btn">
-          ☰
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div className="container-fluid">
+        <button onClick={onToggleDrawer} className="btn btn-dark">
+          <i className="bi bi-list"></i>
         </button>
-        <span className="nav-title">Travel Assistant</span>
-      </div>
-      <div className="nav-right">
-        {user && <span className="user-greeting">Hello, {user.name}!</span>}
-        <button onClick={handleLogout} className="logout-btn">
-          Logout
-        </button>
-        <button onClick={toggleTheme} className="theme-switcher-btn">
-          Switch to {theme === 'light' ? 'Dark' : 'Light'} Mode
-        </button>
+        <a className="navbar-brand" href="#">Travel Assistant</a>
+        <div className="collapse navbar-collapse">
+          <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li className="nav-item">
+              <span className="nav-link">Hello, {user.name}!</span>
+            </li>
+            <li className="nav-item">
+              <button onClick={handleLogout} className="btn btn-outline-light">
+                Logout
+              </button>
+            </li>
+          </ul>
+        </div>
       </div>
     </nav>
   );
