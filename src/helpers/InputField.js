@@ -38,7 +38,7 @@
 // export default InputField;
 import React from 'react';
 
-function InputField({ name, type = 'text', placeholder, formik, value, onChange, error, touched, dataBinding }) {
+function InputField({ name, type = 'text', className, placeholder, formik, value, onChange, error, touched, dataBinding }) {
   const hasFormik = !!formik;
 
   const inputProps = hasFormik
@@ -50,7 +50,9 @@ function InputField({ name, type = 'text', placeholder, formik, value, onChange,
     : touched && error;
 
   return (
-    <div className="form-group mb-3" >
+    <div className={`form-group ${className}`}>
+      {/* "form-group" */}
+      <label  className="form-label">{placeholder}</label>
       {type === 'select' ? (
         <select class="form-select" id={name} {...inputProps}>
           {dataBinding.data?.map((opt) => (
