@@ -1,3 +1,4 @@
+import React, { useEffect } from 'react';
 import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
 import { useSelector } from 'react-redux';
 import { selectIsLoggedIn } from './features/auth/authSlice';
@@ -27,14 +28,19 @@ const PublicRoute = ({ isLoggedIn, children }) => {
 };
 
 function App() {
-  const isLoggedIn =useSelector(selectIsLoggedIn);
+  const isLoggedIn = useSelector(selectIsLoggedIn);
+
+  useEffect(() => {
+    const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    document.documentElement.setAttribute('data-bs-theme', savedTheme);
+  }, []);
 
   return (
     <Router>
       <div className="App">
         <Routes>
-          <Route path="/login" 
-          element={
+          <Route path="/login"
+            element={
               <PublicRoute isLoggedIn={isLoggedIn}>
                 <LoginPage />
               </PublicRoute>
@@ -50,14 +56,14 @@ function App() {
             }
           >
             {/* <Route index element={<Dashboard />} /> */}
-           <Route path="travel-assistant" element={<h1 >ddd</h1>} />
-           <Route path="service-inquiry" element={<ServiceInquiry />} />
-           <Route path="customer-master" element={<CustomerMaster />} />
-           <Route path="item-master" element={<ItemMaster />} />
-           <Route path="inquiry-list" element={<InquiryList />} />
-           <Route path="inquiry/:id" element={<InquiryView />} />
-           <Route path="add-customer" element={<AddCustomer />} />
-           <Route path="add-item" element={<AddItem />} />
+            <Route path="travel-assistant" element={<h1 >ddd</h1>} />
+            <Route path="service-inquiry" element={<ServiceInquiry />} />
+            <Route path="customer-master" element={<CustomerMaster />} />
+            <Route path="item-master" element={<ItemMaster />} />
+            <Route path="inquiry-list" element={<InquiryList />} />
+            <Route path="inquiry/:id" element={<InquiryView />} />
+            <Route path="add-customer" element={<AddCustomer />} />
+            <Route path="add-item" element={<AddItem />} />
             {/* <Route path="profile" element={<UserProfile />} />
             <Route path="new-itinerary" element={<NewItinerary />} />  */}
           </Route>
