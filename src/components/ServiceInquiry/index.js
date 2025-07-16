@@ -1,30 +1,22 @@
 import * as Yup from "yup";
 import { useParams } from "react-router-dom";
+import { useEffect } from "react";
 import InputField from "../../helpers/InputField";
 import { useFormikBuilder } from "../../helpers/formikBuilder";
 
 const inquiryTypes = [
   { key: 1, value: "quotation" },
-  {key:2,value: "technical_support"},
-  {key:3,value: "complain"},
-  {key:4,value: "repair"},
-  {key:5,value: "new_order"},
+  { key: 2, value: "technical_support" },
+  { key: 3, value: "complain" },
+  { key: 4, value: "repair" },
+  { key: 5, value: "new_order" },
 ];
 
-// const priorities = {
-//   LOW: "low",
-//   MEDIUM: "medium",
-//   HIGH: "high",
-// };
-
-const priorities =[
-  {key:1,value:"low"},
-    {key:2,value:"medium"},
-      {key:3,value:"high"}
-
-]
-
-
+const priorities = [
+  { key: 1, value: "low" },
+  { key: 2, value: "medium" },
+  { key: 3, value: "high" },
+];
 
 const fields = {
   customer: {
@@ -73,19 +65,19 @@ const fields = {
   },
   serviceType: {
     name: "serviceType",
-    type: "select", // assuming it's a dropdown
+    type: "select",
     placeholder: "Service Type",
-    dataBinding: { data: inquiryTypes, keyField: "key", valueField: "value" }, //Object.values(inquiryTypes),
-    initialValue: inquiryTypes.QUOTATION,
-    validation: Yup.string(), // optional validation
+    dataBinding: { data: inquiryTypes, keyField: "key", valueField: "value" },
+    initialValue: inquiryTypes[0].value,
+    validation: Yup.string(),
   },
   priority: {
     name: "priority",
-    type: "select", // assuming dropdown
+    type: "select",
     placeholder: "Priority",
-    dataBinding: { data: priorities, keyField: "key", valueField: "value" }, // options: Object.values(priorities),
-    initialValue: priorities.MEDIUM,
-    validation: Yup.string(), // optional
+    dataBinding: { data: priorities, keyField: "key", valueField: "value" },
+    initialValue: priorities[1].value,
+    validation: Yup.string(),
   },
   subject: {
     name: "subject",
@@ -104,11 +96,9 @@ const fields = {
 };
 
 const getNextId = (inquiries) => {
-  if (inquiries.length === 0) {
-    return 1;
-  }
+  if (inquiries.length === 0) return 1;
   const maxId = Math.max(...inquiries.map((i) => i.id));
-  return maxId + 1;
+  return Number.isNaN(maxId) ? 1 : maxId + 1;
 };
 
 function ServiceInquiry() {
@@ -124,63 +114,61 @@ function ServiceInquiry() {
       localStorage.setItem("inquiries", JSON.stringify(updatedInquiries));
     } else {
       const newInquiry = {
-      id: getNextId(inquiries),
-      customer: values.customer,
-      firstName: values.firstName,
-      lastName: values.lastName,
-      email: values.email,
-      phone: values.phone,
-      address: values.address,
-      serviceType: values.serviceType,
-      priority: values.priority,
-      subject: values.subject,
-      message: values.message,
-      status: "new",
-      log: [{ status: "new", timestamp: new Date() }],
-    };
+        id: getNextId(inquiries),
+        ...values,
+        status: "new",
+        log: [{ status: "new", timestamp: new Date() }],
+      };
 
-    inquiries.push(newInquiry);
-    localStorage.setItem("inquiries", JSON.stringify(inquiries));
+      inquiries.push(newInquiry);
+      localStorage.setItem("inquiries", JSON.stringify(inquiries));
     }
-    resetForm();
+
+     resetForm();
   };
 
   const formik = useFormikBuilder(fields, handleInquirySubmit);
 
-  if (id) {
-    const inquiries = JSON.parse(localStorage.getItem("inquiries")) || [];
-    const inquiry = inquiries.find((i) => i.id === parseInt(id));
-    if (inquiry) {
-      formik.setValues(inquiry);
+  useEffect(() => {
+    if (id) {
+      const inquiries = JSON.parse(localStorage.getItem("inquiries")) || [];
+      const inquiry = inquiries.find((i) => i.id === parseInt(id));
+      if (inquiry) {
+        formik.setValues(inquiry);
+      }
     }
-  }
-  
+  }, [id]);
+
   return (
-
     <div className="container">
- <div class="py-5 text-center">
-            <h1 class="h2">Checkout form</h1>
-        </div>
-
+      <div className="py-5 text-center">
+        <h1 className="h2">Checkout form</h1>
+      </div>
 
       <div className="row g-5">
- <div class="col-md-12 col-lg-12">   <h4 class="mb-3">Billing address</h4>  
+        <div className="col-md-12 col-lg-12">
+          <h4 className="mb-3">Billing address</h4>
 
-        <form onSubmit={formik.handleSubmit} noValidate> <div class="row g-3">
-          <InputField className="col-sm-12" {...fields.customer} formik={formik} />
-          <InputField className="col-sm-6" {...fields.firstName} formik={formik} />
-          <InputField className="col-sm-6" {...fields.lastName} formik={formik} />
-          <InputField className="col-sm-12" {...fields.email} formik={formik} />
-          <InputField className="col-sm-12" {...fields.address} formik={formik} />
-          <InputField {...fields.phone} formik={formik} />
-          <InputField className="col-sm-6" {...fields.serviceType} formik={formik} />
-          <InputField className="col-sm-6" {...fields.priority} formik={formik} />
-          <InputField {...fields.subject}  formik={formik}          />
-          <InputField {...fields.message} formik={formik}          />
-          <button className="w-100 btn btn-primary btn-lg" type="submit">Submit</button></div>
-        </form></div>
+          <form onSubmit={formik.handleSubmit} noValidate>
+            <div className="row g-3">
+              <InputField className="col-sm-12" {...fields.customer} formik={formik} />
+              <InputField className="col-sm-6" {...fields.firstName} formik={formik} />
+              <InputField className="col-sm-6" {...fields.lastName} formik={formik} />
+              <InputField className="col-sm-12" {...fields.email} formik={formik} />
+              <InputField className="col-sm-12" {...fields.address} formik={formik} />
+              <InputField {...fields.phone} formik={formik} />
+              <InputField className="col-sm-6" {...fields.serviceType} formik={formik} />
+              <InputField className="col-sm-6" {...fields.priority} formik={formik} />
+              <InputField {...fields.subject} formik={formik} />
+              <InputField {...fields.message} formik={formik} />
+
+              <button className="w-100 btn btn-primary btn-lg" type="submit">
+                Submit
+              </button>
+            </div>
+          </form>
+        </div>
       </div>
-    
     </div>
   );
 }
