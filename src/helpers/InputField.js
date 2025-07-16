@@ -1,44 +1,17 @@
-// import React from 'react';
-
-// function InputField({ name, type = 'text', placeholder, formik, options }) {
-//   return (
-//     <div className="form-group">
-//       {type === 'select' ? (
-//         <select
-//           id={name}
-//           name={name}
-//           {...formik.getFieldProps(name)}
-//         >
-//           {options?.map((opt) => (
-//             <option key={opt} value={opt}>
-//               {opt.replace('_', ' ').toUpperCase()}
-//             </option>
-//           ))}
-//         </select>
-//       ) : (
-//         <input
-//           id={name}
-//           name={name}
-//           type={type}
-//           placeholder={placeholder}
-//           {...formik.getFieldProps(name)}
-//           autoComplete="off"
-//         />
-//       )}
-
-//       {formik.touched[name] && formik.errors[name] && (
-//         <small>
-//           <div className="error-message">{formik.errors[name]}</div>
-//         </small>
-//       )}
-//     </div>
-//   );
-// }
-
-// export default InputField;
 import React from 'react';
 
-function InputField({ name, type = 'text', className, placeholder, formik, value, onChange, error, touched, dataBinding }) {
+function InputField({
+  name,
+  type = 'text',
+  className,
+  placeholder,
+  formik,
+  value,
+  onChange,
+  error,
+  touched,
+  dataBinding
+}) {
   const hasFormik = !!formik;
 
   const inputProps = hasFormik
@@ -51,19 +24,28 @@ function InputField({ name, type = 'text', className, placeholder, formik, value
 
   return (
     <div className={`form-group ${className}`}>
-      {/* "form-group" */}
-      <label  className="form-label">{placeholder}</label>
+      <label className="form-label">{placeholder}</label>
+
       {type === 'select' ? (
-        <select class="form-select" id={name} {...inputProps}>
-          {dataBinding.data?.map((opt) => (
+        <select className="form-select" id={name} {...inputProps}>
+          {dataBinding?.data?.map((opt) => (
             <option key={opt[dataBinding.keyField]} value={opt[dataBinding.valueField]}>
               {opt[dataBinding.valueField]}
-              {/* {opt.replace('_', ' ').toUpperCase()} */}
             </option>
           ))}
         </select>
+      ) : type === 'textarea' ? (
+        <textarea
+          className="form-control"
+          id={name}
+          placeholder={placeholder}
+          {...inputProps}
+          autoComplete="off"
+          rows={4}
+        />
       ) : (
-        <input class="form-control"
+        <input
+          className="form-control"
           id={name}
           type={type}
           placeholder={placeholder}
@@ -71,9 +53,12 @@ function InputField({ name, type = 'text', className, placeholder, formik, value
           autoComplete="off"
         />
       )}
+
       {showError && (
         <small>
-          <div className="error-message">{hasFormik ? formik.errors[name] : error}</div>
+          <div className="error-message">
+            {hasFormik ? formik.errors[name] : error}
+          </div>
         </small>
       )}
     </div>
