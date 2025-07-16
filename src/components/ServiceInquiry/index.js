@@ -28,6 +28,13 @@ const priorities =[
 
 
 const fields = {
+  customer: {
+    name: "customer",
+    type: "text",
+    placeholder: "Customer",
+    initialValue: "",
+    validation: Yup.string().required("Customer is required"),
+  },
   firstName: {
     name: "firstName",
     type: "text",
@@ -56,8 +63,7 @@ const fields = {
     type: "text",
     placeholder: "Address",
     initialValue: "",
-    validation: Yup.string()
-      .required("Address is required"),
+    validation: Yup.string().required("Address is required"),
   },
   phone: {
     name: "phone",
@@ -70,7 +76,7 @@ const fields = {
     name: "serviceType",
     type: "select", // assuming it's a dropdown
     placeholder: "Service Type",
-    dataBinding: {data:inquiryTypes,keyField:'key',valueField:'value'},//Object.values(inquiryTypes),
+    dataBinding: { data: inquiryTypes, keyField: "key", valueField: "value" }, //Object.values(inquiryTypes),
     initialValue: inquiryTypes.QUOTATION,
     validation: Yup.string(), // optional validation
   },
@@ -78,7 +84,7 @@ const fields = {
     name: "priority",
     type: "select", // assuming dropdown
     placeholder: "Priority",
-      dataBinding: {data:priorities,keyField:'key',valueField:'value'},// options: Object.values(priorities),
+    dataBinding: { data: priorities, keyField: "key", valueField: "value" }, // options: Object.values(priorities),
     initialValue: priorities.MEDIUM,
     validation: Yup.string(), // optional
   },
@@ -98,23 +104,38 @@ const fields = {
   },
 };
 
+const getNextId = (inquiries) => {
+  if (inquiries.length === 0) {
+    return 1;
+  }
+  const maxId = Math.max(...inquiries.map((i) => i.id));
+  return maxId + 1;
+};
 
 function ServiceInquiry() {
+  const handleInquirySubmit = (values, { resetForm }) => {
+    const inquiries = JSON.parse(localStorage.getItem("inquiries")) || [];
 
- const handleInquirySubmit = (values, { resetForm }) => {
-  const inquiries = JSON.parse(localStorage.getItem("inquiries")) || [];
+    const newInquiry = {
+      id: getNextId(inquiries),
+      customer: values.customer,
+      firstName: values.firstName,
+      lastName: values.lastName,
+      email: values.email,
+      phone: values.phone,
+      address: values.address,
+      serviceType: values.serviceType,
+      priority: values.priority,
+      subject: values.subject,
+      message: values.message,
+      status: "new",
+      log: [{ status: "new", timestamp: new Date() }],
+    };
 
-  const newInquiry = {
-    ...values,
-    id: new Date().getTime(),
-    status: "new",
-    log: [{ status: "new", timestamp: new Date() }],
+    inquiries.push(newInquiry);
+    localStorage.setItem("inquiries", JSON.stringify(inquiries));
+    resetForm();
   };
-
-  inquiries.push(newInquiry);
-  localStorage.setItem("inquiries", JSON.stringify(inquiries));
-  resetForm();
-};
 
   const formik = useFormikBuilder(fields, handleInquirySubmit);
   
@@ -130,7 +151,7 @@ function ServiceInquiry() {
  <div class="col-md-12 col-lg-12">   <h4 class="mb-3">Billing address</h4>  
 
         <form onSubmit={formik.handleSubmit} noValidate> <div class="row g-3">
-   
+          <InputField className="col-sm-12" {...fields.customer} formik={formik} />
           <InputField className="col-sm-6" {...fields.firstName} formik={formik} />
           <InputField className="col-sm-6" {...fields.lastName} formik={formik} />
           <InputField className="col-sm-12" {...fields.email} formik={formik} />
