@@ -1,11 +1,10 @@
 import * as Yup from "yup";
+import { useParams } from "react-router-dom";
 import InputField from "../../helpers/InputField";
-import {useFormikBuilder} from "../../helpers/formikBuilder";
+import { useFormikBuilder } from "../../helpers/formikBuilder";
 
-const inquiryTypes =
-
-[
-  {key:1,value: "quotation"},
+const inquiryTypes = [
+  { key: 1, value: "quotation" },
   {key:2,value: "technical_support"},
   {key:3,value: "complain"},
   {key:4,value: "repair"},
@@ -113,10 +112,18 @@ const getNextId = (inquiries) => {
 };
 
 function ServiceInquiry() {
+  const { id } = useParams();
+
   const handleInquirySubmit = (values, { resetForm }) => {
     const inquiries = JSON.parse(localStorage.getItem("inquiries")) || [];
 
-    const newInquiry = {
+    if (id) {
+      const updatedInquiries = inquiries.map((inquiry) =>
+        inquiry.id === parseInt(id) ? { ...inquiry, ...values } : inquiry
+      );
+      localStorage.setItem("inquiries", JSON.stringify(updatedInquiries));
+    } else {
+      const newInquiry = {
       id: getNextId(inquiries),
       customer: values.customer,
       firstName: values.firstName,
@@ -134,10 +141,19 @@ function ServiceInquiry() {
 
     inquiries.push(newInquiry);
     localStorage.setItem("inquiries", JSON.stringify(inquiries));
+    }
     resetForm();
   };
 
   const formik = useFormikBuilder(fields, handleInquirySubmit);
+
+  if (id) {
+    const inquiries = JSON.parse(localStorage.getItem("inquiries")) || [];
+    const inquiry = inquiries.find((i) => i.id === parseInt(id));
+    if (inquiry) {
+      formik.setValues(inquiry);
+    }
+  }
   
   return (
 

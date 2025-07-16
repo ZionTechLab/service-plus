@@ -58,6 +58,7 @@ function App() {
             {/* <Route index element={<Dashboard />} /> */}
             <Route path="travel-assistant" element={<h1 >ddd</h1>} />
             <Route path="service-inquiry" element={<ServiceInquiry />} />
+            <Route path="service-inquiry/:id" element={<ServiceInquiry />} />
             <Route path="customer-master" element={<CustomerMaster />} />
             <Route path="item-master" element={<ItemMaster />} />
             <Route path="inquiry-list" element={<InquiryList />} />
