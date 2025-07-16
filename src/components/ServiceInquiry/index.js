@@ -1,6 +1,6 @@
 import * as Yup from "yup";
 import { useParams } from "react-router-dom";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import InputField from "../../helpers/InputField";
 import { useFormikBuilder } from "../../helpers/formikBuilder";
 
@@ -103,6 +103,7 @@ const getNextId = (inquiries) => {
 
 function ServiceInquiry() {
   const { id } = useParams();
+  const [showPopup, setShowPopup] = useState(false);
 
   const handleInquirySubmit = (values, { resetForm }) => {
     const inquiries = JSON.parse(localStorage.getItem("inquiries")) || [];
@@ -124,7 +125,11 @@ function ServiceInquiry() {
       localStorage.setItem("inquiries", JSON.stringify(inquiries));
     }
 
-     resetForm();
+    resetForm();
+    setShowPopup(true);
+    setTimeout(() => {
+      setShowPopup(false);
+    }, 3000);
   };
 
   const formik = useFormikBuilder(fields, handleInquirySubmit);
@@ -144,6 +149,12 @@ function ServiceInquiry() {
       <div className="py-5 text-center">
         <h1 className="h2">Checkout form</h1>
       </div>
+
+      {showPopup && (
+        <div className="alert alert-success" role="alert">
+          Service inquiry saved successfully!
+        </div>
+      )}
 
       <div className="row g-5">
         <div className="col-md-12 col-lg-12">
