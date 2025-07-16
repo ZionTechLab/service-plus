@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useMemo } from 'react';
+import  { useState, useEffect, useMemo } from 'react';
 // import InputField from "./InputField";
 // import { CSVLink } from 'react-csv';
 // import './DataTable.css'; // Add CSS styling
@@ -105,8 +105,8 @@ console.log(searchKey)
 
         {/* Table */}
         <div className="mt-3">
-          <table className="table table-gridjs">
-            <thead>
+          <table className="table table-bordered">
+            <thead className="table-light">
               <tr className="bg-light">
                 {columns.map((col, idx) => (
                   <th
@@ -119,7 +119,7 @@ console.log(searchKey)
                 ))}
               </tr>
             </thead>
-            <tbody>
+            <tbody >
               {!paginatedData.length ? (
                 <tr>
                   <td colSpan={columns.length} className="text-center text-muted">No results found</td>

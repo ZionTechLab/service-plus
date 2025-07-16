@@ -1,17 +1,16 @@
-import React from 'react';
 import { Link } from 'react-router-dom';
-import { customers } from '../../data';
 import DataTable from '../../helpers/DataTable'; 
+
 function CustomerMaster() {
    const sampleData = [
     { id: 1, name: 'John Doe', email: 'john@example.com' },
     { id: 2, name: 'Jane Smith', email: 'jane@example.com' },
   ];
+
     const columns = [
     { header: 'ID', field: 'id' },
     { header: 'Name', field: 'name' },
     { header: 'Email', field: 'email' },
-    // Example with action buttons
     {
       header: 'Actions',
       isAction: true,
@@ -30,24 +29,6 @@ function CustomerMaster() {
         <button>Add Customer</button>
       </Link> 
       <DataTable name="User Export" data={sampleData} columns={columns} />
-      {/* <table>
-        <thead>
-          <tr>
-            <th>ID</th>
-            <th>Name</th>
-            <th>Email</th>
-          </tr>
-        </thead>
-        <tbody>
-          {customers.map((customer) => (
-            <tr key={customer.id}>
-              <td>{customer.id}</td>
-              <td>{customer.name}</td>
-              <td>{customer.email}</td>
-            </tr>
-          ))}
-        </tbody>
-      </table> */}
     </div>
   );
 }
