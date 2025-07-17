@@ -1,11 +1,12 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutSuccess, selectUser } from '../../features/auth/authSlice';
-import { useNavigate } from 'react-router-dom';
+import { useLocation, useNavigate } from 'react-router-dom';
 import "./topbar.css";
 function TopNavBar({ onToggleDrawer }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector(selectUser);
+  const location = useLocation();
 
   const handleLogout = () => {
     dispatch(logoutSuccess());
@@ -20,13 +21,20 @@ function TopNavBar({ onToggleDrawer }) {
     }
   };
 
+  const getPageTitle = () => {
+    const path = location.pathname;
+    if (path === "/") return "Dashboard";
+    const title = path.replace("/", "").replace("-", " ");
+    return title.charAt(0).toUpperCase() + title.slice(1);
+  };
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light navbar-custom sticky-top">
       <div className="container-fluid">
         <button onClick={onToggleDrawer} className="btn ">
            <span className="navbar-toggler-icon"></span>
         </button>
-         <span className="ms-2 fw-semibold">Good Morning, John Smith</span>
+         <span className="ms-2 fw-semibold">{getPageTitle()}</span>
            <div class="flex-grow-1"></div>
         {/* <a className="navbar-brand" href="#">Service Plus</a> */}
 

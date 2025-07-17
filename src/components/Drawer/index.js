@@ -54,12 +54,6 @@ const Drawer = forwardRef(({ isOpen, onClose }, ref) => {
               <i className="bi bi-box-seam-fill me-2"></i>Item Master
             </Link>
           </li>
-
-               <li className="list-group-item">
-            <Link to="/profile" onClick={onClose} className="nav-link">
-              <i className="bi bi-box-seam-fill me-2"></i>Item Master
-            </Link>
-          </li>
         </ul>
       </nav>
       <div className="drawer-footer mt-auto p-3">
