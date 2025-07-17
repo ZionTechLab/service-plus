@@ -21,7 +21,7 @@ function InquiryList() {
 
   const handleEdit = (id) => {
     console.log("sss")
-    navigate(`/main/service-inquiry/${id}`);
+    navigate(`/main/inquiry/${id}`);
   };
 
 

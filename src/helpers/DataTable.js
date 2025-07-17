@@ -20,43 +20,109 @@ const Pagination = ({ total, currentPage, pageSize, onPageChange }) => {
   );
 };
 
-const ColumnVisibilityToggle = ({ columns, visibleColumns, onToggle }) => {
-  const [isOpen, setIsOpen] = useState(false);
+const ColumnVisibilityModal = ({ columns, visibleColumns, onToggle, isOpen, onClose }) => {
+  if (!isOpen) return null;
+
+  const handleSelectAll = () => {
+    const allFields = columns.filter(col => !col.isAction).map(col => col.field);
+    columns.filter(col => !col.isAction).forEach(col => {
+      if (!visibleColumns.includes(col.field)) {
+        onToggle(col.field);
+      }
+    });
+  };
+
+  const handleDeselectAll = () => {
+    const fieldsToHide = visibleColumns.slice(0, -1); // Keep at least one visible
+    fieldsToHide.forEach(field => {
+      if (visibleColumns.includes(field)) {
+        onToggle(field);
+      }
+    });
+  };
 
   return (
-    <div className="dropdown mb-3">
-      <button
-        className="btn btn-outline-secondary dropdown-toggle"
-        type="button"
-        onClick={() => setIsOpen(!isOpen)}
+    <>
+      {/* Modal Backdrop */}
+      <div 
+        className="modal-backdrop fade show" 
+        onClick={onClose}
+        style={{ zIndex: 1040 }}
+      ></div>
+      
+      {/* Modal */}
+      <div 
+        className="modal fade show" 
+        style={{ display: 'block', zIndex: 1050 }}
+        tabIndex="-1"
       >
-        Column Visibility
-      </button>
-      {isOpen && (
-        <div className="dropdown-menu show" style={{ position: 'relative' }}>
-          {columns
-            .filter(col => !col.isAction)
-            .map((col) => (
-              <div key={col.field} className="dropdown-item">
-                <div className="form-check">
-                  <input
-                    className="form-check-input"
-                    type="checkbox"
-                    id={`col-${col.field}`}
-                    checked={visibleColumns.includes(col.field)}
-                    onChange={() => onToggle(col.field)}
-                  />
-                  <label className="form-check-label" htmlFor={`col-${col.field}`}>
-                    {col.header}
-                  </label>
-                </div>
+        <div className="modal-dialog modal-dialog-centered">
+          <div className="modal-content">
+            <div className="modal-header">
+              <h5 className="modal-title">Column Visibility</h5>
+              <button 
+                type="button" 
+                className="btn-close" 
+                onClick={onClose}
+              ></button>
+            </div>
+            
+            <div className="modal-body">
+              <div className="mb-3">
+                <button 
+                  className="btn btn-sm btn-outline-primary me-2"
+                  onClick={handleSelectAll}
+                >
+                  Select All
+                </button>
+                <button 
+                  className="btn btn-sm btn-outline-secondary"
+                  onClick={handleDeselectAll}
+                >
+                  Deselect All
+                </button>
               </div>
-            ))}
+              
+              <div className="border rounded p-3" style={{ maxHeight: '300px', overflowY: 'auto' }}>
+                {columns
+                  .filter(col => !col.isAction)
+                  .map((col) => (
+                    <div key={col.field} className="form-check mb-2">
+                      <input
+                        className="form-check-input"
+                        type="checkbox"
+                        id={`col-${col.field}`}
+                        checked={visibleColumns.includes(col.field)}
+                        onChange={() => onToggle(col.field)}
+                      />
+                      <label className="form-check-label" htmlFor={`col-${col.field}`}>
+                        {col.header}
+                      </label>
+                    </div>
+                  ))}
+              </div>
+              
+              <div className="mt-3 text-muted small">
+                <strong>Note:</strong> At least one column must remain visible. Action columns are always shown.
+              </div>
+            </div>
+            
+            <div className="modal-footer">
+              <button 
+                type="button" 
+                className="btn btn-secondary" 
+                onClick={onClose}
+              >
+                Close
+              </button>
+            </div>
+          </div>
         </div>
-      )}
-    </div>
+      </div>
+    </>
   );
 };
+
 
 const DataTable = ({ data = [], columns = [], name }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -64,6 +130,7 @@ const DataTable = ({ data = [], columns = [], name }) => {
   const [sortKey, setSortKey] = useState(null);
   const [page, setPage] = useState(1);
   const [visibleColumns, setVisibleColumns] = useState([]);
+  const [showColumnModal, setShowColumnModal] = useState(false);
   const pageSize = 10;
 
   const filterableCols = useMemo(
@@ -146,17 +213,29 @@ const DataTable = ({ data = [], columns = [], name }) => {
   return (
     <div className="card">
       <div className="card-body">
-        {/* Column Visibility Toggle */}
-      
+        {/* Column Visibility Button */}
+        <div className="mb-3">
+          <button
+            className="btn btn-outline-secondary"
+            onClick={() => setShowColumnModal(true)}
+          >
+            <span className="me-2">⚙️</span>
+            Column Visibility
+          </button>
+        </div>
+
+        {/* Column Visibility Modal */}
+        <ColumnVisibilityModal
+          columns={columns}
+          visibleColumns={visibleColumns}
+          onToggle={handleColumnToggle}
+          isOpen={showColumnModal}
+          onClose={() => setShowColumnModal(false)}
+        />
 
         {/* Filter */}
-        {/* {visibleFilterableCols.length > 0 && ( */}
-
-        <div className="row g-3">
-
-        <div className="col-sm-9">
-
-          <div className="input-group mb-3 ">
+        {visibleFilterableCols.length > 0 && (
+          <div className="input-group mb-3">
             <span className="input-group-text">Filter by :</span>
             <select
               className="form-select"
@@ -180,16 +259,8 @@ const DataTable = ({ data = [], columns = [], name }) => {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-          </div>
-        {/* )} */}
-        <div className="col-sm-3">
-            <ColumnVisibilityToggle
-          columns={columns}
-          visibleColumns={visibleColumns}
-          onToggle={handleColumnToggle}
-        />
-        </div>
-</div>
+        )}
+
         {/* Table */}
         <div className="mt-3 table-responsive">
           <table className="table table-bordered">
@@ -261,4 +332,6 @@ const DataTable = ({ data = [], columns = [], name }) => {
       </div>
     </div>
   );
-};export default DataTable;
+};
+
+export default DataTable;
