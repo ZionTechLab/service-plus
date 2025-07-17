@@ -12,6 +12,14 @@ function TopNavBar({ onToggleDrawer }) {
     navigate('/login', { replace: true });
   };
 
+  const handleFullScreen = () => {
+    if (document.fullscreenElement) {
+      document.exitFullscreen();
+    } else {
+      document.documentElement.requestFullscreen();
+    }
+  };
+
   return (
     <nav className="navbar navbar-expand-lg navbar-light navbar-custom sticky-top">
       <div className="container-fluid">
@@ -22,7 +30,7 @@ function TopNavBar({ onToggleDrawer }) {
            <div class="flex-grow-1"></div>
         {/* <a className="navbar-brand" href="#">Service Plus</a> */}
 
-        <button class="btn me-3  ">
+        <button class="btn me-3" onClick={handleFullScreen}>
       <i class="bi bi-arrows-fullscreen"></i>
     </button>
 
