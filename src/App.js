@@ -1,21 +1,22 @@
-import React, { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, Navigate } from 'react-router-dom';
-import { useSelector } from 'react-redux';
-import { selectIsLoggedIn } from './features/auth/authSlice';
-import LoginPage from './components/LoginPage';
-import MainPage from './components/MainPage';
-import ServiceInquiry from './components/ServiceInquiry';
-import CustomerMaster from './components/CustomerMaster';
-import ItemMaster from './components/ItemMaster';
-import InquiryList from './components/InquiryList';
-import InquiryView from './components/InquiryView';
-import AddCustomer from './components/AddCustomer';
-import AddItem from './components/AddItem';
-// import TravelAssistantPage from './components/TravelAssistantPage';
-// import Dashboard from './features/Dashboard';
-// import UserProfile from './features/UserProfile';
-// import NewItinerary from './features/NewItinerary';
-import './App.css';
+import React, { useEffect } from "react";
+import {
+  BrowserRouter as Router,
+  Routes,
+  Route,
+  Navigate,
+} from "react-router-dom";
+import { useSelector } from "react-redux";
+import { selectIsLoggedIn } from "./features/auth/authSlice";
+import LoginPage from "./components/LoginPage";
+import MainPage from "./components/MainPage";
+import ServiceInquiry from "./components/ServiceInquiry";
+import CustomerMaster from "./components/CustomerMaster";
+import ItemMaster from "./components/ItemMaster";
+import InquiryList from "./components/InquiryList";
+import InquiryView from "./components/InquiryView";
+import AddCustomer from "./components/AddCustomer";
+import AddItem from "./components/AddItem";
+import "./App.css";
 
 // Protected route wrapper
 const ProtectedRoute = ({ isLoggedIn, children }) => {
@@ -24,22 +25,27 @@ const ProtectedRoute = ({ isLoggedIn, children }) => {
 
 // Public route wrapper
 const PublicRoute = ({ isLoggedIn, children }) => {
-  return isLoggedIn ? <Navigate to="/main" replace /> : children;
+  return isLoggedIn ? <Navigate to="/" replace /> : children;
 };
 
 function App() {
   const isLoggedIn = useSelector(selectIsLoggedIn);
 
   useEffect(() => {
-    const savedTheme = localStorage.getItem('theme') || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
-    document.documentElement.setAttribute('data-bs-theme', savedTheme);
+    const savedTheme =
+      localStorage.getItem("theme") ||
+      (window.matchMedia("(prefers-color-scheme: dark)").matches
+        ? "dark"
+        : "light");
+    document.documentElement.setAttribute("data-bs-theme", savedTheme);
   }, []);
 
   return (
     <Router>
       <div className="App">
         <Routes>
-          <Route path="/login"
+          <Route
+            path="/login"
             element={
               <PublicRoute isLoggedIn={isLoggedIn}>
                 <LoginPage />
@@ -47,30 +53,25 @@ function App() {
             }
           />
 
-          <Route
-            path="/main"
-            element={
-              <ProtectedRoute isLoggedIn={isLoggedIn}>
-                <MainPage />
-              </ProtectedRoute>
-            }
-          >
-            {/* <Route index element={<Dashboard />} /> */}
-            <Route path="travel-assistant" element={<h1 >ddd</h1>} />
-            <Route path="service-inquiry" element={<ServiceInquiry />} />
-            <Route path="service-inquiry/:id" element={<ServiceInquiry />} />
-            <Route path="customer-master" element={<CustomerMaster />} />
-            <Route path="item-master" element={<ItemMaster />} />
-            <Route path="inquiry-list" element={<InquiryList />} />
-            <Route path="inquiry/:id" element={<InquiryView />} />
-            <Route path="add-customer" element={<AddCustomer />} />
-            <Route path="add-item" element={<AddItem />} />
-            {/* <Route path="profile" element={<UserProfile />} />
-            <Route path="new-itinerary" element={<NewItinerary />} />  */}
-          </Route>
+         <Route
+        path="/"
+        element={
+          <ProtectedRoute isLoggedIn={isLoggedIn}>
+            <MainPage />
+          </ProtectedRoute>
+        }
+      >
+          <Route path="service-inquiry" element={<ServiceInquiry />} />
+          <Route path="service-inquiry/:id" element={<ServiceInquiry />} />
+          <Route path="customer-master" element={<CustomerMaster />} />
+          <Route path="item-master" element={<ItemMaster />} />
+          <Route path="inquiry-list" element={<InquiryList />} />
+          <Route path="inquiry/:id" element={<InquiryView />} />
 
-          {/* Root Route */}
-          <Route
+          <Route path="add-customer" element={<AddCustomer />} />
+          <Route path="add-item" element={<AddItem />} />
+    </Route>
+          {/* <Route
             path="/"
             element={
               isLoggedIn ? (
@@ -79,7 +80,7 @@ function App() {
                 <Navigate to="/login" replace />
               )
             }
-          />
+          /> */}
         </Routes>
       </div>
     </Router>

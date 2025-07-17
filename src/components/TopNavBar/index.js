@@ -1,8 +1,6 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutSuccess, selectUser } from '../../features/auth/authSlice';
 import { useNavigate } from 'react-router-dom';
-import React from 'react';
-import './TopNavBar.css';
 
 function TopNavBar({ onToggleDrawer }) {
   const dispatch = useDispatch();
@@ -15,12 +13,12 @@ function TopNavBar({ onToggleDrawer }) {
   };
 
   return (
-    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark sticky-top">
       <div className="container-fluid">
         <button onClick={onToggleDrawer} className="btn btn-dark">
           <i className="bi bi-list"></i>
         </button>
-        <a className="navbar-brand" href="#">Travel Assistant</a>
+        <a className="navbar-brand" href="#">Service Plus</a>
         <div className="collapse navbar-collapse">
           <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
             <li className="nav-item">

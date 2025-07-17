@@ -33,33 +33,24 @@ const Drawer = forwardRef(({ isOpen, onClose }, ref) => {
       </div>
       <nav className="drawer-nav">
         <ul className="list-group list-group-flush">
+         
           <li className="list-group-item">
-            <Link to="/main/travel-assistant" onClick={onClose} className="nav-link">
-              <i className="bi bi-airplane-fill me-2"></i>Travel Assistant
-            </Link>
-          </li>
-          <li className="list-group-item">
-            <Link to="/main/new-itinerary" onClick={onClose} className="nav-link">
-              <i className="bi bi-plus-circle-fill me-2"></i>New Itinerary
-            </Link>
-          </li>
-          <li className="list-group-item">
-            <Link to="/main/service-inquiry" onClick={onClose} className="nav-link">
+            <Link to="/service-inquiry" onClick={onClose} className="nav-link">
               <i className="bi bi-headset me-2"></i>Service Inquiry
             </Link>
           </li>
           <li className="list-group-item">
-            <Link to="/main/inquiry-list" onClick={onClose} className="nav-link">
+            <Link to="/inquiry-list" onClick={onClose} className="nav-link">
               <i className="bi bi-list-ul me-2"></i>Inquiry List
             </Link>
           </li>
           <li className="list-group-item">
-            <Link to="/main/customer-master" onClick={onClose} className="nav-link">
+            <Link to="/customer-master" onClick={onClose} className="nav-link">
               <i className="bi bi-people-fill me-2"></i>Customer Master
             </Link>
           </li>
           <li className="list-group-item">
-            <Link to="/main/item-master" onClick={onClose} className="nav-link">
+            <Link to="/item-master" onClick={onClose} className="nav-link">
               <i className="bi bi-box-seam-fill me-2"></i>Item Master
             </Link>
           </li>

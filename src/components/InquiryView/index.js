@@ -48,37 +48,27 @@ function InquiryView() {
   };
 
   if (!inquiry) {
-    return <div>Loading...</div>;
+    return <div>...</div>;
   }
 
   return (
     <div>
-      <h1>Inquiry Details</h1>
-      <p>
-        <strong>Status:</strong> {inquiry.status}
-      </p>
-      <div>
-        <button onClick={() => handleStatusChange('in_progress')}>
-          In Progress
-        </button>
-        <button onClick={() => handleStatusChange('resolved')}>
-          Resolved
-        </button>
-        <button onClick={() => handleStatusChange('closed')}>Closed</button>
-        <button onClick={() => setShowLogActivity(!showLogActivity)}>
+ 
+
+
+  <h4 class="d-flex justify-content-between align-items-center mb-3">
+            <span class="text-primary">Log</span>
+            {/* <span class="badge bg-primary rounded-pill">3</span> */}
+          </h4>
+
+    <button className='w-100 btn btn-primary btn-lg'  onClick={() => setShowLogActivity(!showLogActivity)}>
           Add Log
         </button>
-      </div>
-      {showLogActivity && (
-        <LogActivity
-          inquiryId={id}
-          onLogActivitySubmit={handleLogActivitySubmit}
-        />
-      )}
-      <h2>Log</h2>
-      <ul>
+
+
+      <ul class="list-group mb-3">
         {inquiry.log.map((entry, index) => (
-          <li key={index}>
+          <li key={index} class="list-group-item d-flex justify-content-between lh-sm">
             {entry.status ? (
               <>
                 {entry.status} - {new Date(entry.timestamp).toLocaleString()}
