@@ -16,6 +16,7 @@ import InquiryList from "./components/InquiryList";
 import InquiryView from "./components/InquiryView";
 import AddCustomer from "./components/AddCustomer";
 import AddItem from "./components/AddItem";
+import Profile from "./components/Profile";
 import "./App.css";
 
 // Protected route wrapper
@@ -70,6 +71,7 @@ function App() {
 
           <Route path="add-customer" element={<AddCustomer />} />
           <Route path="add-item" element={<AddItem />} />
+          <Route path="profile" element={<Profile />} />
     </Route>
           {/* <Route
             path="/"

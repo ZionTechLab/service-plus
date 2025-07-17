@@ -177,10 +177,10 @@ function ServiceInquiry() {
   }, [id]);
 
   return (
-    <div className="container">
-      <div className="py-5 text-center">
+    <div className="container ">
+       <div className="py-5 text-center">
         <h1 className="h2">Inquiry</h1>
-      </div>
+      </div> 
 
       {showPopup && (
         <div className="alert alert-success" role="alert">
