@@ -21,7 +21,7 @@ function InquiryList() {
 
   const handleEdit = (id) => {
     console.log("sss")
-    navigate(`/main/service-inquiry/${id}`);
+    navigate(`/service-inquiry/${id}`);
   };
 
 
@@ -61,8 +61,8 @@ function InquiryList() {
   return (
 
     <div>
-      <h1>Inquiries</h1>
-      <Link to="/main/add-customer">
+      {/* <h1>Inquiries</h1> */}
+      <Link to="/add-customer">
         <button>Add Customer</button>
       </Link> 
       <DataTable name="User Export" data={inquiries} columns={columns} />

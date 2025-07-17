@@ -214,27 +214,11 @@ const DataTable = ({ data = [], columns = [], name }) => {
     <div className="card">
       <div className="card-body">
         {/* Column Visibility Button */}
-        <div className="mb-3">
-          <button
-            className="btn btn-outline-secondary"
-            onClick={() => setShowColumnModal(true)}
-          >
-            <span className="me-2">⚙️</span>
-            Column Visibility
-          </button>
-        </div>
+     
+     <div className="row g-3">
 
-        {/* Column Visibility Modal */}
-        <ColumnVisibilityModal
-          columns={columns}
-          visibleColumns={visibleColumns}
-          onToggle={handleColumnToggle}
-          isOpen={showColumnModal}
-          onClose={() => setShowColumnModal(false)}
-        />
-
-        {/* Filter */}
-        {visibleFilterableCols.length > 0 && (
+      <div className="col-sm-8">
+        {/* {visibleFilterableCols.length > 0 && ( */}
           <div className="input-group mb-3">
             <span className="input-group-text">Filter by :</span>
             <select
@@ -259,8 +243,31 @@ const DataTable = ({ data = [], columns = [], name }) => {
               onChange={(e) => setSearchTerm(e.target.value)}
             />
           </div>
-        )}
+        {/* )} */}
+</div>
 
+      <div className="col-sm-2">
+   <div className="mb-3">
+          <button
+            className="btn btn-outline-secondary"
+            onClick={() => setShowColumnModal(true)}
+          >
+            <span className="me-2">⚙️</span>
+            Column Visibility
+          </button>
+        </div>
+
+        <ColumnVisibilityModal
+          columns={columns}
+          visibleColumns={visibleColumns}
+          onToggle={handleColumnToggle}
+          isOpen={showColumnModal}
+          onClose={() => setShowColumnModal(false)}
+        />
+</div>
+
+
+</div>
         {/* Table */}
         <div className="mt-3 table-responsive">
           <table className="table table-bordered">
