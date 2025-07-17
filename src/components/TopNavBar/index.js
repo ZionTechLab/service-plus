@@ -36,7 +36,7 @@ function TopNavBar({ onToggleDrawer }) {
         <span>{user.name}</span>
       </div>
       <ul class="dropdown-menu dropdown-menu-end">
-        <li><a class="dropdown-item" href="#">Profile</a></li>
+        <li><a class="dropdown-item" href="/profile">Profile</a></li>
         <li><a class="dropdown-item" onClick={handleLogout}>Logout</a></li>
       </ul>
     </div>
