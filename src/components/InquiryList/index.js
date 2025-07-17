@@ -29,7 +29,17 @@ function InquiryList() {
 
 
 
-  const columns = [
+  const columns = [ 
+    {
+      header: 'Actions',
+      isAction: true,
+      actionTemplate: (row) => (
+        <div className="d-flex gap-2 justify-content-center">
+          <button className="btn btn-sm btn-outline-primary" onClick={() => handleEdit(row.id)}>Edit</button>
+          <button className="btn btn-sm btn-outline-danger" onClick={() => handleDelete(row.id)}>Delete</button>
+        </div>
+      )
+    },
     { header: 'ID', field: 'id' },
     { header: 'Customer', field: 'customer' },
     { header: 'First Name', field: 'firstName' },
@@ -42,16 +52,9 @@ function InquiryList() {
     { header: 'Subject', field: 'subject' },
     { header: 'Message', field: 'message' },
     { header: 'Status', field: 'status' },
-    {
-      header: 'Actions',
-      isAction: true,
-      actionTemplate: (row) => (
-        <div className="d-flex gap-2 justify-content-center">
-          <button className="btn btn-sm btn-outline-primary" onClick={() => handleEdit(row.id)}>Edit</button>
-          <button className="btn btn-sm btn-outline-danger" onClick={() => handleDelete(row.id)}>Delete</button>
-        </div>
-      )
-    }
+    { header: 'Due Date', field: 'dueDate' },
+    { header: 'Assignee', field: 'assignee' }
+   
   ];
 
 

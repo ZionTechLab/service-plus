@@ -3,6 +3,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import InputField from "../../helpers/InputField";
 import { useFormikBuilder } from "../../helpers/formikBuilder";
+import PartnerService from "../AddCustomer/PartnerService";
 
 const inquiryTypes = [
   { key: 1, value: "quotation" },
@@ -17,6 +18,27 @@ const priorities = [
   { key: 2, value: "medium" },
   { key: 3, value: "high" },
 ];
+
+
+
+const getNextId = (inquiries) => {
+  if (inquiries.length === 0) return 1;
+  const maxId = Math.max(...inquiries.map((i) => i.id));
+  return Number.isNaN(maxId) ? 1 : maxId + 1;
+};
+
+function ServiceInquiry() {
+  const { id } = useParams();
+  const [showPopup, setShowPopup] = useState(false);
+  const [assigneeData, setAssigneeData] = useState([]);
+
+  useEffect(() => {
+    const fetchInquiries = async () => {
+      const storedInquiries = await PartnerService.getAllPartners();
+      setAssigneeData(storedInquiries);
+    };
+    fetchInquiries();
+  }, []);
 
 const fields = {
   customer: {
@@ -63,7 +85,22 @@ const fields = {
     initialValue: "",
     validation: Yup.string().required("Phone number is required"),
   },
-  serviceType: {
+
+  subject: {
+    name: "subject",
+    type: "text",
+    placeholder: "Subject",
+    initialValue: "",
+    validation: Yup.string().required("Subject is required"),
+  },
+  message: {
+    name: "message",
+    type: "textarea",
+    placeholder: "Message",
+    initialValue: "",
+    validation: Yup.string().required("Message is required"),
+  },
+    serviceType: {
     name: "serviceType",
     type: "select",
     placeholder: "Service Type",
@@ -79,33 +116,26 @@ const fields = {
     initialValue: priorities[1].value,
     validation: Yup.string(),
   },
-  subject: {
-    name: "subject",
-    type: "text",
-    placeholder: "Subject",
-    initialValue: "",
-    validation: Yup.string().required("Subject is required"),
+  assignee: {
+    name: "assignee",
+    type: "select",
+    placeholder: "Assignee",
+    dataBinding: { data: assigneeData, keyField: "id", valueField: "partnerName" },
+    initialValue: assigneeData[0]?.value,
+    validation: Yup.string(),
   },
-  message: {
-    name: "message",
-    type: "textarea",
-    placeholder: "Message",
+  dueDate: {
+    name: "dueDate",
+    type: "date",
+    placeholder: "Due Date",
     initialValue: "",
-    validation: Yup.string().required("Message is required"),
+    validation: Yup.string().required("Due Date is required"),
   },
 };
 
-const getNextId = (inquiries) => {
-  if (inquiries.length === 0) return 1;
-  const maxId = Math.max(...inquiries.map((i) => i.id));
-  return Number.isNaN(maxId) ? 1 : maxId + 1;
-};
-
-function ServiceInquiry() {
-  const { id } = useParams();
-  const [showPopup, setShowPopup] = useState(false);
 
   const handleInquirySubmit = (values, { resetForm }) => {
+    console.log("Form values:", values);
     const inquiries = JSON.parse(localStorage.getItem("inquiries")) || [];
 
     if (id) {
@@ -168,11 +198,13 @@ function ServiceInquiry() {
               <InputField className="col-sm-12" {...fields.email} formik={formik} />
               <InputField className="col-sm-12" {...fields.address} formik={formik} />
               <InputField {...fields.phone} formik={formik} />
-              <InputField className="col-sm-6" {...fields.serviceType} formik={formik} />
-              <InputField className="col-sm-6" {...fields.priority} formik={formik} />
+   
               <InputField {...fields.subject} formik={formik} />
               <InputField {...fields.message} formik={formik} />
-
+           <InputField className="col-sm-6" {...fields.serviceType} formik={formik} />
+              <InputField className="col-sm-6" {...fields.priority} formik={formik} />
+                    <InputField {...fields.assignee} formik={formik} />
+                     <InputField {...fields.dueDate} formik={formik} />
               <button className="w-100 btn btn-primary btn-lg" type="submit">
                 Submit
               </button>
