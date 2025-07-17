@@ -1,9 +1,10 @@
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
-import { useFormik } from "formik";
 import * as Yup from "yup";
 import { loginSuccess } from "../../features/auth/authSlice";
+import InputField from "../../helpers/InputField";
 import "./LoginPage.css";
+import {useFormikBuilder} from "../../helpers/formikBuilder";
 
 const fields = {
   fullName: {
@@ -27,63 +28,39 @@ const fields = {
   },
 };
 
-const initialValues = {
-  fullName: fields.fullName.initialValue,
-  password: fields.password.initialValue,
-};
-
-const validationSchema = Yup.object({
-  fullName: fields.fullName.validation,
-  password: fields.password.validation,
-});
-
 function LoginPage() {
   const navigate = useNavigate();
   const dispatch = useDispatch();
 
-  const formik = useFormik({
-    initialValues,
-    validationSchema,
-    onSubmit: (values) => {
+ const handleInquirySubmit = (values) => {
       const userData = { name: values.fullName, id: "123" };
       if(userData.name === "voyaadmin" && values.password === "voya@admin") 
 
       dispatch(loginSuccess(userData));
       navigate("/main/travel-assistant", { replace: true });
-    },
-  });
+    };
+
+    const formik = useFormikBuilder(fields, handleInquirySubmit);
 
   return (
     <div className="LoginPage">
     <div className="container">
       <h1>Travel Assistant</h1>
+
+
+
+
       <form onSubmit={formik.handleSubmit} noValidate>
+
+
         <InputField {...fields.fullName} formik={formik} />
         <InputField {...fields.password} formik={formik} />
-        <button type="submit">SIGN IN</button>
+        <button className="form-control btn btn-primary" type="submit">SIGN IN</button>
       </form>
     </div>
    </div>
   );
 }
 
-function InputField({ name, type, placeholder, formik }) {
-  return (
-    <div className="form-group">
-      <input
-        id={name}
-        name={name}
-        type={type}
-        className="login-input"
-        placeholder={placeholder}
-        {...formik.getFieldProps(name)}
-        autoComplete="off"
-      />
-      {formik.touched[name] && formik.errors[name] && (
-      <small> <div className="error-message">{formik.errors[name]}</div></small> 
-      )}
-    </div>
-  );
-}
 
 export default LoginPage;

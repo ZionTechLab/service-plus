@@ -1,22 +1,18 @@
-
 .LoginPage {
-  background: var( --theme-primary-accent);
-  min-height: 100vh;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 20px;
-}
+    background: var( --theme-primary-accent);
+    min-height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 20px;
+  }
 
-.container {
-  background: var(--theme-bg-primary);
-  padding: 40px;
-  border-radius: var(--theme-border-radius-medium);
-  box-shadow: var(--theme-box-shadow);
-  width: 100%;
-  max-width: 400px;
-  text-align: center;
-}
-
-
-
+  /* .container {
+    background: var(--theme-bg-primary);
+    padding: 40px;
+    border-radius: var(--theme-border-radius-medium);
+    box-shadow: var(--theme-box-shadow);
+    width: 100%;
+    max-width: 400px;
+    text-align: center;
+  } */

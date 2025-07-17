@@ -1,32 +1,38 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { logoutSuccess, selectUser } from '../../features/auth/authSlice'; 
+import { logoutSuccess, selectUser } from '../../features/auth/authSlice';
 import { useNavigate } from 'react-router-dom';
+import React from 'react';
 import './TopNavBar.css';
 
 function TopNavBar({ onToggleDrawer }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
-  const user = useSelector(selectUser); 
+  const user = useSelector(selectUser);
 
   const handleLogout = () => {
-    dispatch(logoutSuccess()); 
+    dispatch(logoutSuccess());
     navigate('/login', { replace: true });
   };
 
   return (
-    <nav className="top-nav-bar ">
-
-      <div className="nav-left">
-        <button onClick={onToggleDrawer} className="drawer-toggle-btn">
-          ☰ 
+    <nav className="navbar navbar-expand-lg navbar-dark bg-dark">
+      <div className="container-fluid">
+        <button onClick={onToggleDrawer} className="btn btn-dark">
+          <i className="bi bi-list"></i>
         </button>
-        <span className="nav-title">Travel Assistant</span>
-      </div>
-      <div className="nav-right">
-        {user && <span className="user-greeting">Hello, {user.name}!</span>}
-        <button onClick={handleLogout} className="logout-btn">
-          Logout
-        </button>
+        <a className="navbar-brand" href="#">Travel Assistant</a>
+        <div className="collapse navbar-collapse">
+          <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li className="nav-item">
+              <span className="nav-link">Hello, {user.name}!</span>
+            </li>
+            <li className="nav-item">
+              <button onClick={handleLogout} className="btn btn-outline-light">
+                Logout
+              </button>
+            </li>
+          </ul>
+        </div>
       </div>
     </nav>
   );
