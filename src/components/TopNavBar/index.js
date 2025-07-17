@@ -1,6 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutSuccess, selectUser } from '../../features/auth/authSlice';
 import { useNavigate } from 'react-router-dom';
+import ThemeSwitcher from '../ThemeSwitcher';
 
 function TopNavBar({ onToggleDrawer }) {
   const dispatch = useDispatch();
@@ -21,6 +22,9 @@ function TopNavBar({ onToggleDrawer }) {
         <a className="navbar-brand" href="#">Service Plus</a>
         <div className="collapse navbar-collapse">
           <ul className="navbar-nav ms-auto mb-2 mb-lg-0">
+            <li className="nav-item">
+              <ThemeSwitcher />
+            </li>
             <li className="nav-item">
               <span className="nav-link">Hello, {user.name}!</span>
             </li>
