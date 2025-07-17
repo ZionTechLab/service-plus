@@ -3,33 +3,75 @@ import { useFormikBuilder } from "../../helpers/formikBuilder";
 import InputField from "../../helpers/InputField";
 
 const fields = {
-  itemName: {
-    name: "itemName",
+  item_code: {
+    name: "item_code",
+    type: "text",
+    placeholder: "Item Code",
+    initialValue: "",
+    validation: Yup.string().required("Item Code is required"),
+  },
+  item_name: {
+    name: "item_name",
     type: "text",
     placeholder: "Item Name",
     initialValue: "",
     validation: Yup.string().required("Item Name is required"),
   },
-  itemDescription: {
-    name: "itemDescription",
+  description: {
+    name: "description",
     type: "textarea",
-    placeholder: "Item Description",
+    placeholder: "Description",
     initialValue: "",
-    validation: Yup.string().required("Item Description is required"),
+    validation: Yup.string(),
   },
-  itemPrice: {
-    name: "itemPrice",
-    type: "number",
-    placeholder: "Item Price",
-    initialValue: "",
-    validation: Yup.number().required("Item Price is required"),
-  },
-  itemCategory: {
-    name: "itemCategory",
+  uom: {
+    name: "uom",
     type: "text",
-    placeholder: "Item Category",
+    placeholder: "Unit of Measurement",
     initialValue: "",
-    validation: Yup.string().required("Item Category is required"),
+    validation: Yup.string().required("Unit of Measurement is required"),
+  },
+  barcode: {
+    name: "barcode",
+    type: "text",
+    placeholder: "Barcode",
+    initialValue: "",
+    validation: Yup.string(),
+  },
+  brand: {
+    name: "brand",
+    type: "text",
+    placeholder: "Brand",
+    initialValue: "",
+    validation: Yup.string().required("Brand is required"),
+  },
+  reorder_level: {
+    name: "reorder_level",
+    type: "number",
+    placeholder: "Reorder Level",
+    initialValue: "",
+    validation: Yup.number().required("Reorder Level is required"),
+  },
+  cost_price: {
+    name: "cost_price",
+    type: "number",
+    placeholder: "Cost Price",
+    initialValue: "",
+    validation: Yup.number().required("Cost Price is required"),
+  },
+  selling_price: {
+    name: "selling_price",
+    type: "number",
+    placeholder: "Selling Price",
+    initialValue: "",
+    validation: Yup.number().required("Selling Price is required"),
+  },
+  is_active: {
+    name: "is_active",
+    type: "checkbox",
+    placeholder: "Is Active",
+    initialValue: true,
+    validation: Yup.boolean(),
   },
 };
 
@@ -79,10 +121,16 @@ function ItemMaster() {
 
           <form onSubmit={formik.handleSubmit} noValidate>
             <div className="row g-3">
-              <InputField className="col-sm-12" {...fields.itemName} formik={formik} />
-              <InputField className="col-sm-12" {...fields.itemDescription} formik={formik} />
-              <InputField className="col-sm-6" {...fields.itemPrice} formik={formik} />
-              <InputField className="col-sm-6" {...fields.itemCategory} formik={formik} />
+              <InputField className="col-sm-6" {...fields.item_code} formik={formik} />
+              <InputField className="col-sm-6" {...fields.item_name} formik={formik} />
+              <InputField className="col-sm-12" {...fields.description} formik={formik} />
+              <InputField className="col-sm-6" {...fields.uom} formik={formik} />
+              <InputField className="col-sm-6" {...fields.barcode} formik={formik} />
+              <InputField className="col-sm-6" {...fields.brand} formik={formik} />
+              <InputField className="col-sm-6" {...fields.reorder_level} formik={formik} />
+              <InputField className="col-sm-6" {...fields.cost_price} formik={formik} />
+              <InputField className="col-sm-6" {...fields.selling_price} formik={formik} />
+              <InputField className="col-sm-12" {...fields.is_active} formik={formik} />
               <button className="w-100 btn btn-primary btn-lg" type="submit">
                 Submit
               </button>
