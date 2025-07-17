@@ -11,3 +11,9 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+
+:root {
+  --theme-header-height: 60px; /* Adjust as needed */
+  --theme-footer-height: 40px; /* Adjust as needed */
+}

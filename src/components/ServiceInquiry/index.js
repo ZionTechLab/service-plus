@@ -190,7 +190,7 @@ function ServiceInquiry() {
 
       <div className="row g-5">
         <div className="col-md-7 col-lg-8">
-          <h4 className="mb-3">Billing address</h4>
+          {/* <h4 className="mb-3">Billing address</h4> */}
 
           <form onSubmit={formik.handleSubmit} noValidate>
             <div className="row g-3">
@@ -247,12 +247,6 @@ function ServiceInquiry() {
   
         </div>
       </div>
-
-      {/* <div className="row g-5">
-        <div className="col-md-12 col-lg-12">
-       
-        </div>
-      </div> */}
     </div>
   );
 }

@@ -48,7 +48,7 @@ function InquiryView() {
   };
 
   if (!inquiry) {
-    return <div>Loading...</div>;
+    return <div>...</div>;
   }
 
   return (

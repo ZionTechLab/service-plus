@@ -35,22 +35,22 @@ const Drawer = forwardRef(({ isOpen, onClose }, ref) => {
         <ul className="list-group list-group-flush">
          
           <li className="list-group-item">
-            <Link to="/main/service-inquiry" onClick={onClose} className="nav-link">
+            <Link to="/service-inquiry" onClick={onClose} className="nav-link">
               <i className="bi bi-headset me-2"></i>Service Inquiry
             </Link>
           </li>
           <li className="list-group-item">
-            <Link to="/main/inquiry-list" onClick={onClose} className="nav-link">
+            <Link to="/inquiry-list" onClick={onClose} className="nav-link">
               <i className="bi bi-list-ul me-2"></i>Inquiry List
             </Link>
           </li>
           <li className="list-group-item">
-            <Link to="/main/customer-master" onClick={onClose} className="nav-link">
+            <Link to="/customer-master" onClick={onClose} className="nav-link">
               <i className="bi bi-people-fill me-2"></i>Customer Master
             </Link>
           </li>
           <li className="list-group-item">
-            <Link to="/main/item-master" onClick={onClose} className="nav-link">
+            <Link to="/item-master" onClick={onClose} className="nav-link">
               <i className="bi bi-box-seam-fill me-2"></i>Item Master
             </Link>
           </li>
