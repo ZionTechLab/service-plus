@@ -1,6 +1,7 @@
 import * as Yup from "yup";
 import { useFormikBuilder } from "../../helpers/formikBuilder";
 import InputField from "../../helpers/InputField";
+import { useState } from "react";
 
 const fields = {
   item_code: {
@@ -75,7 +76,7 @@ const fields = {
   },
 };
 
-import { useState } from "react";
+
 
 const getNextId = (items) => {
   if (items.length === 0) return 1;
