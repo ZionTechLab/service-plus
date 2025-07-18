@@ -5,6 +5,8 @@ import InputField from "../../helpers/InputField";
 import { useFormikBuilder } from "../../helpers/formikBuilder";
 import PartnerService from "../AddCustomer/PartnerService";
 import InquiryView from "../InquiryView";
+import DataTable from "../../helpers/DataTable";
+import Overlay from "../Overlay";
 
 const inquiryTypes = [
   { key: 1, value: "quotation" },
@@ -30,6 +32,7 @@ function ServiceInquiry() {
   const { id } = useParams();
   const [showPopup, setShowPopup] = useState(false);
   const [assigneeData, setAssigneeData] = useState([]);
+  const [showCustomerModal, setShowCustomerModal] = useState(false);
 
   useEffect(() => {
     const fetchInquiries = async () => {
@@ -176,6 +179,34 @@ function ServiceInquiry() {
     }
   }, [id]);
 
+  const customerColumns = [
+    {
+      field: "partnerName",
+      header: "Partner Name",
+    },
+    {
+      field: "partner_type",
+      header: "Partner Type",
+    },
+    {
+      field: "primary_contact",
+      header: "Primary Contact",
+    },
+    {
+      field: "email",
+      header: "Email",
+    },
+  ];
+
+  const onCustomerSelect = (customer) => {
+    formik.setFieldValue("customer", customer.partnerName);
+    formik.setFieldValue("firstName", customer.primary_contact);
+    formik.setFieldValue("email", customer.email);
+    formik.setFieldValue("phone", customer.phone);
+    formik.setFieldValue("address", customer.address);
+    setShowCustomerModal(false);
+  };
+
   return (
     <div className="container">
       {/* <div className="py-5 text-center">
@@ -194,11 +225,25 @@ function ServiceInquiry() {
 
           <form onSubmit={formik.handleSubmit} noValidate>
             <div className="row g-3">
-              <InputField
-                className="col-sm-12"
-                {...fields.customer}
-                formik={formik}
-              />
+              <div className="col-sm-12">
+                <label htmlFor="customer" className="form-label">
+                  Customer
+                </label>
+                <div className="input-group">
+                  <input
+                    type="text"
+                    className="form-control"
+                    {...formik.getFieldProps("customer")}
+                  />
+                  <button
+                    className="btn btn-outline-secondary"
+                    type="button"
+                    onClick={() => setShowCustomerModal(true)}
+                  >
+                    ...
+                  </button>
+                </div>
+              </div>
               <InputField
                 className="col-sm-6"
                 {...fields.firstName}
@@ -247,6 +292,27 @@ function ServiceInquiry() {
   
         </div>
       </div>
+      {showCustomerModal && (
+        <Overlay>
+          <div className="card">
+            <div className="card-header">
+              <h5 className="card-title">Select Customer</h5>
+              <button
+                type="button"
+                className="btn-close"
+                onClick={() => setShowCustomerModal(false)}
+              ></button>
+            </div>
+            <div className="card-body">
+              <DataTable
+                data={assigneeData}
+                columns={customerColumns}
+                onRowSelect={onCustomerSelect}
+              />
+            </div>
+          </div>
+        </Overlay>
+      )}
     </div>
   );
 }
