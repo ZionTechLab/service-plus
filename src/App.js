@@ -12,6 +12,7 @@ import MainPage from "./components/MainPage";
 import ServiceInquiry from "./components/ServiceInquiry";
 import CustomerMaster from "./components/CustomerMaster";
 import ItemMaster from "./components/ItemMaster";
+import ItemCategory from "./components/ItemCategory";
 import InquiryList from "./components/InquiryList";
 import InquiryView from "./components/InquiryView";
 import AddCustomer from "./components/AddCustomer";
@@ -67,6 +68,7 @@ function App() {
           <Route path="service-inquiry/:id" element={<ServiceInquiry />} />
           <Route path="customer-master" element={<CustomerMaster />} />
           <Route path="item-master" element={<ItemMaster />} />
+          <Route path="item-category" element={<ItemCategory />} />
           <Route path="inquiry-list" element={<InquiryList />} />
           <Route path="inquiry/:id" element={<InquiryView />} />
 
