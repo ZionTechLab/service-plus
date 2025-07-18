@@ -1,12 +1,12 @@
 import React from 'react';
 import './Overlay.css'; // For styling the overlay
 
-function Overlay({ children }) {
-  return (
-    <div className="overlay">
-      <div className="overlay-content">{children}</div>
-    </div>
-  );
+function Overlay({ isOpen, onClick }) {
+  if (!isOpen) {
+    return null;
+  }
+
+  return <div className="overlay" onClick={onClick}></div>;
 }
 
 export default Overlay;

@@ -306,8 +306,15 @@ function ServiceInquiry() {
         </div>
       </div>
       {showCustomerModal && (
-        <Overlay>
-          <div className="card">
+        <div>
+ 
+          <div
+            className="modal-backdrop fade show"
+            style={{ zIndex: 1040 }}
+          ></div>
+      <div className="modal fade show"  style={{ display: 'block', zIndex: 1050 }}
+        tabIndex="-1">
+          <div className="card ">
             <div className="card-header">
               <h5 className="card-title">Select Customer</h5>
               <button
@@ -322,9 +329,9 @@ function ServiceInquiry() {
                 columns={customerColumns}
               />
             </div>
-          </div>
-        </Overlay>
-      )}
+          </div></div></div>
+        // {/* </Overlay> */}
+    )} 
     </div>
   );
 }
