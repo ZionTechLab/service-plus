@@ -196,6 +196,19 @@ function ServiceInquiry() {
       field: "email",
       header: "Email",
     },
+    {
+      field: "action",
+      header: "Action",
+      isAction: true,
+      actionTemplate: (row) => (
+        <button
+          className="btn btn-primary btn-sm"
+          onClick={() => onCustomerSelect(row)}
+        >
+          Select
+        </button>
+      ),
+    },
   ];
 
   const onCustomerSelect = (customer) => {
@@ -307,7 +320,6 @@ function ServiceInquiry() {
               <DataTable
                 data={assigneeData}
                 columns={customerColumns}
-                onRowSelect={onCustomerSelect}
               />
             </div>
           </div>
