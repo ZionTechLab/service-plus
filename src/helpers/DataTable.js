@@ -102,11 +102,11 @@ const ColumnVisibilityModal = ({ columns, visibleColumns, onToggle, isOpen, onCl
                   ))}
               </div>
               
-              <div className="mt-3 text-muted small">
+              {/* <div className="mt-3 text-muted small">
                 <strong>Note:</strong> At least one column must remain visible. Action columns are always shown.
-              </div>
+              </div> */}
             </div>
-            
+{/*             
             <div className="modal-footer">
               <button 
                 type="button" 
@@ -115,7 +115,7 @@ const ColumnVisibilityModal = ({ columns, visibleColumns, onToggle, isOpen, onCl
               >
                 Close
               </button>
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
@@ -219,7 +219,7 @@ const DataTable = ({ data = [], columns = [], name }) => {
 
       <div className="col-sm-8">
         {/* {visibleFilterableCols.length > 0 && ( */}
-          <div className="input-group mb-3">
+          <div className="input-group ">
             <span className="input-group-text">Filter by :</span>
             <select
               className="form-select"
@@ -246,16 +246,16 @@ const DataTable = ({ data = [], columns = [], name }) => {
         {/* )} */}
 </div>
 
-      <div className="col-sm-2">
-   <div className="mb-3">
+      <div className="col-sm-4 ">
+
           <button
-            className="btn btn-outline-secondary"
+            className="btn position-sticky top-0 start-100"
             onClick={() => setShowColumnModal(true)}
           >
-            <span className="me-2">⚙️</span>
-            Column Visibility
+            ⚙️
+
           </button>
-        </div>
+       
 
         <ColumnVisibilityModal
           columns={columns}
