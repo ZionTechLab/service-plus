@@ -7,6 +7,7 @@ import PartnerService from "../AddCustomer/PartnerService";
 import InquiryView from "../InquiryView";
 import DataTable from "../../helpers/DataTable";
 import Overlay from "../Overlay";
+import CustomerModal from "../CustomerModal";
 
 const inquiryTypes = [
   { key: 1, value: "quotation" },
@@ -305,33 +306,12 @@ function ServiceInquiry() {
   
         </div>
       </div>
-      {showCustomerModal && (
-        <div>
- 
-          <div
-            className="modal-backdrop fade show"
-            style={{ zIndex: 1040 }}
-          ></div>
-      <div className="modal fade show"  style={{ display: 'block', zIndex: 1050 }}
-        tabIndex="-1">
-          <div className="card ">
-            <div className="card-header">
-              <h5 className="card-title">Select Customer</h5>
-              <button
-                type="button"
-                className="btn-close"
-                onClick={() => setShowCustomerModal(false)}
-              ></button>
-            </div>
-            <div className="card-body">
-              <DataTable
-                data={assigneeData}
-                columns={customerColumns}
-              />
-            </div>
-          </div></div></div>
-        // {/* </Overlay> */}
-    )} 
+      <CustomerModal
+        show={showCustomerModal}
+        onClose={() => setShowCustomerModal(false)}
+        customers={assigneeData}
+        onCustomerSelect={onCustomerSelect}
+      />
     </div>
   );
 }
