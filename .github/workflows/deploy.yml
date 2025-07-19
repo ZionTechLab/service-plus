@@ -3,7 +3,8 @@ name: Deploy React App to GitHub Pages
 on:
   push:
     branches:
-      - main  # or master
+      - master  # or master
+
 
 jobs:
   deploy:
