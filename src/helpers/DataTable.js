@@ -23,14 +23,13 @@ const Pagination = ({ total, currentPage, pageSize, onPageChange }) => {
 const ColumnVisibilityModal = ({ columns, visibleColumns, onToggle, isOpen, onClose }) => {
   if (!isOpen) return null;
 
-  const handleSelectAll = () => {
-    const allFields = columns.filter(col => !col.isAction).map(col => col.field);
-    columns.filter(col => !col.isAction).forEach(col => {
-      if (!visibleColumns.includes(col.field)) {
-        onToggle(col.field);
-      }
-    });
-  };
+const handleSelectAll = () => {
+  columns.filter(col => !col.isAction).forEach(col => {
+    if (!visibleColumns.includes(col.field)) {
+      onToggle(col.field);
+    }
+  });
+};
 
   const handleDeselectAll = () => {
     const fieldsToHide = visibleColumns.slice(0, -1); // Keep at least one visible
