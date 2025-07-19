@@ -1,6 +1,5 @@
 import React, { useEffect } from "react";
 import {
-  BrowserRouter as Router,
   Routes,
   Route,
   Navigate,
@@ -44,40 +43,39 @@ function App() {
   }, []);
 
   return (
-    <Router>
-      <div className="App">
-        <Routes>
-          <Route
-            path="/login"
-            element={
-              <PublicRoute isLoggedIn={isLoggedIn}>
-                <LoginPage />
-              </PublicRoute>
-            }
-          />
+    <div className="App">
+      <Routes>
+        <Route
+          path="/login"
+          element={
+            <PublicRoute isLoggedIn={isLoggedIn}>
+              <LoginPage />
+            </PublicRoute>
+          }
+        />
 
-         <Route
-        path="/"
-        element={
-          <ProtectedRoute isLoggedIn={isLoggedIn}>
-            <MainPage />
-          </ProtectedRoute>
-        }
-      >
-          <Route path="service-inquiry" element={<ServiceInquiry />} />
-          <Route path="service-inquiry/:id" element={<ServiceInquiry />} />
-          <Route path="customer-master" element={<CustomerMaster />} />
-          <Route path="item-master" element={<ItemMaster />} />
-          <Route path="item-category" element={<ItemCategory />} />
-          <Route path="inquiry-list" element={<InquiryList />} />
-          <Route path="inquiry/:id" element={<InquiryView />} />
+       <Route
+      path="/"
+      element={
+        <ProtectedRoute isLoggedIn={isLoggedIn}>
+          <MainPage />
+        </ProtectedRoute>
+      }
+    >
+        <Route path="service-inquiry" element={<ServiceInquiry />} />
+        <Route path="service-inquiry/:id" element={<ServiceInquiry />} />
+        <Route path="customer-master" element={<CustomerMaster />} />
+        <Route path="item-master" element={<ItemMaster />} />
+        <Route path="item-category" element={<ItemCategory />} />
+        <Route path="inquiry-list" element={<InquiryList />} />
+        <Route path="inquiry/:id" element={<InquiryView />} />
 
-          <Route path="add-customer" element={<AddCustomer />} />
-          <Route path="add-item" element={<AddItem />} />
-          <Route path="profile" element={<Profile />} />
-          <Route path="grn" element={<Grn />} />
-    </Route>
-          {/* <Route
+        <Route path="add-customer" element={<AddCustomer />} />
+        <Route path="add-item" element={<AddItem />} />
+        <Route path="profile" element={<Profile />} />
+        <Route path="grn" element={<Grn />} />
+  </Route>
+        {/* <Route
             path="/"
             element={
               isLoggedIn ? (
@@ -89,7 +87,7 @@ function App() {
           /> */}
         </Routes>
       </div>
-    </Router>
+    
   );
 }
 
