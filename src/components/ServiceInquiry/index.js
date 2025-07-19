@@ -237,26 +237,24 @@ function ServiceInquiry() {
           {/* <h4 className="mb-3">Billing address</h4> */}
 
           <form onSubmit={formik.handleSubmit} noValidate>
+
+
+
+
             <div className="row g-3">
-              <div className="col-sm-12">
-                <label htmlFor="customer" className="form-label">
-                  Customer
-                </label>
-                <div className="input-group">
-                  <input
-                    type="text"
-                    className="form-control"
-                    {...formik.getFieldProps("customer")}
-                  />
-                  <button
+    <InputField
+                className="col-sm-12"
+                {...fields.customer}
+                formik={formik}
+              >
+                 <button
                     className="btn btn-outline-secondary"
                     type="button"
                     onClick={() => setShowCustomerModal(true)}
                   >
                     ...
                   </button>
-                </div>
-              </div>
+              </InputField>
               <InputField
                 className="col-sm-6"
                 {...fields.firstName}

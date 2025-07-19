@@ -10,7 +10,7 @@ function InputField({
   onChange,
   error,
   touched,
-  dataBinding
+  dataBinding,children
 }) {
   const hasFormik = !!formik;
 
@@ -102,7 +102,8 @@ function InputField({
   return (
     <div className={`form-group ${className}`}>
       <label className="form-label">{placeholder}</label>
-      {renderInput()}
+            <div className="input-group">
+      {renderInput()}{children}</div>
       {showError && (
         <small>
           <div className="error-message">
