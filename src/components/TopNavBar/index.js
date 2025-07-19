@@ -47,7 +47,7 @@ function TopNavBar({ onToggleDrawer }) {
       <span class="badge">9</span>
     </div>
  <div class="dropdown">
-      <button class="d-flex align-items-center text-decoration-none btn btn-link" type="button" role="button" data-bs-toggle="dropdown" style={{background: 'none', border: 'none', padding: 0}}>
+      <button class="d-flex align-items-center text-decoration-none btn btn-link" type="button" data-bs-toggle="dropdown" style={{background: 'none', border: 'none', padding: 0}}>
         <img src="https://zoyothemes.com/silva/html/assets/images/users/user-5.jpg" alt="Profile" class="navbar-profile-img me-2"/>
         <span>{user.name}</span>
       </button>
