@@ -107,7 +107,17 @@ function AddCustomer() {
         formik.setValues(inquiry);
       }
     }
-  }, [id]);
+  }, [id, formik]);
+ 
+  // useEffect(() => {
+  //   if (id) {
+  //     const inquiries = JSON.parse(localStorage.getItem("inquiries")) || [];
+  //     const inquiry = inquiries.find((i) => i.id === parseInt(id));
+  //     if (inquiry) {
+  //       formik.setValues(inquiry);
+  //     }
+  //   }
+  // }, [id, formik]);
 
   return (
     <div className="container">

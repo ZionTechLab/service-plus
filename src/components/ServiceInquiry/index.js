@@ -5,8 +5,7 @@ import InputField from "../../helpers/InputField";
 import { useFormikBuilder } from "../../helpers/formikBuilder";
 import PartnerService from "../AddCustomer/PartnerService";
 import InquiryView from "../InquiryView";
-import DataTable from "../../helpers/DataTable";
-import Overlay from "../Overlay";
+
 import CustomerModal from "../CustomerModal";
 
 const inquiryTypes = [
@@ -178,39 +177,9 @@ function ServiceInquiry() {
         formik.setValues(inquiry);
       }
     }
-  }, [id]);
+  }, [id, formik]);
 
-  const customerColumns = [
-    {
-      field: "partnerName",
-      header: "Partner Name",
-    },
-    {
-      field: "partner_type",
-      header: "Partner Type",
-    },
-    {
-      field: "primary_contact",
-      header: "Primary Contact",
-    },
-    {
-      field: "email",
-      header: "Email",
-    },
-    {
-      field: "action",
-      header: "Action",
-      isAction: true,
-      actionTemplate: (row) => (
-        <button
-          className="btn btn-primary btn-sm"
-          onClick={() => onCustomerSelect(row)}
-        >
-          Select
-        </button>
-      ),
-    },
-  ];
+
 
   const onCustomerSelect = (customer) => {
     formik.setFieldValue("customer", customer.partnerName);

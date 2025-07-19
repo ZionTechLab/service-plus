@@ -44,4 +44,5 @@ class PartnerService {
   
 }
 
-export default new PartnerService();
+const partnerServiceInstance = new PartnerService();
+export default partnerServiceInstance;

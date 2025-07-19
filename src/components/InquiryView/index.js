@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useParams } from 'react-router-dom';
-import LogActivity from '../LogActivity';
+
 
 function InquiryView() {
   const { id } = useParams();
@@ -13,39 +13,6 @@ function InquiryView() {
     setInquiry(currentInquiry);
   }, [id]);
 
-  const handleStatusChange = (newStatus) => {
-    const inquiries = JSON.parse(localStorage.getItem('inquiries')) || [];
-    const updatedInquiries = inquiries.map((i) => {
-      if (i.id === parseInt(id)) {
-        const newLogEntry = { status: newStatus, timestamp: new Date() };
-        return {
-          ...i,
-          status: newStatus,
-          log: [...i.log, newLogEntry],
-        };
-      }
-      return i;
-    });
-    localStorage.setItem('inquiries', JSON.stringify(updatedInquiries));
-    setInquiry(updatedInquiries.find((i) => i.id === parseInt(id)));
-  };
-
-  const handleLogActivitySubmit = (values) => {
-    const inquiries = JSON.parse(localStorage.getItem('inquiries')) || [];
-    const updatedInquiries = inquiries.map((i) => {
-      if (i.id === parseInt(id)) {
-        const newLogEntry = { ...values, timestamp: new Date() };
-        return {
-          ...i,
-          log: [...i.log, newLogEntry],
-        };
-      }
-      return i;
-    });
-    localStorage.setItem('inquiries', JSON.stringify(updatedInquiries));
-    setInquiry(updatedInquiries.find((i) => i.id === parseInt(id)));
-    setShowLogActivity(false);
-  };
 
   if (!inquiry) {
     return <div>...</div>;

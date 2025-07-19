@@ -5,7 +5,7 @@ import InputField from "../../helpers/InputField";
 import { useFormikBuilder } from "../../helpers/formikBuilder";
 import PartnerService from "../AddCustomer/PartnerService";
 import DataTable from "../../helpers/DataTable";
-import Overlay from "../Overlay";
+
 
 const getNextId = (items) => {
   if (items.length === 0) return 1;
@@ -110,7 +110,7 @@ function Grn() {
         setItems(grn.items);
       }
     }
-  }, [id]);
+  }, [id, formik]);
 
   const supplierColumns = [
     {

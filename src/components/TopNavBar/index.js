@@ -47,13 +47,13 @@ function TopNavBar({ onToggleDrawer }) {
       <span class="badge">9</span>
     </div>
  <div class="dropdown">
-      <div class="d-flex align-items-center text-decoration-none " href="#" role="button" data-bs-toggle="dropdown">
+      <button class="d-flex align-items-center text-decoration-none btn btn-link" type="button" role="button" data-bs-toggle="dropdown" style={{background: 'none', border: 'none', padding: 0}}>
         <img src="https://zoyothemes.com/silva/html/assets/images/users/user-5.jpg" alt="Profile" class="navbar-profile-img me-2"/>
         <span>{user.name}</span>
-      </div>
+      </button>
       <ul class="dropdown-menu dropdown-menu-end">
         <li><a class="dropdown-item" href="/profile">Profile</a></li>
-        <li><a class="dropdown-item" onClick={handleLogout}>Logout</a></li>
+        <li><button class="dropdown-item" type="button" onClick={handleLogout}>Logout</button></li>
       </ul>
     </div>
         {/* <div className="collapse navbar-collapse">
