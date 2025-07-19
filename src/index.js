@@ -6,14 +6,14 @@ import './index.css';
 // import './themes.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
-
+import { HashRouter } from "react-router-dom";
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
-  <React.StrictMode>
+ <HashRouter> <React.StrictMode>
     <Provider store={store}>
       <App />
     </Provider>
-  </React.StrictMode>
+  </React.StrictMode></HashRouter>
 );
 
 reportWebVitals();
