@@ -160,26 +160,29 @@ function AddBusinessPartner() {
                 {...fields.address}
                 formik={formik}
               />
+              
               <InputField
                 className="col-sm-6"
                 {...fields.phone}
                 formik={formik}
               />
+              <div className="col-sm-6 row g-2">
               <InputField
-                className="col-sm-2"
+                className="col-4"
                 {...fields.isCustomer}
                 formik={formik}
               />
               <InputField
-                className="col-sm-2"
+                className="col-4"
                 {...fields.isSupplier}
                 formik={formik}
               />
               <InputField
-                className="col-sm-2"
+                className="col-4"
                 {...fields.isEmployee}
                 formik={formik}
               />
+              </div>
               <InputField
                 className="col-sm-6"
                 {...fields.active}

@@ -44,10 +44,10 @@ function Navbar({ onToggleDrawer }) {
       <i class="bi bi-arrows-fullscreen"></i>
     </button>
 
-   <div class="notification-bell me-3">
+   {/* <div class="notification-bell me-3">
       <i class="bi bi-bell fs-5"></i>
       <span class="badge">9</span>
-    </div>
+    </div> */}
  <div class="dropdown">
       <button class="d-flex align-items-center text-decoration-none btn btn-link" type="button" data-bs-toggle="dropdown" style={{background: 'none', border: 'none', padding: 0}}>
         <img src="https://zoyothemes.com/silva/html/assets/images/users/user-5.jpg" alt="Profile" class="navbar-profile-img me-2"/>

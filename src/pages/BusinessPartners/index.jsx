@@ -1,10 +1,11 @@
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import DataTable from '../../helpers/DataTable';
 import PartnerService from './PartnerService';
 import { useEffect, useState } from 'react';
 
 function BusinessPartners() {
   const [sampleData, setInquiries] = useState([]);
+  const navigate = useNavigate();
 
   useEffect(() => {
     const fetchInquiries = async () => {
@@ -31,7 +32,12 @@ function BusinessPartners() {
       isAction: true,
       actionTemplate: (row) => (
         <div className="d-flex gap-2 justify-content-center">
-          <button className="btn btn-sm btn-outline-primary" onClick={() => alert(`Edit ${row.name}`)}>Edit</button>
+          <button
+            className="btn btn-sm btn-outline-primary"
+            onClick={() => navigate(`/business-partner/edit/${row.id}`)}
+          >
+            Edit
+          </button>
           <button className="btn btn-sm btn-outline-danger" onClick={() => alert(`Delete ${row.name}`)}>Delete</button>
         </div>
       )
