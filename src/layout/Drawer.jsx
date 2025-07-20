@@ -1,6 +1,7 @@
 import { forwardRef, useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
 import '../components/Drawer/Drawer.css';
+import menuItems from '../helpers/menuItems';
 
 const Drawer = forwardRef(({ isOpen, onClose }, ref) => {
   const [theme, setTheme] = useState('light');
@@ -49,15 +50,6 @@ const Drawer = forwardRef(({ isOpen, onClose }, ref) => {
       {/* Backdrop for modal effect */}
       <div
         className="drawer-backdrop"
-        style={{
-          position: 'fixed',
-          top: 0,
-          left: 0,
-          width: '100vw',
-          height: '100vh',
-          background: 'rgba(0,0,0,0.3)',
-          zIndex: 1049,
-        }}
         onClick={onClose}
         aria-label="Close menu"
       />
@@ -68,57 +60,27 @@ const Drawer = forwardRef(({ isOpen, onClose }, ref) => {
         role="dialog"
         aria-modal="true"
         aria-label="Main menu"
-        style={{ outline: 'none' }}
       >
         <div className="drawer-header">
-          <h3 className="mb-0" style={{ fontWeight: 600, fontSize: '1.25rem' }}>Menu</h3>
+          <h3 className="drawer-title mb-0">Menu</h3>
           <button
             onClick={onClose}
-            className="btn btn-dark"
+            className="drawer-close-btn btn btn-dark"
             aria-label="Close menu"
-            style={{ borderRadius: '50%', width: 36, height: 36, display: 'flex', alignItems: 'center', justifyContent: 'center' }}
           >
             <i className="bi bi-x-lg" aria-hidden="true"></i>
           </button>
         </div>
         <nav className="drawer-nav" aria-label="Main navigation">
           <ul className="list-group list-group-flush">
-            <li className="list-group-item">
-              <Link to="/service-inquiry" onClick={onClose} className="nav-link">
-                <i className="bi bi-headset me-2" aria-hidden="true"></i>
-                <span>Service Inquiry</span>
-              </Link>
-            </li>
-            <li className="list-group-item">
-              <Link to="/inquiry-list" onClick={onClose} className="nav-link">
-                <i className="bi bi-list-ul me-2" aria-hidden="true"></i>
-                <span>Inquiry List</span>
-              </Link>
-            </li>
-            <li className="list-group-item">
-              <Link to="/customer-master" onClick={onClose} className="nav-link">
-                <i className="bi bi-people-fill me-2" aria-hidden="true"></i>
-                <span>Customer Master</span>
-              </Link>
-            </li>
-            <li className="list-group-item">
-              <Link to="/item-master" onClick={onClose} className="nav-link">
-                <i className="bi bi-box-seam-fill me-2" aria-hidden="true"></i>
-                <span>Item Master</span>
-              </Link>
-            </li>
-            <li className="list-group-item">
-              <Link to="/item-category" onClick={onClose} className="nav-link">
-                <i className="bi bi-tags me-2" aria-hidden="true"></i>
-                <span>Item Category</span>
-              </Link>
-            </li>
-            <li className="list-group-item">
-              <Link to="/grn" onClick={onClose} className="nav-link">
-                <i className="bi bi-receipt me-2" aria-hidden="true"></i>
-                <span>GRN</span>
-              </Link>
-            </li>
+            {menuItems.map(item => (
+              <li className="list-group-item" key={item.route}>
+                <Link to={item.route} onClick={onClose} className="nav-link">
+                  <i className={`${item.icon} me-2`} aria-hidden="true"></i>
+                  <span>{item.displayName}</span>
+                </Link>
+              </li>
+            ))}
           </ul>
         </nav>
         <div className="drawer-footer mt-auto p-3">

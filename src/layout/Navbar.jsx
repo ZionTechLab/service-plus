@@ -2,6 +2,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { logoutSuccess, selectUser } from '../features/auth/authSlice';
 import { useLocation, useNavigate } from 'react-router-dom';
 import "../components/TopNavBar/topbar.css";
+import menuItems from '../helpers/menuItems';
 function Navbar({ onToggleDrawer }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -24,8 +25,8 @@ function Navbar({ onToggleDrawer }) {
   const getPageTitle = () => {
     const path = location.pathname;
     if (path === "/") return "Dashboard";
-    const title = path.replace("/", "").replace("-", " ");
-    return title.charAt(0).toUpperCase() + title.slice(1);
+    const found = menuItems.find(item => item.route === path);
+    return found ? found.displayName : "Page";
   };
 
   return (

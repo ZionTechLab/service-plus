@@ -1,3 +1,29 @@
+/* Drawer backdrop for modal effect */
+.drawer-backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  background: rgba(0,0,0,0.3);
+  z-index: 1049;
+}
+
+/* Drawer header title */
+.drawer-title {
+  font-weight: 600;
+  font-size: 1.25rem;
+}
+
+/* Drawer close button */
+.drawer-close-btn {
+  border-radius: 50%;
+  width: 36px;
+  height: 36px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
 .drawer {
   position: fixed;
   top: 0;
