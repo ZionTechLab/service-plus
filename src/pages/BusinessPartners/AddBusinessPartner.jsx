@@ -1,9 +1,9 @@
 import * as Yup from 'yup';
-import InputField from '../helpers/InputField';
+import InputField from '../../helpers/InputField';
 import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
-import { useFormikBuilder } from '../helpers/formikBuilder';
-import PartnerService from '../components/AddCustomer/PartnerService';
+import { useFormikBuilder } from '../../helpers/formikBuilder';
+import PartnerService from './PartnerService';
 
 const fields = {
   partnerCode: {
@@ -83,7 +83,7 @@ const fields = {
   },
 };
 
-function AddCustomer() {
+function AddBusinessPartner() {
   const { id } = useParams();
   const [showPopup, setShowPopup] = useState(false);
 
@@ -197,4 +197,4 @@ function AddCustomer() {
   );
 }
 
-export default AddCustomer;
+export default AddBusinessPartner;

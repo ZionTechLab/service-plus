@@ -3,7 +3,7 @@ import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
 import InputField from "../helpers/InputField";
 import { useFormikBuilder } from "../helpers/formikBuilder";
-import PartnerService from "../components/AddCustomer/PartnerService";
+import PartnerService from "./BusinessPartners/PartnerService";
 import InquiryView from "./InquiryView";
 import CustomerModal from "../components/CustomerModal";
 

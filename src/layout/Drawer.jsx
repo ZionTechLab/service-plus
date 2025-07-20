@@ -73,7 +73,7 @@ const Drawer = forwardRef(({ isOpen, onClose }, ref) => {
         </div>
         <nav className="drawer-nav" aria-label="Main navigation">
           <ul className="list-group list-group-flush">
-            {menuItems.map(item => (
+            {menuItems.filter(item => item.isMenuItem).map(item => (
               <li className="list-group-item" key={item.route}>
                 <Link to={item.route} onClick={onClose} className="nav-link">
                   <i className={`${item.icon} me-2`} aria-hidden="true"></i>

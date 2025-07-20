@@ -3,6 +3,7 @@ import { logoutSuccess, selectUser } from '../features/auth/authSlice';
 import { useLocation, useNavigate } from 'react-router-dom';
 import "../components/TopNavBar/topbar.css";
 import menuItems from '../helpers/menuItems';
+
 function Navbar({ onToggleDrawer }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
@@ -50,10 +51,10 @@ function Navbar({ onToggleDrawer }) {
  <div class="dropdown">
       <button class="d-flex align-items-center text-decoration-none btn btn-link" type="button" data-bs-toggle="dropdown" style={{background: 'none', border: 'none', padding: 0}}>
         <img src="https://zoyothemes.com/silva/html/assets/images/users/user-5.jpg" alt="Profile" class="navbar-profile-img me-2"/>
-        <span>{user.name}</span>
+        <span className="d-none d-md-inline">{user.name}</span>
       </button>
       <ul class="dropdown-menu dropdown-menu-end">
-        <li><a class="dropdown-item" href="/profile">Profile</a></li>
+        <li><button class="dropdown-item" type="button" onClick={() => navigate('/profile')}>Profile</button></li>
         <li><button class="dropdown-item" type="button" onClick={handleLogout}>Logout</button></li>
       </ul>
     </div>

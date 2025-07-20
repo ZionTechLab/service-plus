@@ -210,63 +210,57 @@ const DataTable = ({ data = [], columns = [], name }) => {
   }, [filteredData, page]);
 
   return (
-    <div className="card">
-      <div className="card-body">
-        {/* Column Visibility Button */}
-     
-     <div className="row g-3">
+    <div className="">
+      <div className="">
+        <div className="row g-3">
+          <div className="col-sm-8">
+            {/* Responsive Filter label */}
+            <div className="d-block d-sm-none mb-1">
+              <span className="fw-semibold">Filter by :</span>
+            </div>
+            <div className="input-group">
+              <span className="input-group-text d-none d-sm-inline">Filter by :</span>
+              <select
+                className="form-select"
+                value={searchKey || ""}
+                onChange={(e) => {
+                  setSearchKey(e.target.value);
+                }}
+              >
+                {visibleFilterableCols?.map((opt) => (
+                  <option key={opt.field} value={opt.field}>
+                    {opt.header}
+                  </option>
+                ))}
+              </select>
 
-      <div className="col-sm-8">
-        {/* {visibleFilterableCols.length > 0 && ( */}
-          <div className="input-group ">
-            <span className="input-group-text">Filter by :</span>
-            <select
-              className="form-select"
-              value={searchKey || ''}
-              onChange={(e) => {
-                setSearchKey(e.target.value);
-              }}
+              <input
+                type="text"
+                className="form-control"
+                placeholder="Filter Text..."
+                value={searchTerm}
+                onChange={(e) => setSearchTerm(e.target.value)}
+              />
+            </div>
+          </div>
+
+          <div className=" ">
+            <button
+              className="btn settings-btn"
+              onClick={() => setShowColumnModal(true)}
             >
-              {visibleFilterableCols?.map((opt) => (
-                <option key={opt.field} value={opt.field}>
-                  {opt.header}
-                </option>
-              ))}
-            </select>
+              ⚙️
+            </button>
 
-            <input
-              type="text"
-              className="form-control"
-              placeholder="Filter Text..."
-              value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+            <ColumnVisibilityModal
+              columns={columns}
+              visibleColumns={visibleColumns}
+              onToggle={handleColumnToggle}
+              isOpen={showColumnModal}
+              onClose={() => setShowColumnModal(false)}
             />
           </div>
-        {/* )} */}
-</div>
-
-      <div className="col-sm-4 ">
-
-          <button
-            className="btn position-sticky top-0 start-100"
-            onClick={() => setShowColumnModal(true)}
-          >
-            ⚙️
-
-          </button>
-       
-
-        <ColumnVisibilityModal
-          columns={columns}
-          visibleColumns={visibleColumns}
-          onToggle={handleColumnToggle}
-          isOpen={showColumnModal}
-          onClose={() => setShowColumnModal(false)}
-        />
-</div>
-
-
-</div>
+        </div>
         {/* Table */}
         <div className="mt-3 table-responsive">
           <table className="table table-bordered">
@@ -277,7 +271,7 @@ const DataTable = ({ data = [], columns = [], name }) => {
                     key={idx}
                     className={`sort ${col.class || ""}`}
                     onClick={() => !col.isAction && setSortKey(col)}
-                    style={{ cursor: !col.isAction ? 'pointer' : 'default' }}
+                    style={{ cursor: !col.isAction ? "pointer" : "default" }}
                   >
                     {col.header}
                     {sortKey && sortKey.field === col.field && (

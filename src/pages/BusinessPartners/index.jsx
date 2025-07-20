@@ -1,10 +1,10 @@
 import { Link } from 'react-router-dom';
-import DataTable from '../../helpers/DataTable'; 
-import PartnerService from "../AddCustomer/PartnerService";
-import { useEffect, useState } from "react";
+import DataTable from '../../helpers/DataTable';
+import PartnerService from './PartnerService';
+import { useEffect, useState } from 'react';
 
-function CustomerMaster() {
-    const [sampleData, setInquiries] = useState([]);
+function BusinessPartners() {
+  const [sampleData, setInquiries] = useState([]);
 
   useEffect(() => {
     const fetchInquiries = async () => {
@@ -14,7 +14,7 @@ function CustomerMaster() {
     fetchInquiries();
   }, []);
 
-    const columns = [
+  const columns = [
     { header: 'ID', field: 'id' },
     { header: 'Partner Code', field: 'partnerCode' },
     { header: 'Partner Name', field: 'partnerName' },
@@ -22,10 +22,10 @@ function CustomerMaster() {
     { header: 'Email', field: 'email' },
     { header: 'Address', field: 'address' },
     { header: 'Phone', field: 'phone' },
-    { header: 'Is Customer',isAction: true,  actionTemplate: (row) => (<input type="checkbox" checked={row.isCustomer} />), field: 'isCustomer' },
-    { header: 'Is Supplier',isAction: true,  actionTemplate: (row) => (<input type="checkbox" checked={row.isSupplier} />), field: 'isSupplier' },
-    { header: 'Is Employee',isAction: true,  actionTemplate: (row) => (<input type="checkbox" checked={row.isEmployee} />), field: 'isEmployee' },
-    { header: 'Active',  isAction: true,  actionTemplate: (row) => (<input type="checkbox" checked={row.active} />), field: 'active' },
+    { header: 'Is Customer', isAction: true, actionTemplate: (row) => (<input type="checkbox" checked={row.isCustomer} />), field: 'isCustomer' },
+    { header: 'Is Supplier', isAction: true, actionTemplate: (row) => (<input type="checkbox" checked={row.isSupplier} />), field: 'isSupplier' },
+    { header: 'Is Employee', isAction: true, actionTemplate: (row) => (<input type="checkbox" checked={row.isEmployee} />), field: 'isEmployee' },
+    { header: 'Active', isAction: true, actionTemplate: (row) => (<input type="checkbox" checked={row.active} />), field: 'active' },
     {
       header: 'Actions',
       isAction: true,
@@ -37,15 +37,17 @@ function CustomerMaster() {
       )
     }
   ];
+
   return (
     <div>
-      <h1>Customer Master</h1>
-      <Link to="/main/add-customer">
-        <button>Add Customer</button>
-      </Link> 
+      <Link to="/business-partner/add">
+      <div className="py-3">
+        <button className=" btn btn-primary btn-lg ">Add Business Partner</button>
+      </div>
+      </Link>
       <DataTable name="User Export" data={sampleData} columns={columns} />
     </div>
   );
 }
 
-export default CustomerMaster;
+export default BusinessPartners;
