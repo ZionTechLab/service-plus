@@ -1,48 +1,45 @@
-import { Link, useNavigate } from 'react-router-dom';
+import {  useNavigate } from 'react-router-dom';
 import DataTable from '../../helpers/DataTable';
 import PartnerService from './PartnerService';
 import { useEffect, useState } from 'react';
-import PopupMessage from '../../components/PopupMessage';
+import useConfirm from '../../hooks/useConfirm';
 
 function BusinessPartners() {
-  const [sampleData, setInquiries] = useState([]);
-  const [deleteId, setDeleteId] = useState(null);
-  const [showDeletePopup, setShowDeletePopup] = useState(false);
+  const [dataset, setDataset] = useState([]);
   const navigate = useNavigate();
+  const [ConfirmationDialog, confirm] = useConfirm();
 
   useEffect(() => {
     const fetchInquiries = async () => {
       const storedInquiries = await PartnerService.getAllPartners();
-      setInquiries(storedInquiries);
+      setDataset(storedInquiries);
     };
     fetchInquiries();
   }, []);
 
-  const handleDelete = (id) => {
-    setDeleteId(id);
-    setShowDeletePopup(true);
+  const handleDelete = async (id) => {
+    const isConfirmed = await confirm(
+      "Are you sure you want to delete this business partner?",
+      { confirmText: "Delete", cancelText: "Cancel", type: "danger" }
+    );
+    if (isConfirmed) {
+      const partners = await PartnerService.getAllPartners();
+      const updated = partners.filter(p => p.id !== id);
+      localStorage.setItem('partners', JSON.stringify(updated));
+      setDataset(updated);
+    }
   };
 
-  const confirmDelete = () => {
-    const partners = PartnerService.getAllPartners();
-    const updated = partners.filter(p => p.id !== deleteId);
-    localStorage.setItem('partners', JSON.stringify(updated));
-    setInquiries(updated);
-    setShowDeletePopup(false);
-    setDeleteId(null);
+  const handleEdit = (id) => {
+    navigate(`/business-partner/edit/${id}`);
   };
-
+  
   const columns = [{
       header: 'Actions',
       isAction: true,
       actionTemplate: (row) => (
         <div className="d-flex gap-2 justify-content-center">
-          <button
-            className="btn btn-sm btn-outline-primary"
-            onClick={() => navigate(`/business-partner/edit/${row.id}`)}
-          >
-            Edit
-          </button>
+          <button className="btn btn-sm btn-outline-primary" onClick={() => handleEdit(row.id)}>Edit</button>
           <button className="btn btn-sm btn-outline-danger" onClick={() => handleDelete(row.id)}>Delete</button>
         </div>
       )
@@ -58,26 +55,12 @@ function BusinessPartners() {
     { header: 'Is Supplier', isAction: true, actionTemplate: (row) => (<input type="checkbox" checked={row.isSupplier} readOnly/>), field: 'isSupplier' },
     { header: 'Is Employee', isAction: true, actionTemplate: (row) => (<input type="checkbox" checked={row.isEmployee} readOnly/>), field: 'isEmployee' },
     { header: 'Active', isAction: true, actionTemplate: (row) => (<input type="checkbox" checked={row.active} readOnly/>), field: 'active' },
-    
   ];
 
   return (
     <div>
-      <PopupMessage
-        show={showDeletePopup}
-        message="Are you sure you want to delete this business partner?"
-        onClose={() => { setShowDeletePopup(false); setDeleteId(null); }}
-        onConfirm={confirmDelete}
-        confirmText="Delete"
-        cancelText="Cancel"
-        type="danger"
-      />
-      <Link to="/business-partner/add">
-        <div className="py-3">
-          <button className=" btn btn-primary btn-lg ">Add Business Partner</button>
-        </div>
-      </Link>
-      <DataTable name="User Export" data={sampleData} columns={columns} />
+      <ConfirmationDialog />
+      <DataTable name="User Export" data={dataset} columns={columns} />
     </div>
   );
 }

@@ -52,7 +52,7 @@ function InquiryList() {
 
   return (
     <div>
-      <h1>Inquiry List</h1>
+      {/* <h1>Inquiry List</h1> */}
       <DataTable columns={columns} data={inquiries} />
     </div>
   );

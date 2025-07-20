@@ -1,10 +1,10 @@
 import * as Yup from 'yup';
 import InputField from '../../helpers/InputField';
 import { useParams } from 'react-router-dom';
-import { useEffect, useState } from 'react';
+import { useEffect } from 'react';
 import { useFormikBuilder } from '../../helpers/formikBuilder';
 import PartnerService from './PartnerService';
-import PopupMessage from '../../components/PopupMessage';
+import useConfirm from '../../hooks/useConfirm';
 
 const fields = {
   partnerCode: {
@@ -84,16 +84,16 @@ const fields = {
 
 function AddBusinessPartner() {
   const { id } = useParams();
-  const [showPopup, setShowPopup] = useState(false);
+  const [ConfirmationDialog, confirm] = useConfirm();
 
   const handleInquirySubmit = async (values, { resetForm }) => {
     await PartnerService.createPartner(values);
 
     resetForm();
-    setShowPopup(true);
-    setTimeout(() => {
-      setShowPopup(false);
-    }, 3000);
+ const isConfirmed = await confirm(
+      "Business partner saved successfully!",
+      { confirmText: "OK", type: "success" }
+    );
   };
 
   const formik = useFormikBuilder(fields, handleInquirySubmit);
@@ -114,13 +114,7 @@ function AddBusinessPartner() {
 
   return (
     <div className="container">
-    
-      <PopupMessage
-        show={showPopup}
-        message="Business partner saved successfully!"
-        onClose={() => setShowPopup(false)}
-      />
-
+      <ConfirmationDialog />
       <div className="row g-5">
         <div className="col-md-12 col-lg-12">
           <form onSubmit={formik.handleSubmit} noValidate>
