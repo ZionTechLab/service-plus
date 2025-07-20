@@ -4,6 +4,7 @@ import { useParams } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { useFormikBuilder } from '../../helpers/formikBuilder';
 import PartnerService from './PartnerService';
+import PopupMessage from '../../components/PopupMessage';
 
 const fields = {
   partnerCode: {
@@ -101,7 +102,7 @@ function AddBusinessPartner() {
 
   useEffect(() => {
     if (id) {
-      console.log("Fetching partner data for ID:", id);
+      // console.log("Fetching partner data for ID:", id);
       const fetchInquiries = async () => {
         const inquiries = await PartnerService.getPartnerById(id);
        if (inquiries) {
@@ -109,33 +110,10 @@ function AddBusinessPartner() {
        }
       };
       fetchInquiries();
-
-      // const inquiries = await PartnerService.getPartnerById(id);
-      // if (inquiries) {
-      //   formik.setValues(inquiries);
-      // }
     }
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [ id]);
 
-  // useEffect(() => {
-  //   if (id) {
-  //     const inquiries = JSON.parse(localStorage.getItem("inquiries")) || [];
-  //     const inquiry = inquiries.find((i) => i.id === parseInt(id));
-  //     if (inquiry) {
-  //       formik.setValues(inquiry);
-  //     }
-  //   }
-  // }, [id, formik]);
- 
-  // useEffect(() => {
-  //   if (id) {
-  //     const inquiries = JSON.parse(localStorage.getItem("inquiries")) || [];
-  //     const inquiry = inquiries.find((i) => i.id === parseInt(id));
-  //     if (inquiry) {
-  //       formik.setValues(inquiry);
-  //     }
-  //   }
-  // }, [id, formik]);
 
   return (
     <div className="container">
@@ -143,11 +121,11 @@ function AddBusinessPartner() {
         <h1 className="h2">Business Partner Master</h1>
       </div> */}
 
-      {showPopup && (
-        <div className="alert alert-success" role="alert">
-          Service inquiry saved successfully!
-        </div>
-      )}
+      <PopupMessage
+        show={showPopup}
+        message="Business partner saved successfully!"
+        onClose={() => setShowPopup(false)}
+      />
 
       <div className="row g-5">
         <div className="col-md-12 col-lg-12">

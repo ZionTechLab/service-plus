@@ -15,19 +15,16 @@ function BusinessPartners() {
     fetchInquiries();
   }, []);
 
-  const columns = [
-    { header: 'ID', field: 'id' },
-    { header: 'Partner Code', field: 'partnerCode' },
-    { header: 'Partner Name', field: 'partnerName' },
-    { header: 'Contact Person', field: 'contactPerson' },
-    { header: 'Email', field: 'email' },
-    { header: 'Address', field: 'address' },
-    { header: 'Phone', field: 'phone' },
-    { header: 'Is Customer', isAction: true, actionTemplate: (row) => (<input type="checkbox" checked={row.isCustomer} />), field: 'isCustomer' },
-    { header: 'Is Supplier', isAction: true, actionTemplate: (row) => (<input type="checkbox" checked={row.isSupplier} />), field: 'isSupplier' },
-    { header: 'Is Employee', isAction: true, actionTemplate: (row) => (<input type="checkbox" checked={row.isEmployee} />), field: 'isEmployee' },
-    { header: 'Active', isAction: true, actionTemplate: (row) => (<input type="checkbox" checked={row.active} />), field: 'active' },
-    {
+  const handleDelete = (id) => {
+    if (window.confirm('Are you sure you want to delete this business partner?')) {
+      const partners = PartnerService.getAllPartners();
+      const updated = partners.filter(p => p.id !== id);
+      localStorage.setItem('partners', JSON.stringify(updated));
+      setInquiries(updated);
+    }
+  };
+
+  const columns = [{
       header: 'Actions',
       isAction: true,
       actionTemplate: (row) => (
@@ -38,10 +35,22 @@ function BusinessPartners() {
           >
             Edit
           </button>
-          <button className="btn btn-sm btn-outline-danger" onClick={() => alert(`Delete ${row.name}`)}>Delete</button>
+          <button className="btn btn-sm btn-outline-danger" onClick={() => handleDelete(row.id)}>Delete</button>
         </div>
       )
-    }
+    },
+    { header: 'ID', field: 'id' },
+    { header: 'Partner Code', field: 'partnerCode' },
+    { header: 'Partner Name', field: 'partnerName' },
+    { header: 'Contact Person', field: 'contactPerson' },
+    { header: 'Email', field: 'email' },
+    { header: 'Address', field: 'address' },
+    { header: 'Phone', field: 'phone' },
+    { header: 'Is Customer', isAction: true, actionTemplate: (row) => (<input type="checkbox" checked={row.isCustomer} readOnly/>), field: 'isCustomer' },
+    { header: 'Is Supplier', isAction: true, actionTemplate: (row) => (<input type="checkbox" checked={row.isSupplier} readOnly/>), field: 'isSupplier' },
+    { header: 'Is Employee', isAction: true, actionTemplate: (row) => (<input type="checkbox" checked={row.isEmployee} readOnly/>), field: 'isEmployee' },
+    { header: 'Active', isAction: true, actionTemplate: (row) => (<input type="checkbox" checked={row.active} readOnly/>), field: 'active' },
+    
   ];
 
   return (
