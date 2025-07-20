@@ -16,22 +16,22 @@ function InquiryView() {
   if (!inquiry) {
     return <div>...</div>;
   }
-  const handleStatusChange = (newStatus) => {
-    const inquiries = JSON.parse(localStorage.getItem('inquiries')) || [];
-    const updatedInquiries = inquiries.map((i) => {
-      if (i.id === parseInt(id)) {
-        const newLogEntry = { status: newStatus, timestamp: new Date() };
-        return {
-          ...i,
-          status: newStatus,
-          log: [...i.log, newLogEntry],
-        };
-      }
-      return i;
-    });
-    localStorage.setItem('inquiries', JSON.stringify(updatedInquiries));
-    setInquiry(updatedInquiries.find((i) => i.id === parseInt(id)));
-  };
+  // const handleStatusChange = (newStatus) => {
+  //   const inquiries = JSON.parse(localStorage.getItem('inquiries')) || [];
+  //   const updatedInquiries = inquiries.map((i) => {
+  //     if (i.id === parseInt(id)) {
+  //       const newLogEntry = { status: newStatus, timestamp: new Date() };
+  //       return {
+  //         ...i,
+  //         status: newStatus,
+  //         log: [...i.log, newLogEntry],
+  //       };
+  //     }
+  //     return i;
+  //   });
+  //   localStorage.setItem('inquiries', JSON.stringify(updatedInquiries));
+  //   setInquiry(updatedInquiries.find((i) => i.id === parseInt(id)));
+  // };
 
   const handleLogActivitySubmit = (values) => {
     const inquiries = JSON.parse(localStorage.getItem('inquiries')) || [];

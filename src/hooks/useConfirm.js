@@ -42,6 +42,7 @@ const useConfirm = () => {
         type={confirmState.options.type || 'success'}
       />
     ) : null
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   ), [isConfirming, confirmState]);
 
   return [ConfirmationDialog, confirm];

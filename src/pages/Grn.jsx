@@ -1,10 +1,10 @@
 import * as Yup from "yup";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import InputField from "../helpers/InputField";
+// import InputField from "../helpers/InputField";
 import { useFormikBuilder } from "../helpers/formikBuilder";
-import PartnerService from "./BusinessPartners/PartnerService";
-import DataTable from "../helpers/DataTable";
+// import PartnerService from "./BusinessPartners/PartnerService";
+// import DataTable from "../helpers/DataTable";
 
 const getNextId = (items) => {
   if (items.length === 0) return 1;
@@ -15,16 +15,16 @@ const getNextId = (items) => {
 function Grn() {
   const { id } = useParams();
   const [showPopup, setShowPopup] = useState(false);
-  const [supplierData, setSupplierData] = useState([]);
-  const [showSupplierModal, setShowSupplierModal] = useState(false);
+//   const [supplierData, setSupplierData] = useState([]);
+//   const [showSupplierModal, setShowSupplierModal] = useState(false);
   const [items, setItems] = useState([]);
-  const [showItemModal, setShowItemModal] = useState(false);
-  const [currentItem, setCurrentItem] = useState(null);
+//   const [showItemModal, setShowItemModal] = useState(false);
+//   const [currentItem, setCurrentItem] = useState(null);
 
   useEffect(() => {
     const fetchSuppliers = async () => {
-      const storedSuppliers = await PartnerService.getAllPartners();
-      setSupplierData(storedSuppliers.filter(p => p.partner_type === 'Supplier'));
+    //   const storedSuppliers = await PartnerService.getAllPartners();
+    //   setSupplierData(storedSuppliers.filter(p => p.partner_type === 'Supplier'));
     };
     fetchSuppliers();
   }, []);
@@ -107,87 +107,87 @@ function Grn() {
     }
   }, [id, formik]);
 
-  const supplierColumns = [
-    {
-      field: "partnerName",
-      header: "Partner Name",
-    },
-    {
-      field: "partner_type",
-      header: "Partner Type",
-    },
-    {
-      field: "primary_contact",
-      header: "Primary Contact",
-    },
-    {
-      field: "email",
-      header: "Email",
-    },
-    {
-      field: "action",
-      header: "Action",
-      isAction: true,
-      actionTemplate: (row) => (
-        <button
-          className="btn btn-primary btn-sm"
-          onClick={() => onSupplierSelect(row)}
-        >
-          Select
-        </button>
-      ),
-    },
-  ];
+//   const supplierColumns = [
+//     {
+//       field: "partnerName",
+//       header: "Partner Name",
+//     },
+//     {
+//       field: "partner_type",
+//       header: "Partner Type",
+//     },
+//     {
+//       field: "primary_contact",
+//       header: "Primary Contact",
+//     },
+//     {
+//       field: "email",
+//       header: "Email",
+//     },
+//     {
+//       field: "action",
+//       header: "Action",
+//       isAction: true,
+//       actionTemplate: (row) => (
+//         <button
+//           className="btn btn-primary btn-sm"
+//           onClick={() => onSupplierSelect(row)}
+//         >
+//           Select
+//         </button>
+//       ),
+//     },
+//   ];
 
-  const onSupplierSelect = (supplier) => {
-    formik.setFieldValue("supplier", supplier.partnerName);
-    setShowSupplierModal(false);
-  };
+//   const onSupplierSelect = (supplier) => {
+//     formik.setFieldValue("supplier", supplier.partnerName);
+//     setShowSupplierModal(false);
+//   };
 
-  const itemColumns = [
-    {
-        field: "itemCode",
-        header: "Item Code",
-    },
-    {
-        field: "uom",
-        header: "UOM",
-    },
-    {
-        field: "quantity",
-        header: "Quantity",
-    },
-    {
-        field: "action",
-        header: "Action",
-        isAction: true,
-        actionTemplate: (row) => (
-            <>
-                <button
-                    className="btn btn-primary btn-sm"
-                    onClick={() => onEditItem(row)}
-                >
-                    Edit
-                </button>
-                <button
-                    className="btn btn-danger btn-sm"
-                    onClick={() => onDeleteItem(row)}
-                >
-                    Delete
-                </button>
-            </>
-        ),
-    },
-  ];
+//   const itemColumns = [
+//     {
+//         field: "itemCode",
+//         header: "Item Code",
+//     },
+//     {
+//         field: "uom",
+//         header: "UOM",
+//     },
+//     {
+//         field: "quantity",
+//         header: "Quantity",
+//     },
+//     {
+//         field: "action",
+//         header: "Action",
+//         isAction: true,
+//         actionTemplate: (row) => (
+//             <>
+//                 <button
+//                     className="btn btn-primary btn-sm"
+//                     onClick={() => onEditItem(row)}
+//                 >
+//                     Edit
+//                 </button>
+//                 <button
+//                     className="btn btn-danger btn-sm"
+//                     onClick={() => onDeleteItem(row)}
+//                 >
+//                     Delete
+//                 </button>
+//             </>
+//         ),
+//     },
+//   ];
 
-  const onEditItem = (item) => {
-    setCurrentItem(item);
-    setShowItemModal(true);
-  }
+//   const onEditItem = (item) => {
+//     setCurrentItem(item);
+//     setShowItemModal(true);
+//   }
 
-  const onDeleteItem = (item) => {
-    setItems(items.filter(i => i.id !== item.id));
-  }
+//   const onDeleteItem = (item) => {
+//     setItems(items.filter(i => i.id !== item.id));
+//   }
 
   return (
     <div className="container">

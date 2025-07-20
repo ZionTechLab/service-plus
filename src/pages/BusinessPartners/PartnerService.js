@@ -47,12 +47,10 @@ class PartnerService {
     }
   }
   getPartnerById(id) {
-    // console.log("Fetching partner with ID:", id);
     try {
       const partners = this.getAllPartners();
-        // console.log("Fetching partner with ID:", partners);
+        // eslint-disable-next-line eqeqeq
         var xx=partners.find(partner => partner.id == id) || null
-        // console.log("Found partner:", xx);
       return xx;
     } catch (error) {
       console.error('Error getting partners:', error);
