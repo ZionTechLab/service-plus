@@ -6,18 +6,18 @@ import {
 } from "react-router-dom";
 import { useSelector } from "react-redux";
 import { selectIsLoggedIn } from "./features/auth/authSlice";
-import LoginPage from "./components/LoginPage";
-import MainPage from "./components/MainPage";
-import ServiceInquiry from "./components/ServiceInquiry";
-import CustomerMaster from "./components/CustomerMaster";
-import ItemMaster from "./components/ItemMaster";
-import ItemCategory from "./components/ItemCategory";
-import InquiryList from "./components/InquiryList";
-import InquiryView from "./components/InquiryView";
-import AddCustomer from "./components/AddCustomer";
-import AddItem from "./components/AddItem";
-import Profile from "./components/Profile";
-import Grn from "./components/Grn";
+import LoginPage from "./pages/LoginPage";
+import MainPage from "./pages/MainPage";
+import ServiceInquiry from "./pages/ServiceInquiry";
+import CustomerMaster from "./pages/CustomerMaster";
+import ItemMaster from "./pages/ItemMaster";
+import ItemCategory from "./pages/ItemCategory";
+import InquiryList from "./pages/InquiryList";
+import InquiryView from "./pages/InquiryView";
+import AddCustomer from "./pages/AddCustomer";
+import AddItem from "./pages/AddItem";
+import Profile from "./pages/Profile";
+import Grn from "./pages/Grn";
 import "./App.css";
 
 // Protected route wrapper
