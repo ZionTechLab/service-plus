@@ -25,7 +25,20 @@ class PartnerService {
       throw new Error('Failed to create partner');
     }
   }
-
+  getPartnerById(id) {
+    // console.log("Fetching partner with ID:", id);
+    try {
+      const partners = this.getAllPartners();
+        // console.log("Fetching partner with ID:", partners);
+        var xx=partners.find(partner => partner.id == id) || null
+        // console.log("Found partner:", xx);
+      return xx;
+    } catch (error) {
+      console.error('Error getting partners:', error);
+      return null;
+    }
+  }
+  
   getAllPartners() {
     try {
       const partners = localStorage.getItem(this.storageKey);

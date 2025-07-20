@@ -101,13 +101,31 @@ function AddBusinessPartner() {
 
   useEffect(() => {
     if (id) {
-      const inquiries = JSON.parse(localStorage.getItem("inquiries")) || [];
-      const inquiry = inquiries.find((i) => i.id === parseInt(id));
-      if (inquiry) {
-        formik.setValues(inquiry);
-      }
+      console.log("Fetching partner data for ID:", id);
+      const fetchInquiries = async () => {
+        const inquiries = await PartnerService.getPartnerById(id);
+       if (inquiries) {
+         formik.setValues(inquiries);
+       }
+      };
+      fetchInquiries();
+
+      // const inquiries = await PartnerService.getPartnerById(id);
+      // if (inquiries) {
+      //   formik.setValues(inquiries);
+      // }
     }
-  }, [id, formik]);
+  }, [ id]);
+
+  // useEffect(() => {
+  //   if (id) {
+  //     const inquiries = JSON.parse(localStorage.getItem("inquiries")) || [];
+  //     const inquiry = inquiries.find((i) => i.id === parseInt(id));
+  //     if (inquiry) {
+  //       formik.setValues(inquiry);
+  //     }
+  //   }
+  // }, [id, formik]);
  
   // useEffect(() => {
   //   if (id) {
