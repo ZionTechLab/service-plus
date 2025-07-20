@@ -1,26 +1,29 @@
-import React, { useState, useEffect } from 'react';
+import  { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import DataTable from '../helpers/DataTable';
+import DataTable from '../../helpers/DataTable';
+import useConfirm from '../../hooks/useConfirm';
 
 function InquiryList() {
-  const [inquiries, setInquiries] = useState([]);
+  const [dataset, setDataset] = useState([]);
   const navigate = useNavigate();
-
+  const [ConfirmationDialog, confirm] = useConfirm();
   useEffect(() => {
     const storedInquiries = JSON.parse(localStorage.getItem('inquiries')) || [];
-    setInquiries(storedInquiries);
+    setDataset(storedInquiries);
   }, []);
 
   const handleDelete = (id) => {
-    if (window.confirm('Are you sure you want to delete this inquiry?')) {
-      const updatedInquiries = inquiries.filter((inquiry) => inquiry.id !== id);
-      setInquiries(updatedInquiries);
-      localStorage.setItem('inquiries', JSON.stringify(updatedInquiries));
-    }
+    confirm('Are you sure you want to delete this inquiry?', { confirmText: "Delete", cancelText: "Cancel", type: "danger" }).then((result) => {
+      if (result) {
+        const updated = dataset.filter((data) => data.id !== id);
+        setDataset(updated);
+        localStorage.setItem('inquiries', JSON.stringify(updated));
+      }
+    });
   };
 
   const handleEdit = (id) => {
-    navigate(`/service-inquiry/${id}`);
+    navigate(`/inquiry/edit/${id}`);
   };
 
   const columns = [
@@ -51,9 +54,14 @@ function InquiryList() {
   ];
 
   return (
-    <div>
-      {/* <h1>Inquiry List</h1> */}
-      <DataTable columns={columns} data={inquiries} />
+    <div>     
+        <Link to="/Inquiry/add">
+        <div className="py-3">
+          <button className=" btn btn-primary btn-lg ">Add Inquiry</button>
+        </div>
+      </Link>
+       <ConfirmationDialog />
+      <DataTable columns={columns} data={dataset} />
     </div>
   );
 }

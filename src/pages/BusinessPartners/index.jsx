@@ -1,4 +1,4 @@
-import {  useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import DataTable from '../../helpers/DataTable';
 import PartnerService from './PartnerService';
 import { useEffect, useState } from 'react';
@@ -18,22 +18,30 @@ function BusinessPartners() {
   }, []);
 
   const handleDelete = async (id) => {
-    const isConfirmed = await confirm(
-      "Are you sure you want to delete this business partner?",
-      { confirmText: "Delete", cancelText: "Cancel", type: "danger" }
-    );
-    if (isConfirmed) {
-      const partners = await PartnerService.getAllPartners();
-      const updated = partners.filter(p => p.id !== id);
-      localStorage.setItem('partners', JSON.stringify(updated));
-      setDataset(updated);
-    }
+ confirm('Are you sure you want to delete this business partner?', { confirmText: "Delete", cancelText: "Cancel", type: "danger" }).then((result) => {
+      if (result) {
+        const updated = dataset.filter((data) => data.id !== id);
+        setDataset(updated);
+        localStorage.setItem('partners', JSON.stringify(updated));
+      }
+    });
+
+    // const isConfirmed = await confirm(
+    //   "Are you sure you want to delete this business partner?",
+    //   { confirmText: "Delete", cancelText: "Cancel", type: "danger" }
+    // );
+    // if (isConfirmed) {
+    //   const partners = await PartnerService.getAllPartners();
+    //   const updated = partners.filter(p => p.id !== id);
+    //   localStorage.setItem('partners', JSON.stringify(updated));
+    //   setDataset(updated);
+    // }
   };
 
   const handleEdit = (id) => {
     navigate(`/business-partner/edit/${id}`);
   };
-  
+
   const columns = [{
       header: 'Actions',
       isAction: true,
@@ -58,7 +66,12 @@ function BusinessPartners() {
   ];
 
   return (
-    <div>
+    <div>    
+        <Link to="/business-partner/add">
+        <div className="py-3">
+          <button className=" btn btn-primary btn-lg ">Add Business Partner</button>
+        </div>
+      </Link>
       <ConfirmationDialog />
       <DataTable name="User Export" data={dataset} columns={columns} />
     </div>

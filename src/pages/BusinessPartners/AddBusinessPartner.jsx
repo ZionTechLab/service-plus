@@ -90,7 +90,7 @@ function AddBusinessPartner() {
     await PartnerService.createPartner(values);
 
     resetForm();
- const isConfirmed = await confirm(
+ confirm(
       "Business partner saved successfully!",
       { confirmText: "OK", type: "success" }
     );

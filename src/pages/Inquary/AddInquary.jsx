@@ -1,11 +1,13 @@
 import * as Yup from "yup";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
-import InputField from "../helpers/InputField";
-import { useFormikBuilder } from "../helpers/formikBuilder";
-import PartnerService from "./BusinessPartners/PartnerService";
+import InputField from "../../helpers/InputField";
+import { useFormikBuilder } from "../../helpers/formikBuilder";
+import PartnerService from "../BusinessPartners/PartnerService";
 import InquiryView from "./InquiryView";
-import CustomerModal from "../components/CustomerModal";
+import CustomerModal from "../../components/CustomerModal";
+import useConfirm from '../../hooks/useConfirm';
+import {  useNavigate } from 'react-router-dom';
 
 const inquiryTypes = [
   { key: 1, value: "quotation" },
@@ -29,10 +31,11 @@ const getNextId = (inquiries) => {
 
 function ServiceInquiry() {
   const { id } = useParams();
-  const [showPopup, setShowPopup] = useState(false);
+  // const [showPopup, setShowPopup] = useState(false);
   const [assigneeData, setAssigneeData] = useState([]);
   const [showCustomerModal, setShowCustomerModal] = useState(false);
-
+  const [ConfirmationDialog, confirm] = useConfirm();
+    const navigate = useNavigate();
   useEffect(() => {
     const fetchInquiries = async () => {
       const storedInquiries = await PartnerService.getAllPartners();
@@ -160,10 +163,9 @@ function ServiceInquiry() {
     }
 
     resetForm();
-    setShowPopup(true);
-    setTimeout(() => {
-      setShowPopup(false);
-    }, 3000);
+ confirm(      "Inquiry saved successfully!",      { confirmText: "OK", type: "success" }
+    ).then((result) => {   navigate(`/inquiry`); });
+      
   };
 
   const formik = useFormikBuilder(fields, handleInquirySubmit);
@@ -176,7 +178,8 @@ function ServiceInquiry() {
         formik.setValues(inquiry);
       }
     }
-  }, [id, formik]);
+     // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   const onCustomerSelect = (customer) => {
     formik.setFieldValue("customer", customer.partnerName);
@@ -189,15 +192,12 @@ function ServiceInquiry() {
 
   return (
     <div className="container">
-      {/* <div className="py-5 text-center">
-        <h1 className="h2">Service Inquiry</h1>
-      </div> */}
-
-      {showPopup && (
+      <ConfirmationDialog />
+      {/* {showPopup && (
         <div className="alert alert-success" role="alert">
           Service inquiry saved successfully!
         </div>
-      )}
+      )} */}
 
       <div className="row g-5">
         <div className="col-md-7 col-lg-8">
@@ -216,25 +216,6 @@ function ServiceInquiry() {
                     ...
                   </button>
               </InputField>
-              {/* <div className="col-sm-12">
-                <label htmlFor="customer" className="form-label">
-                  Customer
-                </label>
-                <div className="input-group">
-                  <input
-                    type="text"
-                    className="form-control"
-                    {...formik.getFieldProps("customer")}
-                  />
-                  <button
-                    className="btn btn-outline-secondary"
-                    type="button"
-                    onClick={() => setShowCustomerModal(true)}
-                  >
-                    ...
-                  </button>
-                </div>
-              </div> */}
               <InputField
                 className="col-sm-6"
                 {...fields.firstName}
@@ -278,7 +259,7 @@ function ServiceInquiry() {
           </form>
         </div>
 
-        <div className="col-md-5 col-lg-4 order-md-last">
+        <div className="col-md-5 col-lg-4 order-md-last ">
           <InquiryView />
         </div>
       </div>
