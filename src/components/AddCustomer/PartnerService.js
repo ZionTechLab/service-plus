@@ -3,6 +3,7 @@ class PartnerService {
     this.storageKey = 'partners';
   }
 
+  
  createPartner(partnerData) {
     try {
       const partners = this.getAllPartners();

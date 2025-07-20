@@ -39,9 +39,11 @@ function CustomerMaster() {
   ];
   return (
     <div>
-      <h1>Customer Master</h1>
+      {/* <h1>Customer Master</h1> */}
       <Link to="/add-customer">
-        <button>Add Customer</button>
+      <div className="py-3">
+        <button className=" btn btn-primary btn-lg ">Add Customer</button>
+      </div>
       </Link>
       <DataTable name="User Export" data={sampleData} columns={columns} />
     </div>
