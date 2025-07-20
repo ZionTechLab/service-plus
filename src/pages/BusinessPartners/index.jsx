@@ -2,9 +2,12 @@ import { Link, useNavigate } from 'react-router-dom';
 import DataTable from '../../helpers/DataTable';
 import PartnerService from './PartnerService';
 import { useEffect, useState } from 'react';
+import PopupMessage from '../../components/PopupMessage';
 
 function BusinessPartners() {
   const [sampleData, setInquiries] = useState([]);
+  const [deleteId, setDeleteId] = useState(null);
+  const [showDeletePopup, setShowDeletePopup] = useState(false);
   const navigate = useNavigate();
 
   useEffect(() => {
@@ -16,12 +19,17 @@ function BusinessPartners() {
   }, []);
 
   const handleDelete = (id) => {
-    if (window.confirm('Are you sure you want to delete this business partner?')) {
-      const partners = PartnerService.getAllPartners();
-      const updated = partners.filter(p => p.id !== id);
-      localStorage.setItem('partners', JSON.stringify(updated));
-      setInquiries(updated);
-    }
+    setDeleteId(id);
+    setShowDeletePopup(true);
+  };
+
+  const confirmDelete = () => {
+    const partners = PartnerService.getAllPartners();
+    const updated = partners.filter(p => p.id !== deleteId);
+    localStorage.setItem('partners', JSON.stringify(updated));
+    setInquiries(updated);
+    setShowDeletePopup(false);
+    setDeleteId(null);
   };
 
   const columns = [{
@@ -55,10 +63,19 @@ function BusinessPartners() {
 
   return (
     <div>
+      <PopupMessage
+        show={showDeletePopup}
+        message="Are you sure you want to delete this business partner?"
+        onClose={() => { setShowDeletePopup(false); setDeleteId(null); }}
+        onConfirm={confirmDelete}
+        confirmText="Delete"
+        cancelText="Cancel"
+        type="danger"
+      />
       <Link to="/business-partner/add">
-      <div className="py-3">
-        <button className=" btn btn-primary btn-lg ">Add Business Partner</button>
-      </div>
+        <div className="py-3">
+          <button className=" btn btn-primary btn-lg ">Add Business Partner</button>
+        </div>
       </Link>
       <DataTable name="User Export" data={sampleData} columns={columns} />
     </div>

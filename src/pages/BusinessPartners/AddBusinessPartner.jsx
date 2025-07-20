@@ -51,8 +51,6 @@ const fields = {
     initialValue: "",
     validation: Yup.string().required("Phone number is required"),
   },
-
-
   isCustomer: {
     name: "isCustomer",
     type: "checkbox",
@@ -102,7 +100,6 @@ function AddBusinessPartner() {
 
   useEffect(() => {
     if (id) {
-      // console.log("Fetching partner data for ID:", id);
       const fetchInquiries = async () => {
         const inquiries = await PartnerService.getPartnerById(id);
        if (inquiries) {
@@ -117,10 +114,7 @@ function AddBusinessPartner() {
 
   return (
     <div className="container">
-      {/* <div className="py-5 text-center">
-        <h1 className="h2">Business Partner Master</h1>
-      </div> */}
-
+    
       <PopupMessage
         show={showPopup}
         message="Business partner saved successfully!"
@@ -156,7 +150,6 @@ function AddBusinessPartner() {
                 {...fields.address}
                 formik={formik}
               />
-              
               <InputField
                 className="col-sm-6"
                 {...fields.phone}
@@ -185,7 +178,6 @@ function AddBusinessPartner() {
                 formik={formik}
               />
               <button className="w-100 btn btn-primary btn-lg" type="submit">
-           
                 Save
               </button>
             </div>
