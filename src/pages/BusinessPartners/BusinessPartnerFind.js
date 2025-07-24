@@ -1,6 +1,6 @@
-import DataTable from "../../helpers/DataTable";
+import DataTable from "../../components/DataTable";
 
-function CustomerModal({
+function BusinessPartnerFind({
   show,
   onClose,
   customers,
@@ -12,13 +12,25 @@ function CustomerModal({
       header: "Partner Name",
     },
     {
-      field: "partner_type",
-      header: "Partner Type",
+      field: "contactPerson",
+      header: "Contact Person",
     },
     {
-      field: "primary_contact",
-      header: "Primary Contact",
+      field: "phone1",
+      header: "Phone 1",
     },
+    {
+      field: "phone2",
+      header: "Phone 2",
+    },
+    // {
+    //   field: "partner_type",
+    //   header: "Partner Type",
+    // },
+    // {
+    //   field: "primary_contact",
+    //   header: "Primary Contact",
+    // },
     {
       field: "email",
       header: "Email",
@@ -64,7 +76,7 @@ function CustomerModal({
               type="button"
               className="btn-close"
               onClick={onClose}
-              style={{ position: "absolute", right: "1rem" }}
+              style={{ position: "absolute", right: "1rem", top: "1rem" }}
             ></button>
           </div>
           <div className="card-body">
@@ -76,4 +88,4 @@ function CustomerModal({
   );
 }
 
-export default CustomerModal;
+export default BusinessPartnerFind;

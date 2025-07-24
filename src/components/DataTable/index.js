@@ -1,4 +1,5 @@
 import { useState, useEffect, useMemo } from "react";
+import "./DataTable.css";
 
 const Pagination = ({ total, currentPage, pageSize, onPageChange }) => {
   const totalPages = Math.ceil(total / pageSize);

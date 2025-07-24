@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import DataTable from '../../helpers/DataTable';
+import DataTable from '../../components/DataTable';
 import PartnerService from './PartnerService';
 import { useEffect, useState } from 'react';
 import useConfirm from '../../hooks/useConfirm';

@@ -44,13 +44,21 @@ const fields = {
     initialValue: "",
     validation: Yup.string().required("Address is required"),
   },
-  phone: {
-    name: "phone",
+  phone1: {
+    name: "phone1",
     type: "text",
-    placeholder: "Phone",
+    placeholder: "Phone 1",
     initialValue: "",
     validation: Yup.string().required("Phone number is required"),
   },
+  phone2: {
+    name: "phone2",
+    type: "text",
+    placeholder: "Phone 2",
+    initialValue: "",
+    validation: Yup.string().required("Phone number is required"),
+  },
+
   isCustomer: {
     name: "isCustomer",
     type: "checkbox",
@@ -145,8 +153,13 @@ function AddBusinessPartner() {
                 formik={formik}
               />
               <InputField
-                className="col-sm-6"
-                {...fields.phone}
+                className="col-sm-3"
+                {...fields.phone1}
+                formik={formik}
+              />
+                      <InputField
+                className="col-sm-3"
+                {...fields.phone2}
                 formik={formik}
               />
               <div className="col-sm-6 row g-2">

@@ -18,4 +18,5 @@ code {
 :root {
   --theme-header-height: 60px; /* Adjust as needed */
   --theme-footer-height: 40px; /* Adjust as needed */
+  --bs-border-radius:0px
 }

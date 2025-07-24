@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import InputField from "../../helpers/InputField";
 import { useFormikBuilder } from "../../helpers/formikBuilder";
 import PartnerService from "../AddCustomer/PartnerService";
-import DataTable from "../../helpers/DataTable";
+import DataTable from "../../components/DataTable";
 
 
 const getNextId = (items) => {

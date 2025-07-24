@@ -1,16 +1,4 @@
-/* Settings button sticky top right for mobile */
-.settings-btn {
-  position: static;
-}
 
-/* @media (max-width: 576px) { */
-  .settings-btn {
-    position: fixed;
-    top:calc(var(--theme-header-height) + 20px);
-    right: 20px;
-    z-index: 2000;
-    box-shadow: 0 2px 8px rgba(0,0,0,0.12);
-  }
 /* } */
 /* Drawer backdrop for modal effect */
 .drawer-backdrop {

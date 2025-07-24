@@ -5,7 +5,7 @@ import InputField from "../../helpers/InputField";
 import { useFormikBuilder } from "../../helpers/formikBuilder";
 import PartnerService from "../BusinessPartners/PartnerService";
 import InquiryView from "./InquiryView";
-import CustomerModal from "../../components/CustomerModal";
+import CustomerModal from "../BusinessPartners/BusinessPartnerFind";
 import useConfirm from '../../hooks/useConfirm';
 import {  useNavigate } from 'react-router-dom';
 
@@ -193,11 +193,8 @@ function ServiceInquiry() {
   return (
     <div className="container">
       <ConfirmationDialog />
-      {/* {showPopup && (
-        <div className="alert alert-success" role="alert">
-          Service inquiry saved successfully!
-        </div>
-      )} */}
+
+<h4 class="mb-3">Customer</h4>
 
       <div className="row g-5">
         <div className="col-md-7 col-lg-8">
