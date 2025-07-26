@@ -1,6 +1,6 @@
 import { forwardRef, useState, useEffect, useRef } from 'react';
 import { Link } from 'react-router-dom';
-import '../components/Drawer/Drawer.css';
+import './Drawer.css';
 import menuItems from '../helpers/menuItems';
 
 const Drawer = forwardRef(({ isOpen, onClose }, ref) => {

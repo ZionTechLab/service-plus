@@ -5,25 +5,22 @@
 }
 
 .main-content-area {
-  /* display: flex;  */
-  /* flex-grow: 1;   */
   position: relative; 
   overflow-y: auto;   
   overflow-x: hidden;
   min-height: 0; 
   height: calc(100vh - var(--theme-footer-height) - var(--theme-header-height));
-  /* background-color: brown; */
 }
 
 .content {
   flex-grow: 1; 
-  /* padding: 50px; */
-/* background-color: blue; */
+  padding: 50px;
+}
 
-padding: 50px;
-/* margin-bottom: 30px; */
+@media (max-width: 576px) {
+  .content {
+    padding: 16px;
+  }
 
-
-/* margin-bottom: 30px; */
 }
 

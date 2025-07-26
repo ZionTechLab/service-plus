@@ -1,7 +1,7 @@
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
-import MainPage from "./pages/MainPage";
+import MainLayout from "./layout/MainLayout";
 import BusinessPartner from "./pages/BusinessPartners";
 import AddBusinessPartner from "./pages/BusinessPartners/AddBusinessPartner";
 import Inquary from "./pages/Inquary";
@@ -42,7 +42,7 @@ const AppRoutes = ({ isLoggedIn }) => (
       path="/"
       element={
         <ProtectedRoute isLoggedIn={isLoggedIn}>
-          <MainPage />
+          <MainLayout />
         </ProtectedRoute>
       }
     > <Route path="business-partner" element={<BusinessPartner />} />

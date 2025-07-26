@@ -1,5 +1,5 @@
 import React from 'react';
-import './Overlay.css'; // For styling the overlay
+// import './Overlay.css'; // For styling the overlay
 
 function Overlay({ isOpen, onClick }) {
   if (!isOpen) {
