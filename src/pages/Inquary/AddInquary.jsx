@@ -158,30 +158,49 @@ function ServiceInquiry() {
   };
 
   const handleInquirySubmit = (values, { resetForm }) => {
-    console.log("Form values:", values);
+    // Merge selectedCustomer info into inquiry object
     const inquiries = JSON.parse(localStorage.getItem("inquiries")) || [];
+    const customerData = selectedCustomer
+      ? {
+          customerId: selectedCustomer.id,
+          customerName: selectedCustomer.partnerName,
+          customerContact: selectedCustomer.contactPerson,
+          customerEmail: selectedCustomer.email,
+          customerPhone1: selectedCustomer.phone1,
+          customerPhone2: selectedCustomer.phone2,
+          customerAddress: selectedCustomer.address,
+          customerCode: selectedCustomer.partnerCode,
+          isCustomer: selectedCustomer.isCustomer,
+          isSupplier: selectedCustomer.isSupplier,
+          isEmployee: selectedCustomer.isEmployee,
+          isActive: selectedCustomer.active
+        }
+      : {};
 
     if (id) {
       const updatedInquiries = inquiries.map((inquiry) =>
-        inquiry.id === parseInt(id) ? { ...inquiry, ...values } : inquiry
+        inquiry.id === parseInt(id)
+          ? { ...inquiry, ...values, ...customerData }
+          : inquiry
       );
       localStorage.setItem("inquiries", JSON.stringify(updatedInquiries));
     } else {
       const newInquiry = {
         id: getNextId(inquiries),
         ...values,
+        ...customerData,
         status: "new",
         log: [{ status: "new", timestamp: new Date() }],
       };
-
       inquiries.push(newInquiry);
       localStorage.setItem("inquiries", JSON.stringify(inquiries));
     }
 
     resetForm();
- confirm(      "Inquiry saved successfully!",      { confirmText: "OK", type: "success" }
-    ).then((result) => {   navigate(`/inquiry`); });
-      
+    confirm("Inquiry saved successfully!", { confirmText: "OK", type: "success" })
+      .then(() => {
+        navigate(`/inquiry`);
+      });
   };
 
   const formik = useFormikBuilder(fields, handleInquirySubmit);
@@ -233,35 +252,34 @@ function ServiceInquiry() {
       <Tabs tabs={tabs} activeTab={activeTab} onTabChange={handleTabChange}>
         {activeTab === 'select-customer' && (
           <div>
-            <h4 className="mb-3">Select Customer</h4>
+            {/* Removed 'Select Customer' heading as per request */}
             
-            {/* Customer Option Selection */}
-            <div className="mb-4">
-              <div className="btn-group" role="group" aria-label="Customer options">
-                <button
-                  type="button"
-                  className={`btn ${customerOption === 'select' ? 'btn-primary' : 'btn-outline-primary'}`}
-                  onClick={() => setCustomerOption('select')}
-                >
-                  Select Existing Customer
-                </button>
-                <button
-                  type="button"
-                  className={`btn ${customerOption === 'add' ? 'btn-primary' : 'btn-outline-primary'}`}
-                  onClick={() => setCustomerOption('add')}
-                >
-                  Add New Customer
-                </button>
-              </div>
-            </div>
+            {/* Customer Option Selection removed as per new UX */}
 
             {/* Select Customer Option */}
             {customerOption === 'select' && (
               <div>
                 {!selectedCustomer && (
                   <div className="card">
-                    <div className="card-header">
+                    <div className="card-header d-flex justify-content-between align-items-center">
                       <h5 className="card-title mb-0">Choose a Customer</h5>
+                      <div>
+                        <button
+                          className="btn btn-outline-secondary btn-sm me-2"
+                          onClick={() => {
+                            setSelectedCustomer(null);
+                            setCustomerOption("");
+                          }}
+                        >
+                          Return
+                        </button>
+                        <button
+                          className="btn btn-outline-primary btn-sm"
+                          onClick={() => setCustomerOption('add')}
+                        >
+                          Add New Customer
+                        </button>
+                      </div>
                     </div>
                     <div className="card-body">
                       {assigneeData && assigneeData.length > 0 ? (
@@ -297,17 +315,6 @@ function ServiceInquiry() {
                               </tbody>
                             </table>
                           </div>
-                          <div className="mt-3 text-end">
-                            <button
-                              className="btn btn-outline-secondary"
-                              onClick={() => {
-                                setSelectedCustomer(null);
-                                setCustomerOption('');
-                              }}
-                            >
-                              Return
-                            </button>
-                          </div>
                         </>
                       ) : (
                         <div className="text-center py-4">
@@ -326,9 +333,24 @@ function ServiceInquiry() {
 
                 {selectedCustomer && (
                   <div className="alert alert-success">
-                    <h5>Selected Customer: {selectedCustomer.partnerName}</h5>
-                    <p>Contact: {selectedCustomer.contactPerson}</p>
-                    <p>Email: {selectedCustomer.email}</p>
+                    <h5>Selected Customer</h5>
+                    <div className="row">
+                      <div className="col-md-6">
+                        <strong>Partner Code:</strong> {selectedCustomer.partnerCode || '-'}<br />
+                        <strong>Partner Name:</strong> {selectedCustomer.partnerName || '-'}<br />
+                        <strong>Contact Person:</strong> {selectedCustomer.contactPerson || '-'}<br />
+                        <strong>Email:</strong> {selectedCustomer.email || '-'}<br />
+                        <strong>Address:</strong> {selectedCustomer.address || '-'}<br />
+                      </div>
+                      <div className="col-md-6">
+                        <strong>Phone 1:</strong> {selectedCustomer.phone1 || '-'}<br />
+                        <strong>Phone 2:</strong> {selectedCustomer.phone2 || '-'}<br />
+                        <strong>Customer:</strong> {selectedCustomer.isCustomer ? 'Yes' : 'No'}<br />
+                        <strong>Supplier:</strong> {selectedCustomer.isSupplier ? 'Yes' : 'No'}<br />
+                        <strong>Employee:</strong> {selectedCustomer.isEmployee ? 'Yes' : 'No'}<br />
+                        <strong>Active:</strong> {selectedCustomer.active ? 'Yes' : 'No'}<br />
+                      </div>
+                    </div>
                     <div className="mt-3">
                       <button 
                         className="btn btn-primary me-2"
@@ -353,6 +375,25 @@ function ServiceInquiry() {
             {/* Add Customer Option */}
             {customerOption === 'add' && (
               <div>
+                <div className="d-flex justify-content-between align-items-center mb-3">
+                  <div>
+                    <button
+                      className="btn btn-outline-secondary btn-sm me-2"
+                      onClick={() => {
+                        setSelectedCustomer(null);
+                        setCustomerOption("");
+                      }}
+                    >
+                      Return
+                    </button>
+                    <button
+                      className="btn btn-outline-primary btn-sm"
+                      onClick={() => setCustomerOption('select')}
+                    >
+                      Select Customer
+                    </button>
+                  </div>
+                </div>
                 <AddBusinessPartner onCustomerCreated={handleCustomerCreated} />
               </div>
             )}
@@ -362,37 +403,34 @@ function ServiceInquiry() {
         {activeTab === 'inquiry-details' && (
           <div>
             <h4 className="mb-3">Inquiry Details</h4>
+            {/* Selected Customer Box at the top */}
+            {selectedCustomer && (
+              <div className="alert alert-success mb-4">
+                <h5>Selected Customer</h5>
+                <div className="row">
+                  <div className="col-md-6">
+                    <strong>Partner Code:</strong> {selectedCustomer.partnerCode || '-'}<br />
+                    <strong>Partner Name:</strong> {selectedCustomer.partnerName || '-'}<br />
+                    <strong>Contact Person:</strong> {selectedCustomer.contactPerson || '-'}<br />
+                    <strong>Email:</strong> {selectedCustomer.email || '-'}<br />
+                    <strong>Address:</strong> {selectedCustomer.address || '-'}<br />
+                  </div>
+                  <div className="col-md-6">
+                    <strong>Phone 1:</strong> {selectedCustomer.phone1 || '-'}<br />
+                    <strong>Phone 2:</strong> {selectedCustomer.phone2 || '-'}<br />
+                    <strong>Customer:</strong> {selectedCustomer.isCustomer ? 'Yes' : 'No'}<br />
+                    <strong>Supplier:</strong> {selectedCustomer.isSupplier ? 'Yes' : 'No'}<br />
+                    <strong>Employee:</strong> {selectedCustomer.isEmployee ? 'Yes' : 'No'}<br />
+                    <strong>Active:</strong> {selectedCustomer.active ? 'Yes' : 'No'}<br />
+                  </div>
+                </div>
+              </div>
+            )}
             <div className="row g-5">
               <div className="col-md-7 col-lg-8">
                 <form onSubmit={formik.handleSubmit} noValidate>
                   <div className="row g-3">
-                    <InputField
-                      className="col-sm-12"
-                      {...fields.customer}
-                      formik={formik}
-                    />
-                    <InputField
-                      className="col-sm-6"
-                      {...fields.firstName}
-                      formik={formik}
-                    />
-                    <InputField
-                      className="col-sm-6"
-                      {...fields.lastName}
-                      formik={formik}
-                    />
-                    <InputField
-                      className="col-sm-12"
-                      {...fields.email}
-                      formik={formik}
-                    />
-                    <InputField
-                      className="col-sm-12"
-                      {...fields.address}
-                      formik={formik}
-                    />
-                    <InputField {...fields.phone} formik={formik} />
-
+                    {/* Removed customer-related fields from inquiry form */}
                     <InputField {...fields.subject} formik={formik} />
                     <InputField {...fields.message} formik={formik} />
                     <InputField
@@ -413,7 +451,6 @@ function ServiceInquiry() {
                   </div>
                 </form>
               </div>
-
               <div className="col-md-5 col-lg-4 order-md-last ">
                 <InquiryView />
               </div>
