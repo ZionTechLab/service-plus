@@ -61,7 +61,7 @@ function BusinessPartners() {
     },
     { header: 'ID', field: 'id' },
     { header: 'Code', field: 'partnerCode' },
-    { header: 'Partner Name', field: 'partnerName' },
+    { header: 'Partner Name', field: 'partnerName',class:'text-nowrap' },
     { header: 'Contact Person', field: 'contactPerson' ,class:'text-nowrap'},
     { header: 'Email', field: 'email' },
     { header: 'Address', field: 'address' },

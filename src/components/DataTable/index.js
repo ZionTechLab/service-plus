@@ -267,7 +267,8 @@ const DataTable = ({ data = [], columns = [], name , children }) => {
           </div>
         </div>
 </div>
-        <div className="mt-3 table-responsive card">
+<div className="mt-3 card">
+        <div className=" table-responsive ">
           <table className="table table-hover">
             <thead className="table-header">
               <tr className="">
@@ -313,7 +314,7 @@ const DataTable = ({ data = [], columns = [], name , children }) => {
               )}
             </tbody>
           </table>
-        </div>
+        </div></div>
 
         {/* Export */}
         <div className="d-flex justify-content-end mb-2">

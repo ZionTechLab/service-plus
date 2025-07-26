@@ -47,3 +47,13 @@ code {
   cursor: pointer; /* Indicate it's clickable */
   transition: opacity 0.3s ease-in-out; /* Optional: fade in/out */
 }
+
+.card {
+    border: none;
+    border-radius: 0px;
+}
+
+.table-responsive{
+    border: none;
+    border-radius: 0px;
+}

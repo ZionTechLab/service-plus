@@ -15,15 +15,8 @@
 
 
 
-.card {
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.12);  
-    border: none;
-    border-radius: 0px;
-    /* margin-bottom: 24px; */
-}
-.card-body {
-    padding: 24px;
-}
+
+
 .table thead th {
     background-color: #fafafa;
     border-bottom: 1px solid var(--divider-color);
