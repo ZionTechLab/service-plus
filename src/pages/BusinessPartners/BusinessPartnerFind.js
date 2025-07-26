@@ -1,7 +1,6 @@
 import DataTable from "../../components/DataTable";
-import Modal from "../../components/Modal";
 
-function BusinessPartnerFind({ show, onClose, customers, onCustomerSelect, onNewCustomer }) {
+function BusinessPartnerFind({ customers, onCustomerSelect, onNewCustomer,children }) {
   const customerColumns = [
     {
       field: "partnerName",
@@ -39,12 +38,13 @@ function BusinessPartnerFind({ show, onClose, customers, onCustomerSelect, onNew
   ];
 
   return (
-    <Modal show={show} onClose={onClose} title="Select Customer">
-      <DataTable data={customers} columns={customerColumns} />
+    <div>
+      <DataTable data={customers} columns={customerColumns} >
+      {children}</DataTable>
       <button className="btn btn-secondary mt-3" onClick={onNewCustomer}>
         New Customer
       </button>
-    </Modal>
+    </div>
   );
 }
 

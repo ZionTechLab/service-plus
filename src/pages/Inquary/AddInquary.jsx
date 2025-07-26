@@ -6,9 +6,11 @@ import { useFormikBuilder } from "../../helpers/formikBuilder";
 import PartnerService from "../BusinessPartners/PartnerService";
 import InquiryView from "./InquiryView";
 import AddBusinessPartner from "../BusinessPartners/AddBusinessPartner";
+import BusinessPartnerFind from "../BusinessPartners/BusinessPartnerFind";
 import useConfirm from '../../hooks/useConfirm';
 import { useNavigate } from 'react-router-dom';
 import Tabs from '../../components/Tabs';
+import SelectedCustomerBox from '../../components/SelectedCustomerBox';
 
 const inquiryTypes = [
   { key: 1, value: "quotation" },
@@ -58,6 +60,7 @@ function ServiceInquiry() {
       setAssigneeData(storedInquiries);
     };
     fetchInquiries();
+     setCustomerOption('select');
   }, []);
 
   const fields = {
@@ -223,6 +226,7 @@ function ServiceInquiry() {
     formik.setFieldValue("phone", customer.phone1 || customer.phone2);
     formik.setFieldValue("address", customer.address);
     setSelectedCustomer(customer);
+    setCustomerOption('selected');
     setActiveTab('inquiry-details');
   };
 
@@ -234,196 +238,127 @@ function ServiceInquiry() {
     formik.setFieldValue("phone", newCustomer.phone1 || newCustomer.phone2);
     formik.setFieldValue("address", newCustomer.address);
     setSelectedCustomer(newCustomer);
-    setCustomerOption('select');
+    setCustomerOption('selected');
     setActiveTab('inquiry-details');
   };
 
   const handleTabChange = (tabId) => {
     setActiveTab(tabId);
-    if (tabId === 'select-customer') {
-      setCustomerOption('select');
-    }
+    if(selectedCustomer)
+     setCustomerOption('selected');
+    // if (tabId === 'select-customer') {
+    //   setCustomerOption('select');
+    // }
   };
+
+let content = "";
+switch (true) {
+  case activeTab === "select-customer" && customerOption === "select":
+    content = (
+      <div>
+        <BusinessPartnerFind
+          customers={assigneeData}
+          onCustomerSelect={onCustomerSelect}
+          onNewCustomer={() => setCustomerOption("add")}
+        >
+          <button
+            className="btn btn-primary "
+            onClick={() => setCustomerOption("add")}
+          >
+            Add New Customer
+          </button>
+        </BusinessPartnerFind>
+      </div>
+    );
+    break;
+  case activeTab === "select-customer" && customerOption === "selected":
+    content = (
+      <SelectedCustomerBox
+        selectedCustomer={selectedCustomer}
+        onContinue={() => setActiveTab("inquiry-details")}
+        onChangeCustomer={() => setCustomerOption("select")}
+      />
+    );
+    break;
+  case activeTab === "select-customer" && customerOption === "add":
+    content = (
+     <div>
+         
+                <AddBusinessPartner onCustomerCreated={handleCustomerCreated} />
+                 <div>
+            
+                    <button
+                      className="btn btn-outline-primary btn-sm"
+                      onClick={() => setCustomerOption("select")}
+                    >
+                      Select Customer
+                    </button>
+                  </div>
+              </div>
+    );
+    break;
+  // You can add more cases here for other combinations if needed
+  default:
+    content = "";
+}
 
   return (
     <div>
       <ConfirmationDialog />
       <Tabs tabs={tabs} activeTab={activeTab} onTabChange={handleTabChange}>
-        {activeTab === 'select-customer' && (
-          <div>
-            {/* Removed 'Select Customer' heading as per request */}
-            
-            {/* Customer Option Selection removed as per new UX */}
+   
+        {content}
 
-            {/* Select Customer Option */}
-            {customerOption === 'select' && (
-              <div>
-                {!selectedCustomer && (
-                  <div className="card">
-                    <div className="card-header d-flex justify-content-between align-items-center">
-                      <h5 className="card-title mb-0">Choose a Customer</h5>
-                      <div>
-                        <button
-                          className="btn btn-outline-secondary btn-sm me-2"
-                          onClick={() => {
-                            setSelectedCustomer(null);
-                            setCustomerOption("");
-                          }}
-                        >
-                          Return
-                        </button>
-                        <button
-                          className="btn btn-outline-primary btn-sm"
-                          onClick={() => setCustomerOption('add')}
-                        >
-                          Add New Customer
-                        </button>
-                      </div>
-                    </div>
-                    <div className="card-body">
-                      {assigneeData && assigneeData.length > 0 ? (
-                        <>
-                          <div className="table-responsive">
-                            <table className="table table-striped table-hover">
-                              <thead>
-                                <tr>
-                                  <th>Partner Name</th>
-                                  <th>Contact Person</th>
-                                  <th>Phone</th>
-                                  <th>Email</th>
-                                  <th>Action</th>
-                                </tr>
-                              </thead>
-                              <tbody>
-                                {assigneeData.map((customer) => (
-                                  <tr key={customer.id}>
-                                    <td>{customer.partnerName}</td>
-                                    <td>{customer.contactPerson}</td>
-                                    <td>{customer.phone1 || customer.phone2}</td>
-                                    <td>{customer.email}</td>
-                                    <td>
-                                      <button
-                                        className="btn btn-primary btn-sm"
-                                        onClick={() => onCustomerSelect(customer)}
-                                      >
-                                        Select
-                                      </button>
-                                    </td>
-                                  </tr>
-                                ))}
-                              </tbody>
-                            </table>
-                          </div>
-                        </>
-                      ) : (
-                        <div className="text-center py-4">
-                          <p className="text-muted">No customers found.</p>
-                          <button 
-                            className="btn btn-primary"
-                            onClick={() => setCustomerOption('add')}
-                          >
-                            Add First Customer
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                )}
 
-                {selectedCustomer && (
-                  <div className="alert alert-success">
-                    <h5>Selected Customer</h5>
-                    <div className="row">
-                      <div className="col-md-6">
-                        <strong>Partner Code:</strong> {selectedCustomer.partnerCode || '-'}<br />
-                        <strong>Partner Name:</strong> {selectedCustomer.partnerName || '-'}<br />
-                        <strong>Contact Person:</strong> {selectedCustomer.contactPerson || '-'}<br />
-                        <strong>Email:</strong> {selectedCustomer.email || '-'}<br />
-                        <strong>Address:</strong> {selectedCustomer.address || '-'}<br />
-                      </div>
-                      <div className="col-md-6">
-                        <strong>Phone 1:</strong> {selectedCustomer.phone1 || '-'}<br />
-                        <strong>Phone 2:</strong> {selectedCustomer.phone2 || '-'}<br />
-                        <strong>Customer:</strong> {selectedCustomer.isCustomer ? 'Yes' : 'No'}<br />
-                        <strong>Supplier:</strong> {selectedCustomer.isSupplier ? 'Yes' : 'No'}<br />
-                        <strong>Employee:</strong> {selectedCustomer.isEmployee ? 'Yes' : 'No'}<br />
-                        <strong>Active:</strong> {selectedCustomer.active ? 'Yes' : 'No'}<br />
-                      </div>
-                    </div>
-                    <div className="mt-3">
-                      <button 
-                        className="btn btn-primary me-2"
-                        onClick={() => setActiveTab('inquiry-details')}
-                      >
-                        Continue to Inquiry Details
-                      </button>
-                      <button 
-                        className="btn btn-outline-secondary"
-                        onClick={() => {
-                          setSelectedCustomer(null);
-                        }}
-                      >
-                        Change Customer
-                      </button>
-                    </div>
-                  </div>
-                )}
-              </div>
-            )}
-
-            {/* Add Customer Option */}
-            {customerOption === 'add' && (
-              <div>
-                <div className="d-flex justify-content-between align-items-center mb-3">
-                  <div>
-                    <button
-                      className="btn btn-outline-secondary btn-sm me-2"
-                      onClick={() => {
-                        setSelectedCustomer(null);
-                        setCustomerOption("");
-                      }}
-                    >
-                      Return
-                    </button>
-                    <button
-                      className="btn btn-outline-primary btn-sm"
-                      onClick={() => setCustomerOption('select')}
-                    >
-                      Select Customer
-                    </button>
-                  </div>
-                </div>
-                <AddBusinessPartner onCustomerCreated={handleCustomerCreated} />
-              </div>
-            )}
-          </div>
-        )}
-
-        {activeTab === 'inquiry-details' && (
+        {activeTab === "inquiry-details" && (
           <div>
             <h4 className="mb-3">Inquiry Details</h4>
             {/* Selected Customer Box at the top */}
             {selectedCustomer && (
+              <>
+                    <SelectedCustomerBox
+        selectedCustomer={selectedCustomer}
+        onContinue={() => setActiveTab("inquiry-details")}
+        onChangeCustomer={() => setCustomerOption("select")}
+      />
               <div className="alert alert-success mb-4">
                 <h5>Selected Customer</h5>
                 <div className="row">
                   <div className="col-md-6">
-                    <strong>Partner Code:</strong> {selectedCustomer.partnerCode || '-'}<br />
-                    <strong>Partner Name:</strong> {selectedCustomer.partnerName || '-'}<br />
-                    <strong>Contact Person:</strong> {selectedCustomer.contactPerson || '-'}<br />
-                    <strong>Email:</strong> {selectedCustomer.email || '-'}<br />
-                    <strong>Address:</strong> {selectedCustomer.address || '-'}<br />
+                    <strong>Partner Code:</strong>{" "}
+                    {selectedCustomer.partnerCode || "-"}
+                    <br />
+                    <strong>Partner Name:</strong>{" "}
+                    {selectedCustomer.partnerName || "-"}
+                    <br />
+                    <strong>Contact Person:</strong>{" "}
+                    {selectedCustomer.contactPerson || "-"}
+                    <br />
+                    <strong>Email:</strong> {selectedCustomer.email || "-"}
+                    <br />
+                    <strong>Address:</strong> {selectedCustomer.address || "-"}
+                    <br />
                   </div>
                   <div className="col-md-6">
-                    <strong>Phone 1:</strong> {selectedCustomer.phone1 || '-'}<br />
-                    <strong>Phone 2:</strong> {selectedCustomer.phone2 || '-'}<br />
-                    <strong>Customer:</strong> {selectedCustomer.isCustomer ? 'Yes' : 'No'}<br />
-                    <strong>Supplier:</strong> {selectedCustomer.isSupplier ? 'Yes' : 'No'}<br />
-                    <strong>Employee:</strong> {selectedCustomer.isEmployee ? 'Yes' : 'No'}<br />
-                    <strong>Active:</strong> {selectedCustomer.active ? 'Yes' : 'No'}<br />
+                    <strong>Phone 1:</strong> {selectedCustomer.phone1 || "-"}
+                    <br />
+                    <strong>Phone 2:</strong> {selectedCustomer.phone2 || "-"}
+                    <br />
+                    <strong>Customer:</strong>{" "}
+                    {selectedCustomer.isCustomer ? "Yes" : "No"}
+                    <br />
+                    <strong>Supplier:</strong>{" "}
+                    {selectedCustomer.isSupplier ? "Yes" : "No"}
+                    <br />
+                    <strong>Employee:</strong>{" "}
+                    {selectedCustomer.isEmployee ? "Yes" : "No"}
+                    <br />
+                    <strong>Active:</strong>{" "}
+                    {selectedCustomer.active ? "Yes" : "No"}
+                    <br />
                   </div>
                 </div>
-              </div>
+              </div></>
             )}
             <div className="row g-5">
               <div className="col-md-7 col-lg-8">
@@ -444,7 +379,10 @@ function ServiceInquiry() {
                     />
                     <InputField {...fields.assignee} formik={formik} />
                     <InputField {...fields.dueDate} formik={formik} />
-                    <button className="w-100 btn btn-primary btn-lg" type="submit">
+                    <button
+                      className="w-100 btn btn-primary btn-lg"
+                      type="submit"
+                    >
                       Submit
                     </button>
                   </div>

@@ -133,7 +133,7 @@ function AddBusinessPartner({ onCustomerCreated }) {
 
 
   return (
-    <div className="container">
+    <div className="">
       <ConfirmationDialog />
       <div className="row g-5">
         <div className="col-md-12 col-lg-12">
