@@ -1,7 +1,7 @@
 import { useDispatch, useSelector } from 'react-redux';
 import { logoutSuccess, selectUser } from '../features/auth/authSlice';
 import { useLocation, useNavigate } from 'react-router-dom';
-import "../components/TopNavBar/topbar.css";
+import "./topbar.css";
 import menuItems from '../helpers/menuItems';
 
 function Navbar({ onToggleDrawer }) {
