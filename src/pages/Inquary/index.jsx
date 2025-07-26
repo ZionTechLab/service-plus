@@ -32,36 +32,46 @@ function InquiryList() {
       isAction: true,
       actionTemplate: (row) => (
         <div className="d-flex gap-2 justify-content-center">
-          <button className="btn btn-sm btn-outline-primary" onClick={() => handleEdit(row.id)}>Edit</button>
-          <button className="btn btn-sm btn-outline-danger" onClick={() => handleDelete(row.id)}>Delete</button>
+          {/* <button className="btn btn-sm btn-outline-primary border-0" onClick={() => handleEdit(row.id)}>
+            <i className="bi bi-pencil"></i>
+          </button>
+          <button className="btn btn-sm btn-outline-danger border-0" onClick={() => handleDelete(row.id)}>
+            <i className="bi bi-trash"></i>
+          </button> */}
+          <button class="btn btn-outline-primary btn-icon btn-sm" title="Edit" onClick={() => handleEdit(row.id)}>
+                                           <i className="bi bi-pencil"></i>
+                                        </button>
+<button class="btn btn-outline-danger btn-icon btn-sm" title="Edit" onClick={() => handleDelete(row.id)}>
+                                            <i className="bi bi-trash"></i>
+                                        </button>
         </div>
       )
     },
     { header: 'ID', field: 'id' },
     { header: 'Customer', field: 'customer' },
-    { header: 'First Name', field: 'firstName' },
-    { header: 'Last Name', field: 'lastName' },
+    { header: 'First Name', field: 'firstName',class:'text-nowrap' },
+    { header: 'Last Name', field: 'lastName' ,class:'text-nowrap'},
     { header: 'Email', field: 'email' },
     { header: 'Phone', field: 'phone' },
     { header: 'Address', field: 'address' },
-    { header: 'Service Type', field: 'serviceType' },
+    { header: 'Service Type', field: 'serviceType' ,class:'text-nowrap'},
     { header: 'Priority', field: 'priority' },
     { header: 'Subject', field: 'subject' },
     { header: 'Message', field: 'message' },
     { header: 'Status', field: 'status' },
-    { header: 'Due Date', field: 'dueDate' },
+    { header: 'Due Date', field: 'dueDate',class:'text-nowrap' },
     { header: 'Assignee', field: 'assignee' }
   ];
 
   return (
     <div>     
-        <Link to="/Inquiry/add">
-        <div className="py-3">
-          <button className=" btn btn-primary btn-lg ">Add Inquiry</button>
-        </div>
-      </Link>
+
        <ConfirmationDialog />
-      <DataTable columns={columns} data={dataset} />
+      <DataTable columns={columns} data={dataset} >        <Link to="/Inquiry/add">
+
+          <button className=" btn btn-primary ">Add Inquiry</button>
+
+      </Link></DataTable>
     </div>
   );
 }

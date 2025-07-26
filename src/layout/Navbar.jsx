@@ -33,12 +33,11 @@ function Navbar({ onToggleDrawer }) {
   return (
     <nav className="navbar navbar-expand-lg navbar-light navbar-custom sticky-top">
       <div className="container-fluid">
-        <button onClick={onToggleDrawer} className="btn ">
-           <span className="navbar-toggler-icon"></span>
+        <button onClick={onToggleDrawer} className="btn btn-toggle">
+                <i class="bi bi-list"></i>
         </button>
-         <span className="ms-2 fw-semibold">{getPageTitle()}</span>
+        <div className='title'>{getPageTitle()}</div>
            <div class="flex-grow-1"></div>
-        {/* <a className="navbar-brand" href="#">Service Plus</a> */}
 
         <button class="btn me-3" onClick={handleFullScreen}>
       <i class="bi bi-arrows-fullscreen"></i>

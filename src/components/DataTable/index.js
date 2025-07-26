@@ -124,7 +124,7 @@ const handleSelectAll = () => {
 };
 
 
-const DataTable = ({ data = [], columns = [], name }) => {
+const DataTable = ({ data = [], columns = [], name , children }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchKey, setSearchKey] = useState(null);
   const [sortKey, setSortKey] = useState(null);
@@ -213,9 +213,13 @@ const DataTable = ({ data = [], columns = [], name }) => {
   return (
     <div className="">
       <div className="">
-        <div className="row g-3">
+
+       <div className="card  "> 
+        <div className="card-body row ">
+          {children?
+          (<div className="col-sm-2"> {children}</div>):''}
           <div className="col-sm-8">
-            {/* Responsive Filter label */}
+
             <div className="d-block d-sm-none mb-1">
               <span className="fw-semibold">Filter by :</span>
             </div>
@@ -262,13 +266,13 @@ const DataTable = ({ data = [], columns = [], name }) => {
             />
           </div>
         </div>
-        {/* Table */}
-        <div className="mt-3 table-responsive">
-          <table className="table table-bordered">
-            <thead className="table-light">
-              <tr className="bg-light">
+</div>
+        <div className="mt-3 table-responsive card">
+          <table className="table table-hover">
+            <thead className="table-header">
+              <tr className="">
                 {displayColumns.map((col, idx) => (
-                  <th
+                  <th 
                     key={idx}
                     className={`sort ${col.class || ""}`}
                     onClick={() => !col.isAction && setSortKey(col)}
