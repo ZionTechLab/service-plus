@@ -246,9 +246,8 @@ function ServiceInquiry() {
   };
 
   return (
-    <div className="container">
+    <div>
       <ConfirmationDialog />
-      
       <Tabs tabs={tabs} activeTab={activeTab} onTabChange={handleTabChange}>
         {activeTab === 'select-customer' && (
           <div>
