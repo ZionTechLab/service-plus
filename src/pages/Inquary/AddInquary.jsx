@@ -5,10 +5,10 @@ import InputField from "../../helpers/InputField";
 import { useFormikBuilder } from "../../helpers/formikBuilder";
 import PartnerService from "../BusinessPartners/PartnerService";
 import InquiryView from "./InquiryView";
-import CustomerModal from "../BusinessPartners/BusinessPartnerFind";
 import AddBusinessPartner from "../BusinessPartners/AddBusinessPartner";
 import useConfirm from '../../hooks/useConfirm';
-import {  useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
+import Tabs from '../../components/Tabs';
 
 const inquiryTypes = [
   { key: 1, value: "quotation" },
@@ -32,11 +32,26 @@ const getNextId = (inquiries) => {
 
 function ServiceInquiry() {
   const { id } = useParams();
-  const [workflowState, setWorkflowState] = useState('select-customer');
+  const [activeTab, setActiveTab] = useState('select-customer');
+  const [customerOption, setCustomerOption] = useState('select'); // 'select' or 'add'
   const [assigneeData, setAssigneeData] = useState([]);
-  const [showCustomerModal, setShowCustomerModal] = useState(true);
+  const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [ConfirmationDialog, confirm] = useConfirm();
-    const navigate = useNavigate();
+  const navigate = useNavigate();
+
+  // Tab configuration
+  const tabs = [
+    {
+      id: 'select-customer',
+      label: 'Select Customer',
+      disabled: false
+    },
+    {
+      id: 'inquiry-details',
+      label: 'Inquiry Details',
+      disabled: !selectedCustomer && !id
+    }
+  ];
   useEffect(() => {
     const fetchInquiries = async () => {
       const storedInquiries = await PartnerService.getAllPartners();
@@ -184,98 +199,228 @@ function ServiceInquiry() {
 
   const onCustomerSelect = (customer) => {
     formik.setFieldValue("customer", customer.partnerName);
-    formik.setFieldValue("firstName", customer.primary_contact);
+    formik.setFieldValue("firstName", customer.contactPerson);
     formik.setFieldValue("email", customer.email);
-    formik.setFieldValue("phone", customer.phone);
+    formik.setFieldValue("phone", customer.phone1 || customer.phone2);
     formik.setFieldValue("address", customer.address);
-    setShowCustomerModal(false);
-    setWorkflowState('add-inquiry');
+    setSelectedCustomer(customer);
+    setActiveTab('inquiry-details');
   };
 
-  const handleNewCustomer = () => {
-    setShowCustomerModal(false);
-    setWorkflowState('add-customer');
+  const handleCustomerCreated = (newCustomer) => {
+    // Handle when a new customer is created from AddBusinessPartner
+    formik.setFieldValue("customer", newCustomer.partnerName);
+    formik.setFieldValue("firstName", newCustomer.contactPerson);
+    formik.setFieldValue("email", newCustomer.email);
+    formik.setFieldValue("phone", newCustomer.phone1 || newCustomer.phone2);
+    formik.setFieldValue("address", newCustomer.address);
+    setSelectedCustomer(newCustomer);
+    setCustomerOption('select');
+    setActiveTab('inquiry-details');
+  };
+
+  const handleTabChange = (tabId) => {
+    setActiveTab(tabId);
+    if (tabId === 'select-customer') {
+      setCustomerOption('select');
+    }
   };
 
   return (
     <div className="container">
       <ConfirmationDialog />
-
-      {workflowState === 'select-customer' && (
-        <CustomerModal
-          show={showCustomerModal}
-          onClose={() => setShowCustomerModal(false)}
-          customers={assigneeData}
-          onCustomerSelect={onCustomerSelect}
-          onNewCustomer={handleNewCustomer}
-        />
-      )}
-
-      {workflowState === 'add-customer' && (
-        <AddBusinessPartner />
-      )}
-
-      {workflowState === 'add-inquiry' && (
-        <div>
-          <h4 className="mb-3">Customer</h4>
-          <div className="row g-5">
-            <div className="col-md-7 col-lg-8">
-              <form onSubmit={formik.handleSubmit} noValidate>
-                <div className="row g-3">
-                  <InputField
-                    className="col-sm-12"
-                    {...fields.customer}
-                    formik={formik}
-                  />
-                  <InputField
-                    className="col-sm-6"
-                    {...fields.firstName}
-                    formik={formik}
-                  />
-                  <InputField
-                    className="col-sm-6"
-                    {...fields.lastName}
-                    formik={formik}
-                  />
-                  <InputField
-                    className="col-sm-12"
-                    {...fields.email}
-                    formik={formik}
-                  />
-                  <InputField
-                    className="col-sm-12"
-                    {...fields.address}
-                    formik={formik}
-                  />
-                  <InputField {...fields.phone} formik={formik} />
-
-                  <InputField {...fields.subject} formik={formik} />
-                  <InputField {...fields.message} formik={formik} />
-                  <InputField
-                    className="col-sm-6"
-                    {...fields.serviceType}
-                    formik={formik}
-                  />
-                  <InputField
-                    className="col-sm-6"
-                    {...fields.priority}
-                    formik={formik}
-                  />
-                  <InputField {...fields.assignee} formik={formik} />
-                  <InputField {...fields.dueDate} formik={formik} />
-                  <button className="w-100 btn btn-primary btn-lg" type="submit">
-                    Submit
-                  </button>
-                </div>
-              </form>
+      
+      <Tabs tabs={tabs} activeTab={activeTab} onTabChange={handleTabChange}>
+        {activeTab === 'select-customer' && (
+          <div>
+            <h4 className="mb-3">Select Customer</h4>
+            
+            {/* Customer Option Selection */}
+            <div className="mb-4">
+              <div className="btn-group" role="group" aria-label="Customer options">
+                <button
+                  type="button"
+                  className={`btn ${customerOption === 'select' ? 'btn-primary' : 'btn-outline-primary'}`}
+                  onClick={() => setCustomerOption('select')}
+                >
+                  Select Existing Customer
+                </button>
+                <button
+                  type="button"
+                  className={`btn ${customerOption === 'add' ? 'btn-primary' : 'btn-outline-primary'}`}
+                  onClick={() => setCustomerOption('add')}
+                >
+                  Add New Customer
+                </button>
+              </div>
             </div>
 
-            <div className="col-md-5 col-lg-4 order-md-last ">
-              <InquiryView />
+            {/* Select Customer Option */}
+            {customerOption === 'select' && (
+              <div>
+                {!selectedCustomer && (
+                  <div className="card">
+                    <div className="card-header">
+                      <h5 className="card-title mb-0">Choose a Customer</h5>
+                    </div>
+                    <div className="card-body">
+                      {assigneeData && assigneeData.length > 0 ? (
+                        <>
+                          <div className="table-responsive">
+                            <table className="table table-striped table-hover">
+                              <thead>
+                                <tr>
+                                  <th>Partner Name</th>
+                                  <th>Contact Person</th>
+                                  <th>Phone</th>
+                                  <th>Email</th>
+                                  <th>Action</th>
+                                </tr>
+                              </thead>
+                              <tbody>
+                                {assigneeData.map((customer) => (
+                                  <tr key={customer.id}>
+                                    <td>{customer.partnerName}</td>
+                                    <td>{customer.contactPerson}</td>
+                                    <td>{customer.phone1 || customer.phone2}</td>
+                                    <td>{customer.email}</td>
+                                    <td>
+                                      <button
+                                        className="btn btn-primary btn-sm"
+                                        onClick={() => onCustomerSelect(customer)}
+                                      >
+                                        Select
+                                      </button>
+                                    </td>
+                                  </tr>
+                                ))}
+                              </tbody>
+                            </table>
+                          </div>
+                          <div className="mt-3 text-end">
+                            <button
+                              className="btn btn-outline-secondary"
+                              onClick={() => {
+                                setSelectedCustomer(null);
+                                setCustomerOption('');
+                              }}
+                            >
+                              Return
+                            </button>
+                          </div>
+                        </>
+                      ) : (
+                        <div className="text-center py-4">
+                          <p className="text-muted">No customers found.</p>
+                          <button 
+                            className="btn btn-primary"
+                            onClick={() => setCustomerOption('add')}
+                          >
+                            Add First Customer
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                )}
+
+                {selectedCustomer && (
+                  <div className="alert alert-success">
+                    <h5>Selected Customer: {selectedCustomer.partnerName}</h5>
+                    <p>Contact: {selectedCustomer.contactPerson}</p>
+                    <p>Email: {selectedCustomer.email}</p>
+                    <div className="mt-3">
+                      <button 
+                        className="btn btn-primary me-2"
+                        onClick={() => setActiveTab('inquiry-details')}
+                      >
+                        Continue to Inquiry Details
+                      </button>
+                      <button 
+                        className="btn btn-outline-secondary"
+                        onClick={() => {
+                          setSelectedCustomer(null);
+                        }}
+                      >
+                        Change Customer
+                      </button>
+                    </div>
+                  </div>
+                )}
+              </div>
+            )}
+
+            {/* Add Customer Option */}
+            {customerOption === 'add' && (
+              <div>
+                <AddBusinessPartner onCustomerCreated={handleCustomerCreated} />
+              </div>
+            )}
+          </div>
+        )}
+
+        {activeTab === 'inquiry-details' && (
+          <div>
+            <h4 className="mb-3">Inquiry Details</h4>
+            <div className="row g-5">
+              <div className="col-md-7 col-lg-8">
+                <form onSubmit={formik.handleSubmit} noValidate>
+                  <div className="row g-3">
+                    <InputField
+                      className="col-sm-12"
+                      {...fields.customer}
+                      formik={formik}
+                    />
+                    <InputField
+                      className="col-sm-6"
+                      {...fields.firstName}
+                      formik={formik}
+                    />
+                    <InputField
+                      className="col-sm-6"
+                      {...fields.lastName}
+                      formik={formik}
+                    />
+                    <InputField
+                      className="col-sm-12"
+                      {...fields.email}
+                      formik={formik}
+                    />
+                    <InputField
+                      className="col-sm-12"
+                      {...fields.address}
+                      formik={formik}
+                    />
+                    <InputField {...fields.phone} formik={formik} />
+
+                    <InputField {...fields.subject} formik={formik} />
+                    <InputField {...fields.message} formik={formik} />
+                    <InputField
+                      className="col-sm-6"
+                      {...fields.serviceType}
+                      formik={formik}
+                    />
+                    <InputField
+                      className="col-sm-6"
+                      {...fields.priority}
+                      formik={formik}
+                    />
+                    <InputField {...fields.assignee} formik={formik} />
+                    <InputField {...fields.dueDate} formik={formik} />
+                    <button className="w-100 btn btn-primary btn-lg" type="submit">
+                      Submit
+                    </button>
+                  </div>
+                </form>
+              </div>
+
+              <div className="col-md-5 col-lg-4 order-md-last ">
+                <InquiryView />
+              </div>
             </div>
           </div>
-        </div>
-      )}
+        )}
+      </Tabs>
     </div>
   );
 }

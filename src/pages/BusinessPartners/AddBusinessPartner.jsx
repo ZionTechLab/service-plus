@@ -90,18 +90,30 @@ const fields = {
   },
 };
 
-function AddBusinessPartner() {
+function AddBusinessPartner({ onCustomerCreated }) {
   const { id } = useParams();
   const [ConfirmationDialog, confirm] = useConfirm();
 
   const handleInquirySubmit = async (values, { resetForm }) => {
-    await PartnerService.createPartner(values);
+    const savedPartner = await PartnerService.createPartner(values);
 
-    resetForm();
- confirm(
-      "Business partner saved successfully!",
-      { confirmText: "OK", type: "success" }
-    );
+    if (onCustomerCreated && typeof onCustomerCreated === 'function') {
+      // If this is being used in the inquiry flow, notify parent
+      confirm(
+        "Customer created successfully! Proceeding to inquiry details.",
+        { confirmText: "Continue", type: "success" }
+      ).then(() => {
+        resetForm();
+        onCustomerCreated(savedPartner);
+      });
+    } else {
+      // If this is being used standalone, show confirmation
+      resetForm();
+      confirm(
+        "Business partner saved successfully!",
+        { confirmText: "OK", type: "success" }
+      );
+    }
   };
 
   const formik = useFormikBuilder(fields, handleInquirySubmit);

@@ -1,48 +1,142 @@
 # Copilot Instructions for service-plus
 
 ## Project Overview
-- This is a React SPA for managing service inquiries, customers, and items.
-- Uses Redux Toolkit for state management (`src/store.js`, `src/features/`).
-- Routing is handled by React Router, with main routes in `src/App.js` and nested routes in `MainPage`.
-- Forms use Formik and Yup for validation (see `helpers/formikBuilder.js`, component form logic).
-- UI is styled with Pico.css and custom component CSS files.
-- Data is currently mock/local (see `src/data.js`), with localStorage used for persistence in some flows (e.g., ServiceInquiry).
+This is a React SPA for managing service inquiries, business partners, and inventory items. The app uses a modern tabbed workflow approach with inline components instead of modals for better UX.
 
-## Key Patterns & Conventions
-- Components are modular, in `src/components/FeatureName/index.js`.
-- Redux slices live in `src/features/featureName/featureSlice.js`.
-- Helper utilities are in `src/helpers/` (e.g., `InputField.js`, `DataTable.js`).
-- Use PascalCase for components and camelCase for variables/functions.
-- Prefer local state for UI, Redux for app-wide state.
-- ServiceInquiry workflow: form submission updates localStorage, triggers popup, and resets form.
-- Customer selection uses a modal and updates form fields directly.
+**Key Stack:**
+- React 19 + Redux Toolkit for state management
+- React Router for navigation with nested routes  
+- Formik + Yup for form handling and validation
+- Bootstrap 5 + custom CSS (no external CSS framework dependency)
+- localStorage for persistence (no backend integration currently)
+
+## Architecture Patterns
+
+### Layout Structure
+```
+MainPage (layout wrapper)
+├── Navbar (top bar with hamburger menu)
+├── Drawer (slide-out navigation with theme toggle)
+├── Overlay (backdrop for drawer)
+└── Outlet (route content)
+```
+
+### Form & Data Flow Patterns
+1. **Formik Builder Pattern**: Use `useFormikBuilder(fields, submitHandler)` - see `helpers/formikBuilder.js`
+2. **Field Configuration**: Define fields as objects with `name`, `type`, `placeholder`, `initialValue`, `validation` 
+3. **Service Classes**: Use class-based services for data operations (e.g., `PartnerService`) with localStorage
+4. **Confirmation Pattern**: Use `useConfirm` hook for success/error popups instead of alerts
+
+### Component Organization
+- **Pages**: Route components in `src/pages/FeatureName/`
+- **Components**: Reusable UI in `src/components/ComponentName/index.js`
+- **Layout**: Layout wrappers in `src/layout/`
+- **Helpers**: Utilities in `src/helpers/` (InputField, DataTable, etc.)
+
+## Key Conventions
+
+### Tab-Based Workflows
+Modern approach uses `<Tabs>` component instead of modals:
+```jsx
+// Example from AddInquary.jsx
+const tabs = [
+  { id: 'select-customer', label: 'Select Customer', disabled: false },
+  { id: 'inquiry-details', label: 'Inquiry Details', disabled: !selectedCustomer }
+];
+```
+
+### Inline Components vs Modals
+- **Prefer**: Inline tables/forms within tabs for selection workflows
+- **Avoid**: Modal popups for primary workflows (legacy pattern being phased out)
+- **Use Modals**: Only for column visibility, confirmations, or secondary actions
+
+### Form Field Patterns
+```javascript
+// Standard field definition
+const fields = {
+  fieldName: {
+    name: "fieldName",
+    type: "text|email|select|textarea|checkbox|date",
+    placeholder: "Display Text",
+    initialValue: "",
+    validation: Yup.string().required("Error message"),
+    dataBinding: { data: array, keyField: "id", valueField: "name" } // for selects
+  }
+};
+```
+
+### Data Table Configuration
+```javascript
+const columns = [
+  { header: 'Name', field: 'name' },
+  { header: 'Action', isAction: true, actionTemplate: (row) => <button>Edit</button> }
+];
+```
 
 ## Developer Workflows
-- **Start dev server:** `npm start` (http://localhost:3000)
-- **Run tests:** `npm test` (Jest + React Testing Library)
-- **Build for production:** `npm run build`
-- **Install dependencies:** `npm install`
-- **Environment:** Set `REACT_APP_API_BASE_URL` in `.env` if integrating with an API.
+
+### Adding New Features
+1. Create page component in `src/pages/FeatureName/`
+2. Add route to `AppRoutes.jsx`
+3. Add menu item to `helpers/menuItems.js`
+4. Create service class if data persistence needed
+5. Use `useFormikBuilder` for forms
+
+### Form Workflow Pattern
+```jsx
+// 1. Define fields configuration
+const fields = { /* field definitions */ };
+
+// 2. Create submit handler
+const handleSubmit = (values, { resetForm }) => {
+  // Save data, show confirmation, navigate
+  confirm("Success message").then(() => navigate('/somewhere'));
+};
+
+// 3. Initialize formik
+const formik = useFormikBuilder(fields, handleSubmit);
+
+// 4. Use InputField components
+<InputField {...fields.fieldName} formik={formik} />
+```
+
+### Testing & Debugging
+- **Start dev**: `npm start` (http://localhost:3000)
+- **Run tests**: `npm test` (Jest + React Testing Library)  
+- **Build prod**: `npm run build`
+- **Debug**: Browser DevTools + Redux DevTools extension
 
 ## Integration Points
-- No backend/API calls by default; mock data and localStorage are used.
-- If adding API calls, use Axios or Fetch, and store base URL in `.env`.
-- Authentication state managed in `features/auth/authSlice.js`.
+
+### State Management
+- **Redux**: App-wide state in `src/features/` (currently only auth)
+- **Local State**: Component state for UI interactions
+- **localStorage**: Data persistence via service classes
+
+### Navigation & Routing  
+- **Main Routes**: Defined in `AppRoutes.jsx` with protected/public route wrappers
+- **Menu Items**: Configured in `helpers/menuItems.js` with icons
+- **Drawer Navigation**: Auto-generated from menuItems with `isMenuItem: true`
+
+### Service Layer
+Business logic in class-based services:
+```javascript
+class PartnerService {
+  constructor() { this.storageKey = 'partners'; }
+  createPartner(data) { /* localStorage operations */ }
+  getAllPartners() { /* return array */ }
+}
+```
+
+## Current Implementation Notes
+- **Recent Change**: AddInquary now uses tabbed workflow with inline customer selection instead of modal
+- **Theme Support**: Dark/light mode toggle in drawer footer
+- **Responsive**: Bootstrap grid system with mobile-first approach  
+- **Icons**: Bootstrap Icons (`bi bi-*` classes)
+- **Forms**: All forms use consistent Formik + InputField pattern
 
 ## Examples
-- To add a new feature, create a folder in `src/components/FeatureName/` and a Redux slice in `src/features/featureName/`.
-- To persist new data, use localStorage or update mock data in `src/data.js`.
-- For forms, use Formik builder pattern as in `ServiceInquiry`.
-
-## Testing & Debugging
-- Test files are named `*.test.js` and colocated with source files.
-- Use React Testing Library for UI/component tests.
-- Debug by inspecting browser console and Redux state.
-
-## References
-- See `DOCUMENTATION.md` and `README.md` for more details on setup and architecture.
-- Example: `ServiceInquiry` component demonstrates form, modal, localStorage, and popup patterns.
-
----
-
-If any section is unclear or missing, please provide feedback to improve these instructions.
+- **Tab Workflow**: `pages/Inquary/AddInquary.jsx` - shows modern tab-based UX
+- **Data Table**: `components/DataTable/index.js` - sortable, filterable, with column toggle
+- **Service Pattern**: `pages/BusinessPartners/PartnerService.js` - localStorage CRUD operations
+- **Form Builder**: `helpers/formikBuilder.js` + `helpers/InputField.js` - declarative form creation
