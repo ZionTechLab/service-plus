@@ -6,6 +6,7 @@ import { useFormikBuilder } from "../../helpers/formikBuilder";
 import PartnerService from "../BusinessPartners/PartnerService";
 import InquiryView from "./InquiryView";
 import CustomerModal from "../BusinessPartners/BusinessPartnerFind";
+import AddBusinessPartner from "../BusinessPartners/AddBusinessPartner";
 import useConfirm from '../../hooks/useConfirm';
 import {  useNavigate } from 'react-router-dom';
 
@@ -31,9 +32,9 @@ const getNextId = (inquiries) => {
 
 function ServiceInquiry() {
   const { id } = useParams();
-  // const [showPopup, setShowPopup] = useState(false);
+  const [workflowState, setWorkflowState] = useState('select-customer');
   const [assigneeData, setAssigneeData] = useState([]);
-  const [showCustomerModal, setShowCustomerModal] = useState(false);
+  const [showCustomerModal, setShowCustomerModal] = useState(true);
   const [ConfirmationDialog, confirm] = useConfirm();
     const navigate = useNavigate();
   useEffect(() => {
@@ -188,85 +189,93 @@ function ServiceInquiry() {
     formik.setFieldValue("phone", customer.phone);
     formik.setFieldValue("address", customer.address);
     setShowCustomerModal(false);
+    setWorkflowState('add-inquiry');
+  };
+
+  const handleNewCustomer = () => {
+    setShowCustomerModal(false);
+    setWorkflowState('add-customer');
   };
 
   return (
     <div className="container">
       <ConfirmationDialog />
 
-<h4 class="mb-3">Customer</h4>
-
-      <div className="row g-5">
-        <div className="col-md-7 col-lg-8">
-          <form onSubmit={formik.handleSubmit} noValidate>
-            <div className="row g-3">
-                    <InputField
-                className="col-sm-12"
-                {...fields.customer}
-                formik={formik}
-              >
-                 <button
-                    className="btn btn-outline-secondary"
-                    type="button"
-                    onClick={() => setShowCustomerModal(true)}
-                  >
-                    ...
-                  </button>
-              </InputField>
-              <InputField
-                className="col-sm-6"
-                {...fields.firstName}
-                formik={formik}
-              />
-              <InputField
-                className="col-sm-6"
-                {...fields.lastName}
-                formik={formik}
-              />
-              <InputField
-                className="col-sm-12"
-                {...fields.email}
-                formik={formik}
-              />
-              <InputField
-                className="col-sm-12"
-                {...fields.address}
-                formik={formik}
-              />
-              <InputField {...fields.phone} formik={formik} />
-
-              <InputField {...fields.subject} formik={formik} />
-              <InputField {...fields.message} formik={formik} />
-              <InputField
-                className="col-sm-6"
-                {...fields.serviceType}
-                formik={formik}
-              />
-              <InputField
-                className="col-sm-6"
-                {...fields.priority}
-                formik={formik}
-              />
-              <InputField {...fields.assignee} formik={formik} />
-              <InputField {...fields.dueDate} formik={formik} />
-              <button className="w-100 btn btn-primary btn-lg" type="submit">
-                Submit
-              </button>
-            </div>
-          </form>
-        </div>
-
-        <div className="col-md-5 col-lg-4 order-md-last ">
-          <InquiryView />
-        </div>
-      </div>
- 
+      {workflowState === 'select-customer' && (
         <CustomerModal
           show={showCustomerModal}
-        onClose={() => setShowCustomerModal(false)}
-        customers={assigneeData}
-        onCustomerSelect={onCustomerSelect}
+          onClose={() => setShowCustomerModal(false)}
+          customers={assigneeData}
+          onCustomerSelect={onCustomerSelect}
+          onNewCustomer={handleNewCustomer}
         />
+      )}
+
+      {workflowState === 'add-customer' && (
+        <AddBusinessPartner />
+      )}
+
+      {workflowState === 'add-inquiry' && (
+        <div>
+          <h4 className="mb-3">Customer</h4>
+          <div className="row g-5">
+            <div className="col-md-7 col-lg-8">
+              <form onSubmit={formik.handleSubmit} noValidate>
+                <div className="row g-3">
+                  <InputField
+                    className="col-sm-12"
+                    {...fields.customer}
+                    formik={formik}
+                  />
+                  <InputField
+                    className="col-sm-6"
+                    {...fields.firstName}
+                    formik={formik}
+                  />
+                  <InputField
+                    className="col-sm-6"
+                    {...fields.lastName}
+                    formik={formik}
+                  />
+                  <InputField
+                    className="col-sm-12"
+                    {...fields.email}
+                    formik={formik}
+                  />
+                  <InputField
+                    className="col-sm-12"
+                    {...fields.address}
+                    formik={formik}
+                  />
+                  <InputField {...fields.phone} formik={formik} />
+
+                  <InputField {...fields.subject} formik={formik} />
+                  <InputField {...fields.message} formik={formik} />
+                  <InputField
+                    className="col-sm-6"
+                    {...fields.serviceType}
+                    formik={formik}
+                  />
+                  <InputField
+                    className="col-sm-6"
+                    {...fields.priority}
+                    formik={formik}
+                  />
+                  <InputField {...fields.assignee} formik={formik} />
+                  <InputField {...fields.dueDate} formik={formik} />
+                  <button className="w-100 btn btn-primary btn-lg" type="submit">
+                    Submit
+                  </button>
+                </div>
+              </form>
+            </div>
+
+            <div className="col-md-5 col-lg-4 order-md-last ">
+              <InquiryView />
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   );
 }

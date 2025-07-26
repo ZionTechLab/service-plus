@@ -1,25 +1,36 @@
-
-import React from 'react';
+import React, { useEffect } from 'react';
 import './Modal.css';
 
 const Modal = ({ show, onClose, title, children }) => {
+  useEffect(() => {
+    const handleKeyDown = (event) => {
+      if (event.key === 'Escape') {
+        onClose();
+      }
+    };
+
+    if (show) {
+      document.addEventListener('keydown', handleKeyDown);
+    } else {
+      document.removeEventListener('keydown', handleKeyDown);
+    }
+
+    return () => {
+      document.removeEventListener('keydown', handleKeyDown);
+    };
+  }, [show, onClose]);
+
   if (!show) {
     return null;
   }
 
   return (
     <div>
-      <div className="modal-backdrop fade show" style={{ zIndex: 1040 }}></div>
+      <div className="modal-backdrop fade show"></div>
       <div
         className="modal fade show"
-        style={{
-          display: 'block',
-          zIndex: 1050,
-          top: '50%',
-          left: '50%',
-          transform: 'translate(-50%, -50%)',
-        }}
         tabIndex="-1"
+        role="dialog"
       >
         <div className="card">
           <div className="card-header">
@@ -28,7 +39,7 @@ const Modal = ({ show, onClose, title, children }) => {
               type="button"
               className="btn-close"
               onClick={onClose}
-              style={{ position: 'absolute', right: '1rem', top: '1rem' }}
+              aria-label="Close"
             ></button>
           </div>
           <div className="card-body">{children}</div>
