@@ -83,7 +83,7 @@ function BusinessPartners() {
       <DataTable name="User Export" data={dataset} columns={columns} >
      <Link to="/business-partner/add">
    
-          <button className=" btn btn-primary  ">Add Business Partner</button>
+          <button className=" btn btn-primary  ">New</button>
        
       </Link>
       </DataTable>

@@ -1,3 +1,4 @@
+
 import * as Yup from "yup";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
@@ -12,26 +13,7 @@ import useConfirm from "../../hooks/useConfirm";
 import { useNavigate } from "react-router-dom";
 import Tabs from "../../components/Tabs";
 import SelectedCustomerBox from "../BusinessPartners/card-selectedBP";
-
-const inquiryTypes = [
-  { key: 1, value: "quotation" },
-  { key: 2, value: "technical_support" },
-  { key: 3, value: "complain" },
-  { key: 4, value: "repair" },
-  { key: 5, value: "new_order" },
-];
-
-const priorities = [
-  { key: 1, value: "low" },
-  { key: 2, value: "medium" },
-  { key: 3, value: "high" },
-];
-
-// const getNextId = (inquiries) => {
-//   if (inquiries.length === 0) return 1;
-//   const maxId = Math.max(...inquiries.map((i) => i.id));
-//   return Number.isNaN(maxId) ? 1 : maxId + 1;
-// };
+import { inquiryTypes, priorities } from "./inquiryOptions";
 
 function ServiceInquiry() {
   const { id } = useParams();
@@ -125,29 +107,29 @@ function ServiceInquiry() {
   const handleInquirySubmit = (values, { resetForm }) => {
     console.log("Form values:", values);
 
-    // let result;
-    // if (id) {
-    //   // Update existing inquiry
-    //   result = InquaryService.createInquary({
-    //     id: parseInt(id),
-    //     ...values,
-    //   });
-    // } else {
-    //   // Create new inquiry
-    //   result = InquaryService.createInquary({
-    //     ...values,
-    //     status: "new",
-    //     log: [{ status: "new", timestamp: new Date() }],
-    //   });
-    // }
+    let result;
+    if (id) {
+      // Update existing inquiry
+      result = InquaryService.createInquary({
+        id: parseInt(id),
+        ...values,
+      });
+    } else {
+      // Create new inquiry
+      result = InquaryService.createInquary({
+        ...values,
+        status: "new",
+        log: [{ status: "new", timestamp: new Date() }],
+      });
+    }
 
-    // resetForm();
-    // confirm("Inquiry saved successfully!", {
-    //   confirmText: "OK",
-    //   type: "success",
-    // }).then(() => {
-    //   navigate(`/inquiry`);
-    // });
+    resetForm();
+    confirm("Inquiry saved successfully!", {
+      confirmText: "OK",
+      type: "success",
+    }).then(() => {
+      navigate(`/inquiry`);
+    });
   };
 
   const formik = useFormikBuilder(fields, handleInquirySubmit);

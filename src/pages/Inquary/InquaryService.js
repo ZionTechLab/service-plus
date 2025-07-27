@@ -1,6 +1,8 @@
+import { priorities, inquiryTypes } from "./inquiryOptions";
+
 class InquaryService {
   constructor() {
-    this.storageKey = 'inquiries';
+    this.storageKey = "inquiries";
   }
 
   createInquary(inquaryData) {
@@ -9,12 +11,12 @@ class InquaryService {
       let updatedInquary;
       if (inquaryData.id) {
         // Update existing inquary
-        const idx = inquaries.findIndex(i => i.id === inquaryData.id);
+        const idx = inquaries.findIndex((i) => i.id === inquaryData.id);
         if (idx !== -1) {
           updatedInquary = {
             ...inquaries[idx],
             ...inquaryData,
-            updatedAt: new Date().toISOString()
+            updatedAt: new Date().toISOString(),
           };
           inquaries[idx] = updatedInquary;
         } else {
@@ -23,7 +25,7 @@ class InquaryService {
             id: inquaryData.id,
             ...inquaryData,
             createdAt: new Date().toISOString(),
-            updatedAt: new Date().toISOString()
+            updatedAt: new Date().toISOString(),
           };
           inquaries.push(updatedInquary);
         }
@@ -34,24 +36,24 @@ class InquaryService {
           id: newId,
           ...inquaryData,
           createdAt: new Date().toISOString(),
-          updatedAt: new Date().toISOString()
+          updatedAt: new Date().toISOString(),
         };
         inquaries.push(updatedInquary);
       }
       localStorage.setItem(this.storageKey, JSON.stringify(inquaries));
       return updatedInquary;
     } catch (error) {
-      console.error('Error creating inquary:', error);
-      throw new Error('Failed to create inquary');
+      console.error("Error creating inquary:", error);
+      throw new Error("Failed to create inquary");
     }
   }
 
   getInquaryById(id) {
     try {
       const inquaries = this.getAllInquaries();
-      return inquaries.find(inquary => inquary.id === id) || null;
+      return inquaries.find((inquary) => inquary.id === id) || null;
     } catch (error) {
-      console.error('Error getting inquary:', error);
+      console.error("Error getting inquary:", error);
       return null;
     }
   }
@@ -59,37 +61,41 @@ class InquaryService {
   getAllInquairies() {
     try {
       const inquiries = JSON.parse(localStorage.getItem(this.storageKey));
-      const partners = JSON.parse(localStorage.getItem('partners'));
+      const partners = JSON.parse(localStorage.getItem("partners"));
 
-   const joined = inquiries.map(({ customer, ...rest }) => {
-  const partner = partners.find(p => p.id === customer);
-  return {
-    ...rest,
-    customer,
-    partnerName: partner?.partnerName || '',
-    contactPerson: partner?.contactPerson || '',
-    email: partner?.email || '',
-    address: partner?.address || '',
-    phone1: partner?.phone || '',
-    phone2: partner?.phone2 || '',
-  };
-});
-        console.log('Fetched inquiries:', joined);
+      const joined = (inquiries || []).map(({ customer, priority, serviceType,assignee, ...rest }) => {
+        const partner = (partners || []).find((p) => p.id === customer);
+        // Find display names for priority and serviceType
+        const priorityObj = priorities.find((p) => p.key == priority);
+        const serviceTypeObj = inquiryTypes.find((t) => t.key == serviceType);
+                const AsigneeObj = partners.find((t) => t.id == assignee);
+        return {
+          ...rest,
+          customer,
+          partnerName: partner?.partnerName || "",
+          contactPerson: partner?.contactPerson || "",
+          email: partner?.email || "",
+          address: partner?.address || "",
+          phone1: partner?.phone || "",
+          phone2: partner?.phone2 || "",
+          // priority,
+          priority: priorityObj ?  priorityObj.value :priority,
+          // serviceType,
+          serviceType: serviceTypeObj ?  serviceTypeObj.value: serviceType,
+          assignee: AsigneeObj ?  AsigneeObj.partnerName: assignee,
+        };
+      });
+      console.log("Fetched inquiries:", joined);
       return joined ? joined : [];
     } catch (error) {
-      console.error('Error getting inquiries:', error);
+      console.error("Error getting inquiries:", error);
       return [];
     }
   }
 
-
-
-
-
-
   getNextId(inquaries) {
     if (inquaries.length === 0) return 1;
-    return Math.max(...inquaries.map(i => i.id)) + 1;
+    return Math.max(...inquaries.map((i) => i.id)) + 1;
   }
 }
 
