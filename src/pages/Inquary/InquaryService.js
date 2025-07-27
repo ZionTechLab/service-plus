@@ -65,9 +65,12 @@ class InquaryService {
 
       const joined = (inquiries || []).map(({ customer, priority, serviceType,assignee, ...rest }) => {
         const partner = (partners || []).find((p) => p.id === customer);
-        // Find display names for priority and serviceType
+
+        // eslint-disable-next-line eqeqeq
         const priorityObj = priorities.find((p) => p.key == priority);
+// eslint-disable-next-line eqeqeq
         const serviceTypeObj = inquiryTypes.find((t) => t.key == serviceType);
+  // eslint-disable-next-line eqeqeq
                 const AsigneeObj = partners.find((t) => t.id == assignee);
         return {
           ...rest,

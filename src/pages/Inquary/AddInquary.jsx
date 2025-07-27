@@ -98,6 +98,13 @@ function ServiceInquiry() {
       initialValue: "",
       validation: Yup.string().required("Nature Of Faulty is required"),
     },
+    toDo: {
+      name: "toDo",
+      type: "textarea",
+      placeholder: "To Do",
+      initialValue: "",
+      validation: Yup.string().required("To Do is required"),
+    },
     charger: {
       name: "charger",
       type: "checkbox",
@@ -208,6 +215,7 @@ function ServiceInquiry() {
       });
     } else {
       // Create new inquiry
+      // eslint-disable-next-line no-unused-vars
       result = InquaryService.createInquary({
         ...values,
         status: "new",
@@ -337,6 +345,7 @@ function ServiceInquiry() {
                     <InputField {...fields.usbcable} formik={formik} className="col-4 col-lg-3 col-xl-2"/>
                     <InputField {...fields.videoCable} formik={formik} className="col-4 col-lg-3 col-xl-2"/>
               </div></div></div>
+               <InputField {...fields.toDo} formik={formik} />
                   <InputField
                     className="col-sm-6"
                     {...fields.serviceType}
