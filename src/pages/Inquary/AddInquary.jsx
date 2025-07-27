@@ -329,12 +329,13 @@ function ServiceInquiry() {
                   <InputField {...fields.itemName} formik={formik} />
                   <InputField {...fields.serialNo} formik={formik} />
                   <InputField {...fields.description} formik={formik} />
-
-             
+<div className="col-sm-12" > 
+                <label className="form-label">Items / Accessories</label>
                                           <div className="card">
      <div className="card-body">
-      <h5>Selected Customer</h5>
-      <div className="col-sm-12 row g-2">
+      {/* <h5>Selected Customer</h5> */}
+     
+           <div className=" row g-2">
                     <InputField {...fields.charger} formik={formik} className="  col-4 col-lg-3  col-xl-2"/>
                     <InputField {...fields.powerCable} formik={formik} className="  col-4  col-lg-3 col-xl-2"/>
                     <InputField {...fields.bag} formik={formik} className="col-4 col-lg-3 col-xl-2"/>
@@ -344,7 +345,7 @@ function ServiceInquiry() {
                     <InputField {...fields.mouse} formik={formik} className="col-4 col-lg-3 col-xl-2"/>
                     <InputField {...fields.usbcable} formik={formik} className="col-4 col-lg-3 col-xl-2"/>
                     <InputField {...fields.videoCable} formik={formik} className="col-4 col-lg-3 col-xl-2"/>
-              </div></div></div>
+              </div></div></div></div>
                <InputField {...fields.toDo} formik={formik} />
                   <InputField
                     className="col-sm-6"

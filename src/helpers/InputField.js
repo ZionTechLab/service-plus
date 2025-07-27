@@ -1,4 +1,5 @@
 import React from 'react';
+import './InputField.css';
 
 function InputField({
   name,
@@ -117,20 +118,19 @@ function InputField({
 
   if (type === 'checkbox' ) {
     return (
-      <div className={`form-group ${className}`}>
-        <div className="input-group">
-          {renderInput()}
-          <label className="form-label">{placeholder}</label>
-          {/* {children} */}
+      <div className={`form-group d-flex align-items-center gap-2 checkbox-custom ${className}`}>
+      <div className="input-group flex-nowrap ">
+        {renderInput()}
+        <label className="form-label mb-0 ms-2 ">{placeholder}</label>
+      </div>
+      {showError && (
+        <small>
+        <div className="error-message">
+          {hasFormik ? formik.errors[name] : error}
         </div>
-        {showError && (
-          <small>
-          <div className="error-message">
-            {hasFormik ? formik.errors[name] : error}
-          </div>
         </small>
       )}
-    </div>
+      </div>
     );
   }
 
