@@ -61,21 +61,21 @@ const fields = {
 
   isCustomer: {
     name: "isCustomer",
-    type: "checkbox",
+    type: "switch",
     initialValue: false,
     validation: Yup.boolean(),
     placeholder: "Customer",
   },
   isSupplier: {
     name: "isSupplier",
-    type: "checkbox",
+    type: "switch",
     initialValue: false,
     validation: Yup.boolean(),
     placeholder: "Supplier",
   },
   isEmployee: {
     name: "isEmployee",
-    type: "checkbox",
+    type: "switch",
     initialValue: false,
     validation: Yup.boolean(),
     placeholder: "Employee",
@@ -83,7 +83,7 @@ const fields = {
 
   active: {
     name: "active",
-    type: "checkbox",
+    type: "switch",
     initialValue: true,
     validation: Yup.boolean(),
     placeholder: "Active",

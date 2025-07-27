@@ -68,8 +68,24 @@ function InputField({
         />
       );
     }
-    if (type === 'checkbox') {
+    if (type === 'switch') {
       return (  <div className="form-check form-switch ">
+          {/* <input className="form-check-input" type="checkbox" role="switch" id="switchCheckDefault"/> */}
+         <input
+          className="form-check-input"
+          id={name}
+          type="checkbox" role="switch"// keep spinner away
+          // placeholder={placeholder}
+          {...inputProps}
+            checked={inputProps.value}
+          // autoComplete="off"
+          // onKeyDown={handleKeyDownNumber}
+        />
+         {/* <label className="form-check-label" htmlFor="switchCheckDefault">{placeholder}</label> */}
+        </div>
+      );
+    }    if (type === 'checkbox') {
+      return (  <div className="form-check  ">
           {/* <input className="form-check-input" type="checkbox" role="switch" id="switchCheckDefault"/> */}
          <input
           className="form-check-input"
@@ -99,11 +115,33 @@ function InputField({
     );
   };
 
+  if (type === 'checkbox' ) {
+    return (
+      <div className={`form-group ${className}`}>
+        <div className="input-group">
+          {renderInput()}
+          <label className="form-label">{placeholder}</label>
+          {/* {children} */}
+        </div>
+        {showError && (
+          <small>
+          <div className="error-message">
+            {hasFormik ? formik.errors[name] : error}
+          </div>
+        </small>
+      )}
+    </div>
+    );
+  }
+
+  // Default return for other types
   return (
     <div className={`form-group ${className}`}>
       <label className="form-label">{placeholder}</label>
-            <div className="input-group">
-      {renderInput()}{children}</div>
+      <div className="input-group">
+        {renderInput()}
+        {children}
+      </div>
       {showError && (
         <small>
           <div className="error-message">

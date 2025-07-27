@@ -46,9 +46,9 @@ function SelectedCustomerBox({
           <strong>Employee:</strong>{" "}
           {selectedCustomer.isEmployee ? "Yes" : "No"}
           <br />
-          <strong>Active:</strong>{" "}
+          {/* <strong>Active:</strong>{" "}
           {selectedCustomer.active ? "Yes" : "No"}
-          <br />
+          <br /> */}
         </div>
       </div>
       <div className="mt-3">

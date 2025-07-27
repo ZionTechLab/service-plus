@@ -48,6 +48,28 @@ function ServiceInquiry() {
   }, []);
 
   const fields = {
+    jobNo: {
+      name: "jobNo",
+      type: "text",
+      placeholder: "Job No",
+      initialValue: "",
+      // validation: Yup.string().required("Job No is required"),
+    },
+    jobDate: {
+      name: "jobDate",
+      type: "date",
+      placeholder: "Job Date",
+      initialValue: new Date().toISOString().split("T")[0],
+      validation: Yup.string().required("Job Date is required"),
+    },
+    deliveredBy: {
+      name: "deliveredBy",
+      type: "text",
+      placeholder: "Delivered By",
+      initialValue: "",
+      validation: Yup.string().required("Delivered By is required"),
+   
+    },
     customer: {
       name: "customer",
       type: "text",
@@ -55,26 +77,96 @@ function ServiceInquiry() {
       initialValue: "",
       validation: Yup.string().required("Customer is required"),
     },
-    subject: {
-      name: "subject",
+    itemName: {
+      name: "itemName",
       type: "text",
-      placeholder: "Subject",
+      placeholder: "Item Name",
       initialValue: "",
-      validation: Yup.string().required("Subject is required"),
+      validation: Yup.string().required("Item Name is required"),
     },
-    message: {
-      name: "message",
-      type: "textarea",
-      placeholder: "Message",
+    serialNo: {
+      name: "serialNo",
+      type: "text",
+      placeholder: "Serial No",
       initialValue: "",
-      validation: Yup.string().required("Message is required"),
+      validation: Yup.string().required("Serial No is required"),
+    },
+    description: {
+      name: "description",
+      type: "textarea",
+      placeholder: "Nature Of Faulty",
+      initialValue: "",
+      validation: Yup.string().required("Nature Of Faulty is required"),
+    },
+    charger: {
+      name: "charger",
+      type: "checkbox",
+      initialValue: false,
+      validation: Yup.boolean(),
+      placeholder: "Charger",
+    },
+    powerCable: {
+      name: "powerCable",
+      type: "checkbox",
+      initialValue: false,
+      validation: Yup.boolean(),
+      placeholder: "Power Cable",
+    },
+    bag: {
+      name: "bag",
+      type: "checkbox",
+      initialValue: false,
+      validation: Yup.boolean(),
+      placeholder: "Bag",
+    },
+    toner: {
+      name: "toner",
+      type: "checkbox",
+      initialValue: false,
+      validation: Yup.boolean(),
+      placeholder: "Toner",
+    },
+    cartridge: {
+      name: "cartridge",
+      type: "checkbox",
+      initialValue: false,
+      validation: Yup.boolean(),
+      placeholder: "Cartridge",
+    },
+    ribbon: {
+      name: "ribbon",
+      type: "checkbox",
+      initialValue: false,
+      validation: Yup.boolean(),
+      placeholder: "Ribbon",
+    },
+    mouse: {
+      name: "mouse",
+      type: "checkbox",
+      initialValue: false,
+      validation: Yup.boolean(),
+      placeholder: "Mouse",
+    },
+    usbcable: {
+      name: "usbcable",
+      type: "checkbox",
+      initialValue: false,
+      validation: Yup.boolean(),
+      placeholder: "USB Cable",
+    },
+    videoCable: {
+      name: "videoCable",
+      type: "checkbox",
+      initialValue: false,
+      validation: Yup.boolean(),
+      placeholder: "Video Cable",
     },
     serviceType: {
       name: "serviceType",
       type: "select",
       placeholder: "Service Type",
       dataBinding: { data: inquiryTypes, keyField: "key", valueField: "value" },
-      initialValue: inquiryTypes[0].value,
+      initialValue: inquiryTypes[0].key,
       validation: Yup.string(),
     },
     priority: {
@@ -82,7 +174,7 @@ function ServiceInquiry() {
       type: "select",
       placeholder: "Priority",
       dataBinding: { data: priorities, keyField: "key", valueField: "value" },
-      initialValue: priorities[1].value,
+      initialValue: priorities[1].key,
       validation: Yup.string(),
     },
     assignee: {
@@ -92,7 +184,7 @@ function ServiceInquiry() {
       dataBinding: {
         data: assigneeData,keyField: "id",valueField: "partnerName",
       },
-      initialValue: assigneeData[0]?.value,
+      initialValue: assigneeData[0]?.id,
       validation: Yup.string(),
     },
     dueDate: {
@@ -223,9 +315,28 @@ function ServiceInquiry() {
             <div className="col-md-7 col-lg-8">
               <form onSubmit={formik.handleSubmit} noValidate>
                 <div className="row g-3">
-                  {/* Removed customer-related fields from inquiry form */}
-                  <InputField {...fields.subject} formik={formik} />
-                  <InputField {...fields.message} formik={formik} />
+                  <InputField {...fields.jobNo} formik={formik} className="col-sm-6"/>
+                  <InputField {...fields.jobDate} formik={formik} className="col-sm-6"/>
+                  <InputField {...fields.deliveredBy} formik={formik} />
+                  <InputField {...fields.itemName} formik={formik} />
+                  <InputField {...fields.serialNo} formik={formik} />
+                  <InputField {...fields.description} formik={formik} />
+
+             
+                                          <div className="card">
+     <div className="card-body">
+      <h5>Selected Customer</h5>
+      <div className="col-sm-12 row g-2">
+                    <InputField {...fields.charger} formik={formik} className="  col-4 col-lg-3  col-xl-2"/>
+                    <InputField {...fields.powerCable} formik={formik} className="  col-4  col-lg-3 col-xl-2"/>
+                    <InputField {...fields.bag} formik={formik} className="col-4 col-lg-3 col-xl-2"/>
+                    <InputField {...fields.toner} formik={formik} className="col-4 col-lg-3 col-xl-2"/>
+                    <InputField {...fields.cartridge} formik={formik} className="col-4 col-lg-3 col-xl-2"/>
+                    <InputField {...fields.ribbon} formik={formik} className="col-4 col-lg-3 col-xl-2"/>
+                    <InputField {...fields.mouse} formik={formik} className="col-4 col-lg-3 col-xl-2"/>
+                    <InputField {...fields.usbcable} formik={formik} className="col-4 col-lg-3 col-xl-2"/>
+                    <InputField {...fields.videoCable} formik={formik} className="col-4 col-lg-3 col-xl-2"/>
+              </div></div></div>
                   <InputField
                     className="col-sm-6"
                     {...fields.serviceType}
