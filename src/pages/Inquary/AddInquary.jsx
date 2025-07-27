@@ -7,10 +7,10 @@ import PartnerService from "../BusinessPartners/PartnerService";
 import InquiryView from "./InquiryView";
 import AddBusinessPartner from "../BusinessPartners/AddBusinessPartner";
 import BusinessPartnerFind from "../BusinessPartners/BusinessPartnerFind";
-import useConfirm from '../../hooks/useConfirm';
-import { useNavigate } from 'react-router-dom';
-import Tabs from '../../components/Tabs';
-import SelectedCustomerBox from '../../components/SelectedCustomerBox';
+import useConfirm from "../../hooks/useConfirm";
+import { useNavigate } from "react-router-dom";
+import Tabs from "../../components/Tabs";
+import SelectedCustomerBox from "../BusinessPartners/card-selectedBP";
 
 const inquiryTypes = [
   { key: 1, value: "quotation" },
@@ -34,8 +34,8 @@ const getNextId = (inquiries) => {
 
 function ServiceInquiry() {
   const { id } = useParams();
-  const [activeTab, setActiveTab] = useState('select-customer');
-  const [customerOption, setCustomerOption] = useState('select'); // 'select' or 'add'
+  const [activeTab, setActiveTab] = useState("select-customer");
+  const [customerOption, setCustomerOption] = useState("select"); // 'select' or 'add'
   const [assigneeData, setAssigneeData] = useState([]);
   const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [ConfirmationDialog, confirm] = useConfirm();
@@ -44,15 +44,15 @@ function ServiceInquiry() {
   // Tab configuration
   const tabs = [
     {
-      id: 'select-customer',
-      label: 'Select Customer',
-      disabled: false
+      id: "select-customer",
+      label: "Select Customer",
+      disabled: false,
     },
     {
-      id: 'inquiry-details',
-      label: 'Inquiry Details',
-      disabled: !selectedCustomer && !id
-    }
+      id: "inquiry-details",
+      label: "Inquiry Details",
+      disabled: !selectedCustomer && !id,
+    },
   ];
   useEffect(() => {
     const fetchInquiries = async () => {
@@ -60,7 +60,7 @@ function ServiceInquiry() {
       setAssigneeData(storedInquiries);
     };
     fetchInquiries();
-     setCustomerOption('select');
+    setCustomerOption("select");
   }, []);
 
   const fields = {
@@ -176,7 +176,7 @@ function ServiceInquiry() {
           isCustomer: selectedCustomer.isCustomer,
           isSupplier: selectedCustomer.isSupplier,
           isEmployee: selectedCustomer.isEmployee,
-          isActive: selectedCustomer.active
+          isActive: selectedCustomer.active,
         }
       : {};
 
@@ -200,10 +200,12 @@ function ServiceInquiry() {
     }
 
     resetForm();
-    confirm("Inquiry saved successfully!", { confirmText: "OK", type: "success" })
-      .then(() => {
-        navigate(`/inquiry`);
-      });
+    confirm("Inquiry saved successfully!", {
+      confirmText: "OK",
+      type: "success",
+    }).then(() => {
+      navigate(`/inquiry`);
+    });
   };
 
   const formik = useFormikBuilder(fields, handleInquirySubmit);
@@ -216,7 +218,7 @@ function ServiceInquiry() {
         formik.setValues(inquiry);
       }
     }
-     // eslint-disable-next-line react-hooks/exhaustive-deps
+    // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [id]);
 
   const onCustomerSelect = (customer) => {
@@ -226,8 +228,8 @@ function ServiceInquiry() {
     formik.setFieldValue("phone", customer.phone1 || customer.phone2);
     formik.setFieldValue("address", customer.address);
     setSelectedCustomer(customer);
-    setCustomerOption('selected');
-    setActiveTab('inquiry-details');
+    setCustomerOption("selected");
+    setActiveTab("inquiry-details");
   };
 
   const handleCustomerCreated = (newCustomer) => {
@@ -238,162 +240,118 @@ function ServiceInquiry() {
     formik.setFieldValue("phone", newCustomer.phone1 || newCustomer.phone2);
     formik.setFieldValue("address", newCustomer.address);
     setSelectedCustomer(newCustomer);
-    setCustomerOption('selected');
-    setActiveTab('inquiry-details');
+    setCustomerOption("selected");
+    setActiveTab("inquiry-details");
   };
 
   const handleTabChange = (tabId) => {
     setActiveTab(tabId);
-    if(selectedCustomer)
-     setCustomerOption('selected');
+    if (selectedCustomer) setCustomerOption("selected");
     // if (tabId === 'select-customer') {
     //   setCustomerOption('select');
     // }
   };
 
-let content = "";
-switch (true) {
-  case activeTab === "select-customer" && customerOption === "select":
-    content = (
-      <div>
-        <BusinessPartnerFind
-          customers={assigneeData}
-          onCustomerSelect={onCustomerSelect}
-          onNewCustomer={() => setCustomerOption("add")}
-        >
-          <button
-            className="btn btn-primary "
-            onClick={() => setCustomerOption("add")}
+  let content = "";
+  switch (true) {
+    case activeTab === "select-customer" && customerOption === "select":
+      content = (
+        <div>
+          <BusinessPartnerFind
+            customers={assigneeData}
+            onCustomerSelect={onCustomerSelect}
+            onNewCustomer={() => setCustomerOption("add")}
           >
-            Add New Customer
-          </button>
-        </BusinessPartnerFind>
-      </div>
-    );
-    break;
-  case activeTab === "select-customer" && customerOption === "selected":
-    content = (
-      <SelectedCustomerBox
-        selectedCustomer={selectedCustomer}
-        onContinue={() => setActiveTab("inquiry-details")}
-        onChangeCustomer={() => setCustomerOption("select")}
-      />
-    );
-    break;
-  case activeTab === "select-customer" && customerOption === "add":
-    content = (
-     <div>
-         
-                <AddBusinessPartner onCustomerCreated={handleCustomerCreated} />
-                 <div>
-            
-                    <button
-                      className="btn btn-outline-primary btn-sm"
-                      onClick={() => setCustomerOption("select")}
-                    >
-                      Select Customer
-                    </button>
-                  </div>
-              </div>
-    );
-    break;
-  // You can add more cases here for other combinations if needed
-  default:
-    content = "";
-}
+            <button
+              className="btn btn-primary "
+              onClick={() => setCustomerOption("add")}
+            >
+              Add New Customer
+            </button>
+          </BusinessPartnerFind>
+        </div>
+      );
+      break;
+    case activeTab === "select-customer" && customerOption === "selected":
+      content = (
+        <SelectedCustomerBox
+          selectedCustomer={selectedCustomer}
+          onContinue={() => setActiveTab("inquiry-details")}
+          onChangeCustomer={() => setCustomerOption("select")}
+        />
+      );
+      break;
+    case activeTab === "select-customer" && customerOption === "add":
+      content = (
+        <div>
+          <AddBusinessPartner onCustomerCreated={handleCustomerCreated} />
+          <div>
+            <button
+              className="btn btn-outline-primary btn-sm"
+              onClick={() => setCustomerOption("select")}
+            >
+              Select Customer
+            </button>
+          </div>
+        </div>
+      );
+      break;
+    case activeTab === "inquiry-details":
+      content = (
+        <div>
+          <SelectedCustomerBox
+            showChange={false}
+            showContinue={false}
+            selectedCustomer={selectedCustomer}
+            onContinue={() => setActiveTab("inquiry-details")}
+            onChangeCustomer={() => setCustomerOption("select")}
+          />
+
+          <div className="row  mt-3">
+            <div className="col-md-7 col-lg-8">
+              <form onSubmit={formik.handleSubmit} noValidate>
+                <div className="row g-3">
+                  {/* Removed customer-related fields from inquiry form */}
+                  <InputField {...fields.subject} formik={formik} />
+                  <InputField {...fields.message} formik={formik} />
+                  <InputField
+                    className="col-sm-6"
+                    {...fields.serviceType}
+                    formik={formik}
+                  />
+                  <InputField
+                    className="col-sm-6"
+                    {...fields.priority}
+                    formik={formik}
+                  />
+                  <InputField {...fields.assignee} formik={formik} />
+                  <InputField {...fields.dueDate} formik={formik} />
+                  <button
+                    className="w-100 btn btn-primary btn-lg"
+                    type="submit"
+                  >
+                    Submit
+                  </button>
+                </div>
+              </form>
+            </div>
+            <div className="col-md-5 col-lg-4 order-md-last ">
+              <InquiryView />
+            </div>
+          </div>
+        </div>
+      );
+      break;
+    // You can add more cases here for other combinations if needed
+    default:
+      content = "";
+  }
 
   return (
     <div>
       <ConfirmationDialog />
       <Tabs tabs={tabs} activeTab={activeTab} onTabChange={handleTabChange}>
-   
         {content}
-
-
-        {activeTab === "inquiry-details" && (
-          <div>
-            <h4 className="mb-3">Inquiry Details</h4>
-            {/* Selected Customer Box at the top */}
-            {selectedCustomer && (
-              <>
-                    <SelectedCustomerBox
-        selectedCustomer={selectedCustomer}
-        onContinue={() => setActiveTab("inquiry-details")}
-        onChangeCustomer={() => setCustomerOption("select")}
-      />
-              <div className="alert alert-success mb-4">
-                <h5>Selected Customer</h5>
-                <div className="row">
-                  <div className="col-md-6">
-                    <strong>Partner Code:</strong>{" "}
-                    {selectedCustomer.partnerCode || "-"}
-                    <br />
-                    <strong>Partner Name:</strong>{" "}
-                    {selectedCustomer.partnerName || "-"}
-                    <br />
-                    <strong>Contact Person:</strong>{" "}
-                    {selectedCustomer.contactPerson || "-"}
-                    <br />
-                    <strong>Email:</strong> {selectedCustomer.email || "-"}
-                    <br />
-                    <strong>Address:</strong> {selectedCustomer.address || "-"}
-                    <br />
-                  </div>
-                  <div className="col-md-6">
-                    <strong>Phone 1:</strong> {selectedCustomer.phone1 || "-"}
-                    <br />
-                    <strong>Phone 2:</strong> {selectedCustomer.phone2 || "-"}
-                    <br />
-                    <strong>Customer:</strong>{" "}
-                    {selectedCustomer.isCustomer ? "Yes" : "No"}
-                    <br />
-                    <strong>Supplier:</strong>{" "}
-                    {selectedCustomer.isSupplier ? "Yes" : "No"}
-                    <br />
-                    <strong>Employee:</strong>{" "}
-                    {selectedCustomer.isEmployee ? "Yes" : "No"}
-                    <br />
-                    <strong>Active:</strong>{" "}
-                    {selectedCustomer.active ? "Yes" : "No"}
-                    <br />
-                  </div>
-                </div>
-              </div></>
-            )}
-            <div className="row g-5">
-              <div className="col-md-7 col-lg-8">
-                <form onSubmit={formik.handleSubmit} noValidate>
-                  <div className="row g-3">
-                    {/* Removed customer-related fields from inquiry form */}
-                    <InputField {...fields.subject} formik={formik} />
-                    <InputField {...fields.message} formik={formik} />
-                    <InputField
-                      className="col-sm-6"
-                      {...fields.serviceType}
-                      formik={formik}
-                    />
-                    <InputField
-                      className="col-sm-6"
-                      {...fields.priority}
-                      formik={formik}
-                    />
-                    <InputField {...fields.assignee} formik={formik} />
-                    <InputField {...fields.dueDate} formik={formik} />
-                    <button
-                      className="w-100 btn btn-primary btn-lg"
-                      type="submit"
-                    >
-                      Submit
-                    </button>
-                  </div>
-                </form>
-              </div>
-              <div className="col-md-5 col-lg-4 order-md-last ">
-                <InquiryView />
-              </div>
-            </div>
-          </div>
-        )}
       </Tabs>
     </div>
   );

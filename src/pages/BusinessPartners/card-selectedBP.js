@@ -1,9 +1,17 @@
 import React from "react";
 
-function SelectedCustomerBox({ selectedCustomer, onContinue, onChangeCustomer, showContinue = true }) {
+
+function SelectedCustomerBox({
+  selectedCustomer,
+  onContinue,
+  onChangeCustomer,
+  showContinue = true,
+  showChange = true
+}) {
   if (!selectedCustomer) return null;
   return (
-    <div className="alert alert-success">
+    <div className="card">
+      <div className="card-body">
       <h5>Selected Customer</h5>
       <div className="row">
         <div className="col-md-6">
@@ -52,12 +60,15 @@ function SelectedCustomerBox({ selectedCustomer, onContinue, onChangeCustomer, s
             Continue to Inquiry Details
           </button>
         )}
-        <button
-          className="btn btn-outline-secondary"
-          onClick={onChangeCustomer}
-        >
-          Change Customer
-        </button>
+        {showChange && (
+          <button
+            className="btn btn-outline-secondary"
+            onClick={onChangeCustomer}
+          >
+            Change Customer
+          </button>
+        )}
+      </div>
       </div>
     </div>
   );
