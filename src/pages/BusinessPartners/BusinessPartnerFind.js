@@ -1,22 +1,34 @@
+import React, { useEffect ,useState} from "react";
 import DataTable from "../../components/DataTable";
+import PartnerService from "./PartnerService";
 
-function BusinessPartnerFind({ customers, onCustomerSelect, onNewCustomer,children }) {
+function BusinessPartnerFind({ onCustomerSelect, onNewCustomer, children }) {
+    const [customers, setCustomers] = useState([]);
+
+    useEffect(() => {
+    const fetchPartners = async () => {
+      const storedPartners = await PartnerService.getAllPartners();
+      setCustomers(storedPartners);
+    };
+    fetchPartners();
+  }, []);
+  
   const customerColumns = [
     {
       field: "partnerName",
-      header: "Partner Name",
+      header: "Partner",
     },
     {
       field: "contactPerson",
-      header: "Contact Person",
+      header: "Person",
     },
     {
       field: "phone1",
-      header: "Phone 1",
+      header: "Phone 1",class:'text-nowrap' 
     },
     {
       field: "phone2",
-      header: "Phone 2",
+      header: "Phone 2",class:'text-nowrap' 
     },
     {
       field: "email",
@@ -39,11 +51,16 @@ function BusinessPartnerFind({ customers, onCustomerSelect, onNewCustomer,childr
 
   return (
     <div>
-      <DataTable data={customers} columns={customerColumns} >
-      {children}</DataTable>
-      <button className="btn btn-secondary mt-3" onClick={onNewCustomer}>
+      <DataTable
+        data={customers}
+        columns={customerColumns}
+        onRowSelect={onCustomerSelect}
+      >
+        {children}
+      </DataTable>
+      {/* <button className="btn btn-secondary mt-3" onClick={onNewCustomer}>
         New Customer
-      </button>
+      </button> */}
     </div>
   );
 }

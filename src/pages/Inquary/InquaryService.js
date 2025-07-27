@@ -1,0 +1,97 @@
+class InquaryService {
+  constructor() {
+    this.storageKey = 'inquiries';
+  }
+
+  createInquary(inquaryData) {
+    try {
+      const inquaries = this.getAllInquairies();
+      let updatedInquary;
+      if (inquaryData.id) {
+        // Update existing inquary
+        const idx = inquaries.findIndex(i => i.id === inquaryData.id);
+        if (idx !== -1) {
+          updatedInquary = {
+            ...inquaries[idx],
+            ...inquaryData,
+            updatedAt: new Date().toISOString()
+          };
+          inquaries[idx] = updatedInquary;
+        } else {
+          // If not found, treat as new
+          updatedInquary = {
+            id: inquaryData.id,
+            ...inquaryData,
+            createdAt: new Date().toISOString(),
+            updatedAt: new Date().toISOString()
+          };
+          inquaries.push(updatedInquary);
+        }
+      } else {
+        // Create new inquary
+        const newId = this.getNextId(inquaries);
+        updatedInquary = {
+          id: newId,
+          ...inquaryData,
+          createdAt: new Date().toISOString(),
+          updatedAt: new Date().toISOString()
+        };
+        inquaries.push(updatedInquary);
+      }
+      localStorage.setItem(this.storageKey, JSON.stringify(inquaries));
+      return updatedInquary;
+    } catch (error) {
+      console.error('Error creating inquary:', error);
+      throw new Error('Failed to create inquary');
+    }
+  }
+
+  getInquaryById(id) {
+    try {
+      const inquaries = this.getAllInquaries();
+      return inquaries.find(inquary => inquary.id === id) || null;
+    } catch (error) {
+      console.error('Error getting inquary:', error);
+      return null;
+    }
+  }
+
+  getAllInquairies() {
+    try {
+      const inquiries = JSON.parse(localStorage.getItem(this.storageKey));
+      const partners = JSON.parse(localStorage.getItem('partners'));
+
+   const joined = inquiries.map(({ customer, ...rest }) => {
+  const partner = partners.find(p => p.id === customer);
+  return {
+    ...rest,
+    customer,
+    partnerName: partner?.partnerName || '',
+    contactPerson: partner?.contactPerson || '',
+    email: partner?.email || '',
+    address: partner?.address || '',
+    phone1: partner?.phone || '',
+    phone2: partner?.phone2 || '',
+  };
+});
+        console.log('Fetched inquiries:', joined);
+      return joined ? joined : [];
+    } catch (error) {
+      console.error('Error getting inquiries:', error);
+      return [];
+    }
+  }
+
+
+
+
+
+
+  getNextId(inquaries) {
+    if (inquaries.length === 0) return 1;
+    return Math.max(...inquaries.map(i => i.id)) + 1;
+  }
+}
+
+const inquaryServiceInstance = new InquaryService();
+export default inquaryServiceInstance;

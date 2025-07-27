@@ -2,14 +2,19 @@ import  { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import DataTable from '../../components/DataTable';
 import useConfirm from '../../hooks/useConfirm';
+import InquaryService from './InquaryService';
 
 function InquiryList() {
   const [dataset, setDataset] = useState([]);
   const navigate = useNavigate();
   const [ConfirmationDialog, confirm] = useConfirm();
+
   useEffect(() => {
-    const storedInquiries = JSON.parse(localStorage.getItem('inquiries')) || [];
-    setDataset(storedInquiries);
+    const fetchData = async () => {
+      const data = await InquaryService.getAllInquairies();
+      setDataset(data || []);
+    };
+    fetchData();
   }, []);
 
   const handleDelete = (id) => {
@@ -42,12 +47,13 @@ function InquiryList() {
       )
     },
     { header: 'ID', field: 'id' },
-    { header: 'Customer', field: 'customer' },
-    { header: 'First Name', field: 'firstName',class:'text-nowrap' },
-    { header: 'Last Name', field: 'lastName' ,class:'text-nowrap'},
-    { header: 'Email', field: 'email' },
-    { header: 'Phone', field: 'phone' },
-    { header: 'Address', field: 'address' },
+    // { header: 'Customer', field: 'customer' },
+    { header: 'Partner', field: 'partnerName',class:'text-nowrap' },
+    { header: 'Person', field: 'contactPerson' ,class:'text-nowrap'},
+    { header: 'Email', field: 'email' ,class:'text-nowrap'},
+    { header: 'Phone 1', field: 'phone1' ,class:'text-nowrap'},
+    { header: 'Phone 2', field: 'phone2' ,class:'text-nowrap' },
+    // { header: 'Address', field: 'address' },
     { header: 'Service Type', field: 'serviceType' ,class:'text-nowrap'},
     { header: 'Priority', field: 'priority' },
     { header: 'Subject', field: 'subject' },
@@ -62,7 +68,7 @@ function InquiryList() {
       <ConfirmationDialog />
       <DataTable columns={columns} data={dataset} >
         <Link to="/Inquiry/add">
-          <button className=" btn btn-primary ">Add Inquiry</button>
+          <button className=" btn btn-primary ">New</button>
       </Link>
     </DataTable>
     </div>

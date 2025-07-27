@@ -124,13 +124,14 @@ const handleSelectAll = () => {
 };
 
 
-const DataTable = ({ data = [], columns = [], name , children }) => {
+const DataTable = ({ data = [], columns = [], name, children, onRowSelect }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [searchKey, setSearchKey] = useState(null);
   const [sortKey, setSortKey] = useState(null);
   const [page, setPage] = useState(1);
   const [visibleColumns, setVisibleColumns] = useState([]);
   const [showColumnModal, setShowColumnModal] = useState(false);
+  const [selectedRowIndex, setSelectedRowIndex] = useState(null);
   const pageSize = 10;
 
   const filterableCols = useMemo(
@@ -298,19 +299,30 @@ const DataTable = ({ data = [], columns = [], name , children }) => {
                   </td>
                 </tr>
               ) : (
-                paginatedData.map((row, i) => (
-                  <tr key={i}>
-                    {displayColumns.map((col, j) => (
-                      <td key={j}>
-                        {!col.isAction
-                          ? row[col.field]
-                          : col.actionTemplate
-                          ? col.actionTemplate(row)
-                          : null}
-                      </td>
-                    ))}
-                  </tr>
-                ))
+                paginatedData.map((row, i) => {
+                  const globalIndex = (page - 1) * pageSize + i;
+                  return (
+                    <tr
+                      key={i}
+                      className={selectedRowIndex === globalIndex ? "table-active" : ""}
+                      style={{ cursor: "pointer" }}
+                      onClick={() => {
+                        setSelectedRowIndex(globalIndex);
+                        if (onRowSelect) onRowSelect(row);
+                      }}
+                    >
+                      {displayColumns.map((col, j) => (
+                        <td key={j}>
+                          {!col.isAction
+                            ? row[col.field]
+                            : col.actionTemplate
+                            ? col.actionTemplate(row)
+                            : null}
+                        </td>
+                      ))}
+                    </tr>
+                  );
+                })
               )}
             </tbody>
           </table>

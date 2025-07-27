@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import InputField from "../../helpers/InputField";
 import { useFormikBuilder } from "../../helpers/formikBuilder";
 import PartnerService from "../BusinessPartners/PartnerService";
+import InquaryService from "./InquaryService";
 import InquiryView from "./InquiryView";
 import AddBusinessPartner from "../BusinessPartners/AddBusinessPartner";
 import BusinessPartnerFind from "../BusinessPartners/BusinessPartnerFind";
@@ -26,11 +27,11 @@ const priorities = [
   { key: 3, value: "high" },
 ];
 
-const getNextId = (inquiries) => {
-  if (inquiries.length === 0) return 1;
-  const maxId = Math.max(...inquiries.map((i) => i.id));
-  return Number.isNaN(maxId) ? 1 : maxId + 1;
-};
+// const getNextId = (inquiries) => {
+//   if (inquiries.length === 0) return 1;
+//   const maxId = Math.max(...inquiries.map((i) => i.id));
+//   return Number.isNaN(maxId) ? 1 : maxId + 1;
+// };
 
 function ServiceInquiry() {
   const { id } = useParams();
@@ -55,11 +56,12 @@ function ServiceInquiry() {
     },
   ];
   useEffect(() => {
-    const fetchInquiries = async () => {
-      const storedInquiries = await PartnerService.getAllPartners();
-      setAssigneeData(storedInquiries);
+    const fetchPartners = async () => {
+      const storedPartners = await PartnerService.getAllPartners();
+      var cc = storedPartners ? storedPartners.filter(p => p.isEmployee === true) : [];
+      setAssigneeData(cc);
     };
-    fetchInquiries();
+    fetchPartners();
     setCustomerOption("select");
   }, []);
 
@@ -71,44 +73,6 @@ function ServiceInquiry() {
       initialValue: "",
       validation: Yup.string().required("Customer is required"),
     },
-    firstName: {
-      name: "firstName",
-      type: "text",
-      placeholder: "First Name",
-      initialValue: "",
-      validation: Yup.string().required("First Name is required"),
-    },
-    lastName: {
-      name: "lastName",
-      type: "text",
-      placeholder: "Last Name",
-      initialValue: "",
-      validation: Yup.string().required("Last Name is required"),
-    },
-    email: {
-      name: "email",
-      type: "email",
-      placeholder: "Email",
-      initialValue: "",
-      validation: Yup.string()
-        .email("Invalid email address")
-        .required("Email is required"),
-    },
-    address: {
-      name: "address",
-      type: "text",
-      placeholder: "Address",
-      initialValue: "",
-      validation: Yup.string().required("Address is required"),
-    },
-    phone: {
-      name: "phone",
-      type: "text",
-      placeholder: "Phone",
-      initialValue: "",
-      validation: Yup.string().required("Phone number is required"),
-    },
-
     subject: {
       name: "subject",
       type: "text",
@@ -144,9 +108,7 @@ function ServiceInquiry() {
       type: "select",
       placeholder: "Assignee",
       dataBinding: {
-        data: assigneeData,
-        keyField: "id",
-        valueField: "partnerName",
+        data: assigneeData,keyField: "id",valueField: "partnerName",
       },
       initialValue: assigneeData[0]?.value,
       validation: Yup.string(),
@@ -155,65 +117,44 @@ function ServiceInquiry() {
       name: "dueDate",
       type: "date",
       placeholder: "Due Date",
-      initialValue: "",
+      initialValue: new Date().toISOString().split("T")[0],
       validation: Yup.string().required("Due Date is required"),
     },
   };
 
   const handleInquirySubmit = (values, { resetForm }) => {
-    // Merge selectedCustomer info into inquiry object
-    const inquiries = JSON.parse(localStorage.getItem("inquiries")) || [];
-    const customerData = selectedCustomer
-      ? {
-          customerId: selectedCustomer.id,
-          customerName: selectedCustomer.partnerName,
-          customerContact: selectedCustomer.contactPerson,
-          customerEmail: selectedCustomer.email,
-          customerPhone1: selectedCustomer.phone1,
-          customerPhone2: selectedCustomer.phone2,
-          customerAddress: selectedCustomer.address,
-          customerCode: selectedCustomer.partnerCode,
-          isCustomer: selectedCustomer.isCustomer,
-          isSupplier: selectedCustomer.isSupplier,
-          isEmployee: selectedCustomer.isEmployee,
-          isActive: selectedCustomer.active,
-        }
-      : {};
+    console.log("Form values:", values);
 
-    if (id) {
-      const updatedInquiries = inquiries.map((inquiry) =>
-        inquiry.id === parseInt(id)
-          ? { ...inquiry, ...values, ...customerData }
-          : inquiry
-      );
-      localStorage.setItem("inquiries", JSON.stringify(updatedInquiries));
-    } else {
-      const newInquiry = {
-        id: getNextId(inquiries),
-        ...values,
-        ...customerData,
-        status: "new",
-        log: [{ status: "new", timestamp: new Date() }],
-      };
-      inquiries.push(newInquiry);
-      localStorage.setItem("inquiries", JSON.stringify(inquiries));
-    }
+    // let result;
+    // if (id) {
+    //   // Update existing inquiry
+    //   result = InquaryService.createInquary({
+    //     id: parseInt(id),
+    //     ...values,
+    //   });
+    // } else {
+    //   // Create new inquiry
+    //   result = InquaryService.createInquary({
+    //     ...values,
+    //     status: "new",
+    //     log: [{ status: "new", timestamp: new Date() }],
+    //   });
+    // }
 
-    resetForm();
-    confirm("Inquiry saved successfully!", {
-      confirmText: "OK",
-      type: "success",
-    }).then(() => {
-      navigate(`/inquiry`);
-    });
+    // resetForm();
+    // confirm("Inquiry saved successfully!", {
+    //   confirmText: "OK",
+    //   type: "success",
+    // }).then(() => {
+    //   navigate(`/inquiry`);
+    // });
   };
 
   const formik = useFormikBuilder(fields, handleInquirySubmit);
 
   useEffect(() => {
     if (id) {
-      const inquiries = JSON.parse(localStorage.getItem("inquiries")) || [];
-      const inquiry = inquiries.find((i) => i.id === parseInt(id));
+      const inquiry = InquaryService.getInquaryById(parseInt(id));
       if (inquiry) {
         formik.setValues(inquiry);
       }
@@ -222,11 +163,7 @@ function ServiceInquiry() {
   }, [id]);
 
   const onCustomerSelect = (customer) => {
-    formik.setFieldValue("customer", customer.partnerName);
-    formik.setFieldValue("firstName", customer.contactPerson);
-    formik.setFieldValue("email", customer.email);
-    formik.setFieldValue("phone", customer.phone1 || customer.phone2);
-    formik.setFieldValue("address", customer.address);
+    formik.setFieldValue("customer", customer.id);
     setSelectedCustomer(customer);
     setCustomerOption("selected");
     setActiveTab("inquiry-details");
@@ -234,11 +171,7 @@ function ServiceInquiry() {
 
   const handleCustomerCreated = (newCustomer) => {
     // Handle when a new customer is created from AddBusinessPartner
-    formik.setFieldValue("customer", newCustomer.partnerName);
-    formik.setFieldValue("firstName", newCustomer.contactPerson);
-    formik.setFieldValue("email", newCustomer.email);
-    formik.setFieldValue("phone", newCustomer.phone1 || newCustomer.phone2);
-    formik.setFieldValue("address", newCustomer.address);
+    formik.setFieldValue("customer", newCustomer.id);
     setSelectedCustomer(newCustomer);
     setCustomerOption("selected");
     setActiveTab("inquiry-details");
@@ -247,9 +180,6 @@ function ServiceInquiry() {
   const handleTabChange = (tabId) => {
     setActiveTab(tabId);
     if (selectedCustomer) setCustomerOption("selected");
-    // if (tabId === 'select-customer') {
-    //   setCustomerOption('select');
-    // }
   };
 
   let content = "";
@@ -258,7 +188,7 @@ function ServiceInquiry() {
       content = (
         <div>
           <BusinessPartnerFind
-            customers={assigneeData}
+            // customers={assigneeData}
             onCustomerSelect={onCustomerSelect}
             onNewCustomer={() => setCustomerOption("add")}
           >

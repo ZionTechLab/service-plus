@@ -34,8 +34,8 @@ function InputField({
       return (
         <select className="form-select" id={name} {...inputProps}>
           {dataBinding?.data?.map((opt) => (
-            <option key={opt[dataBinding.keyField]} value={opt[dataBinding.valueField]}>
-              {opt[dataBinding.valueField]}
+            <option key={opt[dataBinding.keyField]} value={opt[dataBinding.keyField]}>
+              {opt[dataBinding.keyField]} | {opt[dataBinding.valueField]}
             </option>
           ))}
         </select>
