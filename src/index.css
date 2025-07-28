@@ -65,3 +65,6 @@ code {
     justify-content: center;
     padding: 20px;
   }
+  .accordion-button {
+padding: 9px;
+  }

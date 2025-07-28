@@ -11,8 +11,9 @@ function InputField({
   onChange,
   error,
   touched,
-  dataBinding,children
+  dataBinding,children,disabled
 }) {
+
   const hasFormik = !!formik;
 
   const inputProps = hasFormik
@@ -110,7 +111,8 @@ function InputField({
         type={type}
         placeholder={placeholder}
         {...inputProps}
-      
+      // readOnly
+     disabled={disabled}
         autoComplete="off"
       />
     );

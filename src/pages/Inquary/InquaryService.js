@@ -9,7 +9,8 @@ class InquaryService {
     try {
       const inquaries = this.getAllInquairies();
       let updatedInquary;
-      if (inquaryData.id) {
+
+      if (inquaryData.id!==0) {
         // Update existing inquary
         const idx = inquaries.findIndex((i) => i.id === inquaryData.id);
         if (idx !== -1) {
@@ -33,8 +34,8 @@ class InquaryService {
         // Create new inquary
         const newId = this.getNextId(inquaries);
         updatedInquary = {
-          id: newId,
-          ...inquaryData,
+        
+          ...inquaryData,  id: newId,
           createdAt: new Date().toISOString(),
           updatedAt: new Date().toISOString(),
         };
@@ -50,11 +51,23 @@ class InquaryService {
 
   getInquaryById(id) {
     try {
-      const inquaries = this.getAllInquaries();
+      
+ console.log("Fetched inquaries:", id);
+      const inquaries = this.getAllInquairies_row();
+      console.log("Fetched inquaries:", inquaries);
       return inquaries.find((inquary) => inquary.id === id) || null;
     } catch (error) {
       console.error("Error getting inquary:", error);
       return null;
+    }
+  }
+  getAllInquairies_row() {
+    try {
+      const inquiries = JSON.parse(localStorage.getItem(this.storageKey));
+      return inquiries ? inquiries : [];
+    } catch (error) {
+      console.error("Error getting inquiries:", error);
+      return [];
     }
   }
 

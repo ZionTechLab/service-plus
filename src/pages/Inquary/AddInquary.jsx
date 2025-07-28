@@ -37,6 +37,7 @@ function ServiceInquiry() {
       disabled: !selectedCustomer && !id,
     },
   ];
+
   useEffect(() => {
     const fetchPartners = async () => {
       const storedPartners = await PartnerService.getAllPartners();
@@ -44,15 +45,29 @@ function ServiceInquiry() {
       setAssigneeData(cc);
     };
     fetchPartners();
+
     setCustomerOption("select");
   }, []);
 
+  useEffect(() => {
+
+    if (id) {
+      const inquiry = InquaryService.getInquaryById(parseInt(id));
+      if (inquiry) {
+            console.log("Selected Customer:", inquiry);
+        formik.setValues(inquiry);
+      }
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
+
   const fields = {
-    jobNo: {
-      name: "jobNo",
+    id: {
+      name: "id",
       type: "text",
       placeholder: "Job No",
-      initialValue: "",
+        initialValue: "<New>",
+        disabled: true,
       // validation: Yup.string().required("Job No is required"),
     },
     jobDate: {
@@ -66,7 +81,7 @@ function ServiceInquiry() {
       name: "deliveredBy",
       type: "text",
       placeholder: "Delivered By",
-      initialValue: "",
+      initialValue: "ssss",
       validation: Yup.string().required("Delivered By is required"),
    
     },
@@ -210,14 +225,15 @@ function ServiceInquiry() {
     if (id) {
       // Update existing inquiry
       result = InquaryService.createInquary({
-        id: parseInt(id),
-        ...values,
+       
+        ...values, id: parseInt(id)
       });
     } else {
       // Create new inquiry
       // eslint-disable-next-line no-unused-vars
       result = InquaryService.createInquary({
         ...values,
+        id: 0,
         status: "new",
         log: [{ status: "new", timestamp: new Date() }],
       });
@@ -234,15 +250,7 @@ function ServiceInquiry() {
 
   const formik = useFormikBuilder(fields, handleInquirySubmit);
 
-  useEffect(() => {
-    if (id) {
-      const inquiry = InquaryService.getInquaryById(parseInt(id));
-      if (inquiry) {
-        formik.setValues(inquiry);
-      }
-    }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [id]);
+
 
   const onCustomerSelect = (customer) => {
     formik.setFieldValue("customer", customer.id);
@@ -311,20 +319,27 @@ function ServiceInquiry() {
     case activeTab === "inquiry-details":
       content = (
         <div>
-          <SelectedCustomerBox
-            showChange={false}
-            showContinue={false}
-            selectedCustomer={selectedCustomer}
-            onContinue={() => setActiveTab("inquiry-details")}
-            onChangeCustomer={() => setCustomerOption("select")}
-          />
+       
 
           <div className="row  mt-3">
             <div className="col-md-7 col-lg-8">
               <form onSubmit={formik.handleSubmit} noValidate>
                 <div className="row g-3">
-                  <InputField {...fields.jobNo} formik={formik} className="col-sm-6"/>
+                  <InputField {...fields.id} formik={formik} className="col-sm-6"/>
                   <InputField {...fields.jobDate} formik={formik} className="col-sm-6"/>
+                  
+<div className="col-sm-12" > 
+                    <label className="form-label">customer</label>
+   <SelectedCustomerBox
+            showChange={false}
+            showContinue={false}
+            selectedCustomer={selectedCustomer}
+            onContinue={() => setActiveTab("inquiry-details")}
+            onChangeCustomer={() => setCustomerOption("select")}
+            isOpen={false}
+          />
+</div>
+
                   <InputField {...fields.deliveredBy} formik={formik} />
                   <InputField {...fields.itemName} formik={formik} />
                   <InputField {...fields.serialNo} formik={formik} />
@@ -357,10 +372,10 @@ function ServiceInquiry() {
                     {...fields.priority}
                     formik={formik}
                   />
-                  <InputField {...fields.assignee} formik={formik} />
-                  <InputField {...fields.dueDate} formik={formik} />
+                  <InputField {...fields.assignee} formik={formik}  className="col-sm-6"/>
+                  <InputField {...fields.dueDate} formik={formik}  className="col-sm-6"/>
                   <button
-                    className="w-100 btn btn-primary btn-lg"
+                    className="w-100 btn btn-primary "
                     type="submit"
                   >
                     Submit
