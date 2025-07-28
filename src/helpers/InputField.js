@@ -1,5 +1,6 @@
 import React from 'react';
 import './InputField.css';
+// import InputMask from 'react-input-mask';
 
 function InputField({
   name,
@@ -59,15 +60,16 @@ function InputField({
 
     if (type === 'number') {
       return (
-        <input
-          className="form-control"
-          id={name}
-          type="text" // keep spinner away
-          placeholder={placeholder}
-          {...inputProps}
-          autoComplete="off"
-          onKeyDown={handleKeyDownNumber}
-        />
+      <input
+        className="form-control"
+        id={name}
+        type="number"
+        placeholder={placeholder}
+        {...inputProps}
+        autoComplete="off"
+        // onKeyDown={handleKeyDownNumber}
+        disabled={disabled}
+      />
       );
     }
     if (type === 'switch') {

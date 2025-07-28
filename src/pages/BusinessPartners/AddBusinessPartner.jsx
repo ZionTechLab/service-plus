@@ -46,14 +46,14 @@ const fields = {
   },
   phone1: {
     name: "phone1",
-    type: "text",
+    type: "number",
     placeholder: "Phone 1",
     initialValue: "",
     validation: Yup.string().required("Phone number is required"),
   },
   phone2: {
     name: "phone2",
-    type: "text",
+    type: "number",
     placeholder: "Phone 2",
     initialValue: "",
     validation: Yup.string().required("Phone number is required"),
