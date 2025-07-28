@@ -57,6 +57,33 @@ function InputField({
     }
   };
 
+  // Format amount as currency (no symbol, 2 decimals, no commas for input)
+  const formatAmount = (val) => {
+    if (val === undefined || val === null || val === '') return '';
+    // Remove all non-numeric except dot
+    let cleaned = String(val).replace(/[^\d.]/g, '');
+    // Only allow one dot
+    const parts = cleaned.split('.');
+    if (parts.length > 2) cleaned = parts[0] + '.' + parts.slice(1).join('');
+    // Limit to 2 decimals
+    if (cleaned.includes('.')) {
+      const [intPart, decPart] = cleaned.split('.');
+      cleaned = intPart + '.' + decPart.slice(0, 2);
+    }
+    return cleaned;
+  };
+
+  // Custom onChange for amount
+  const handleAmountChange = (e) => {
+    const raw = e.target.value;
+    const formatted = formatAmount(raw);
+    if (hasFormik) {
+      formik.setFieldValue(name, formatted);
+    } else if (onChange) {
+      onChange({ target: { name, value: formatted } });
+    }
+  };
+
   const renderInput = () => {
     if (type === 'select') {
       return (
@@ -98,6 +125,26 @@ function InputField({
           autoComplete="off"
           disabled={disabled}
           maxLength={14}
+        />
+      );
+    }
+
+    if (type === 'amount') {
+      // Use value from Formik or prop
+      const amountValue = hasFormik ? formik.values[name] : value;
+      return (
+        <input
+          className="form-control text-end"
+          id={name}
+          type="text"
+          placeholder={placeholder || '0.00'}
+          name={name}
+          value={formatAmount(amountValue)}
+          onChange={handleAmountChange}
+          autoComplete="off"
+          disabled={disabled}
+          inputMode="decimal"
+          maxLength={12}
         />
       );
     }

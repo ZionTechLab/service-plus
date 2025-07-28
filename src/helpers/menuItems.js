@@ -9,6 +9,7 @@ const menuItems = [
   { route: '/item-master', displayName: 'Item Master', icon: 'bi bi-box-seam-fill',isMenuItem: true },
   { route: '/item-category', displayName: 'Item Category', icon: 'bi bi-tags',isMenuItem: true },
   { route: '/grn', displayName: 'GRN', icon: 'bi bi-receipt',isMenuItem: true },
+  { route: '/invoice', displayName: 'Invoice', icon: 'bi bi-file-earmark-text', isMenuItem: true },
 ];
 
 export default menuItems;

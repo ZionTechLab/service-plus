@@ -1,3 +1,4 @@
+import Invoice from "./pages/Invoice";
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
@@ -63,6 +64,7 @@ const AppRoutes = ({ isLoggedIn }) => (
       <Route path="add-item" element={<AddItem />} />
       <Route path="profile" element={<Profile />} />
       <Route path="grn" element={<Grn />} />
+      <Route path="invoice" element={<Invoice />} />
     </Route>
   </Routes>
 );
