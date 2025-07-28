@@ -46,7 +46,7 @@ const fields = {
   },
   phone1: {
     name: "phone1",
-    type: "number",
+    type: "phone",
     placeholder: "Phone 1",
     initialValue: "",
     validation: Yup.string().required("Phone number is required"),

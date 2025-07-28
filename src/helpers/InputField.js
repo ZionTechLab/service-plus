@@ -32,6 +32,31 @@ function InputField({
     }
   };
 
+  // Custom phone mask formatter
+  const formatPhone = (value) => {
+    const str = typeof value === 'string' ? value : (value ? String(value) : '');
+    if (!str) return '';
+    // Remove all non-digit chars
+    const digits = str.replace(/\D/g, '').slice(0, 10);
+    const len = digits.length;
+    if (len === 0) return '';
+    if (len < 4) return `(${digits}`;
+    if (len < 7) return `(${digits.slice(0, 3)}) ${digits.slice(3)}`;
+    return `(${digits.slice(0, 3)}) ${digits.slice(3, 6)}-${digits.slice(6)}`;
+  };
+
+  // Custom onChange for phone
+  const handlePhoneChange = (e) => {
+    const raw = e.target.value;
+    const formatted = formatPhone(raw);
+    if (hasFormik) {
+      formik.setFieldValue(name, formatted);
+    } else if (onChange) {
+      // Simulate a normal event for non-Formik
+      onChange({ target: { name, value: formatted } });
+    }
+  };
+
   const renderInput = () => {
     if (type === 'select') {
       return (
@@ -58,18 +83,37 @@ function InputField({
       );
     }
 
+    if (type === 'phone') {
+      // Use value from Formik or prop
+      const phoneValue = hasFormik ? formik.values[name] : value;
+      return (
+        <input
+          className="form-control"
+          id={name}
+          type="text"
+          placeholder={placeholder || '(123) 456-7890'}
+          name={name}
+          value={formatPhone(phoneValue)}
+          onChange={handlePhoneChange}
+          autoComplete="off"
+          disabled={disabled}
+          maxLength={14}
+        />
+      );
+    }
+
     if (type === 'number') {
       return (
-      <input
-        className="form-control"
-        id={name}
-        type="number"
-        placeholder={placeholder}
-        {...inputProps}
-        autoComplete="off"
-        // onKeyDown={handleKeyDownNumber}
-        disabled={disabled}
-      />
+        <input
+          className="form-control"
+          id={name}
+          type="number"
+          placeholder={placeholder}
+          {...inputProps}
+          autoComplete="off"
+          // onKeyDown={handleKeyDownNumber}
+          disabled={disabled}
+        />
       );
     }
     if (type === 'switch') {
