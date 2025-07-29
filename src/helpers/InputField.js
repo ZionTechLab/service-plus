@@ -25,12 +25,12 @@ function InputField({
     ? formik.touched[name] && formik.errors[name]
     : touched && error;
 
-  const handleKeyDownNumber = (e) => {
-    const allowed = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab', 'Delete'];
-    if (!/[0-9]/.test(e.key) && !allowed.includes(e.key)) {
-      e.preventDefault();
-    }
-  };
+  // const handleKeyDownNumber = (e) => {
+  //   const allowed = ['Backspace', 'ArrowLeft', 'ArrowRight', 'Tab', 'Delete'];
+  //   if (!/[0-9]/.test(e.key) && !allowed.includes(e.key)) {
+  //     e.preventDefault();
+  //   }
+  // };
 
   // Custom phone mask formatter
   const formatPhone = (value) => {

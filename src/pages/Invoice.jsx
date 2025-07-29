@@ -8,7 +8,7 @@ import InvoiceLineItems from "../components/InvoiceLineItems";
 import SelectedCustomerBox from "./BusinessPartners/card-selectedBP";
 
 function Invoice() {
-    const [selectedCustomer, setSelectedCustomer] = useState(null);
+    // const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [ConfirmationDialog, confirm] = useConfirm();
   // Define columns for InvoiceLineItems
   const lineItemColumns = [
@@ -165,7 +165,7 @@ function Invoice() {
    <SelectedCustomerBox
             showChange={false}
             showContinue={false}
-            selectedCustomer={selectedCustomer}
+            // selectedCustomer={selectedCustomer}
             // onContinue={() => setActiveTab("inquiry-details")}
             // onChangeCustomer={() => setCustomerOption("select")}
             isOpen={false}
