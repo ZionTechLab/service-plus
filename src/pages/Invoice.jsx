@@ -5,12 +5,30 @@ import InputField from "../helpers/InputField";
 import { useFormikBuilder } from "../helpers/formikBuilder";
 import useConfirm from "../hooks/useConfirm";
 import InvoiceLineItems from "../components/InvoiceLineItems";
+import SelectedCustomerBox from "./BusinessPartners/card-selectedBP";
 
 function Invoice() {
+    const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [ConfirmationDialog, confirm] = useConfirm();
-  const [lineItems, setLineItems] = useState([
-    { description: "", amount: "" }
-  ]);
+  // Define columns for InvoiceLineItems
+  const lineItemColumns = [
+    {
+      header: "Description",
+      field: "description",
+      type: "text",
+      placeholder: "Description",
+      width: "60%"
+    },
+    {
+      header: "Amount",
+      field: "amount",
+      type: "number",
+      placeholder: "Amount",
+      width: "25%"
+    }
+  ];
+  const emptyLineItem = lineItemColumns.reduce((acc, col) => ({ ...acc, [col.field]: "" }), {});
+  const [lineItems, setLineItems] = useState([ { ...emptyLineItem } ]);
 
   // Field configuration based on invoice image
   const fields = {
@@ -111,7 +129,7 @@ function Invoice() {
     setLineItems(updated);
   };
   const handleLineAdd = () => {
-    setLineItems([...lineItems, { description: "", amount: "" }]);
+    setLineItems([...lineItems, { ...emptyLineItem }]);
   };
   const handleLineRemove = idx => {
     if (lineItems.length > 1) {
@@ -123,7 +141,7 @@ function Invoice() {
     // For now, just show confirmation
     confirm("Invoice saved!", { confirmText: "OK", type: "success" });
     resetForm();
-    setLineItems([{ description: "", amount: "" }]);
+    setLineItems([{ ...emptyLineItem }]);
   };
 
   const formik = useFormikBuilder(fields, handleSubmit);
@@ -142,6 +160,17 @@ function Invoice() {
         <div className="row g-3">
           <InputField {...fields.invoiceNo} formik={formik} className="col-md-6" />
           <InputField {...fields.date} formik={formik} className="col-md-6" />
+          <div className="col-sm-12" > 
+                    <label className="form-label">Customer</label>
+   <SelectedCustomerBox
+            showChange={false}
+            showContinue={false}
+            selectedCustomer={selectedCustomer}
+            // onContinue={() => setActiveTab("inquiry-details")}
+            // onChangeCustomer={() => setCustomerOption("select")}
+            isOpen={false}
+          />
+</div>
         </div>
         <div className="row g-3 mt-2">
           <InputField {...fields.to} formik={formik} className="col-md-6" />
@@ -152,6 +181,7 @@ function Invoice() {
           <div className="col-12">
             <InvoiceLineItems
               items={lineItems}
+              columns={lineItemColumns}
               onChange={handleLineChange}
               onAdd={handleLineAdd}
               onRemove={handleLineRemove}

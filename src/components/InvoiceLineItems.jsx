@@ -1,40 +1,37 @@
 import React from "react";
 import "./InvoiceLineItems.css";
 
-function InvoiceLineItems({ items, onChange, onAdd, onRemove }) {
+// columns: [{ header, field, type, placeholder, width }]
+function InvoiceLineItems({ items, columns, onChange, onAdd, onRemove }) {
   return (
     <div className="mb-3">
-      <label className="form-label">Description / Amount</label>
+      <label className="form-label">Line Items</label>
       <div className="table-responsive">
         <table className="table table-bordered align-middle mb-0">
           <thead>
             <tr>
-              <th style={{ width: "60%" }}>Description</th>
-              <th style={{ width: "25%" }}>Amount</th>
+              {columns.map((col, i) => (
+                <th key={col.field || i} style={col.width ? { width: col.width } : {}}>
+                  {col.header}
+                </th>
+              ))}
               <th style={{ width: "15%" }}></th>
             </tr>
           </thead>
           <tbody>
             {items.map((item, idx) => (
               <tr key={idx}>
-                <td>
-                  <input
-                    type="text"
-                    className="form-control no-padding-input"
-                    value={item.description}
-                    onChange={e => onChange(idx, { ...item, description: e.target.value })}
-                    placeholder="Description"
-                  />
-                </td>
-                <td>
-                  <input
-                    type="number"
-                    className="form-control no-padding-input"
-                    value={item.amount}
-                    onChange={e => onChange(idx, { ...item, amount: e.target.value })}
-                    placeholder="Amount"
-                  />
-                </td>
+                {columns.map((col, cidx) => (
+                  <td key={col.field || cidx}>
+                    <input
+                      type={col.type || "text"}
+                      className="form-control no-padding-input"
+                      value={item[col.field] ?? ""}
+                      onChange={e => onChange(idx, { ...item, [col.field]: e.target.value })}
+                      placeholder={col.placeholder || col.header}
+                    />
+                  </td>
+                ))}
                 <td>
                   <button
                     type="button"

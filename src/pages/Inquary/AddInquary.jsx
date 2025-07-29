@@ -329,7 +329,7 @@ function ServiceInquiry() {
                   <InputField {...fields.jobDate} formik={formik} className="col-sm-6"/>
                   
 <div className="col-sm-12" > 
-                    <label className="form-label">customer</label>
+                    <label className="form-label">Customer</label>
    <SelectedCustomerBox
             showChange={false}
             showContinue={false}
