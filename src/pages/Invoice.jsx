@@ -8,7 +8,7 @@ import InvoiceLineItems from "../components/InvoiceLineItems";
 import SelectedBusinessPartnerBox from "./BusinessPartners/select-bp";
 
 function Invoice() {
-    const [selectedPartner, setSelectedCustomer] = useState(null);
+    const [selectedPartner] = useState(null);
   const [ConfirmationDialog, confirm] = useConfirm();
   // Define columns for InvoiceLineItems
   const lineItemColumns = [
@@ -160,8 +160,7 @@ function Invoice() {
         <div className="row g-3">
           <InputField {...fields.invoiceNo} formik={formik} className="col-md-6" />
           <InputField {...fields.date} formik={formik} className="col-md-6" />
-          <div className="col-sm-12" > 
-                    <label className="form-label">Customer</label>
+
    <SelectedBusinessPartnerBox
             showChange={false}
             showContinue={false}
@@ -170,12 +169,12 @@ function Invoice() {
             // onChangePartner={() => setPartnerOption("select")}
             isOpen={false}
           />
-</div>
+
         </div>
         <div className="row g-3 mt-2">
-          <InputField {...fields.to} formik={formik} className="col-md-6" />
+          {/* <InputField {...fields.to} formik={formik} className="col-md-6" /> */}
           <InputField {...fields.typeOfVehicle} formik={formik} className="col-md-6" />
-          <InputField {...fields.address} formik={formik} className="col-md-12" />
+          {/* <InputField {...fields.address} formik={formik} className="col-md-12" /> */}
         </div>
         <div className="row g-3 mt-2">
           <div className="col-12">

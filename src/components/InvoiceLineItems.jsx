@@ -1,5 +1,5 @@
 import React from "react";
-import "./InvoiceLineItems.css";
+import styles from "./InvoiceLineItems.module.css";
 
 // columns: [{ header, field, type, placeholder, width }]
 function InvoiceLineItems({ items, columns, onChange, onAdd, onRemove }) {
@@ -20,12 +20,12 @@ function InvoiceLineItems({ items, columns, onChange, onAdd, onRemove }) {
           </thead>
           <tbody>
             {items.map((item, idx) => (
-              <tr key={idx}>
+              <tr key={idx} className={styles.tr}>
                 {columns.map((col, cidx) => (
-                  <td key={col.field || cidx}>
+                  <td key={col.field || cidx} className={styles.td}>
                     <input
                       type={col.type || "text"}
-                      className="form-control no-padding-input"
+                      className={`form-control ${styles.sd}`}
                       value={item[col.field] ?? ""}
                       onChange={e => onChange(idx, { ...item, [col.field]: e.target.value })}
                       placeholder={col.placeholder || col.header}

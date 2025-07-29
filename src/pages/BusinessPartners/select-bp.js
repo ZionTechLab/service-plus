@@ -38,7 +38,9 @@ function SelectedBusinessPartnerBox({
 
 //   if (!selectedPartner) return null;
 return (
-  <>
+  <>      
+   <div className="col-sm-12" > 
+                    <label className="form-label">Customer</label>
     <div className="accordion" id="selectedPartnerAccordion">
       <div className="accordion-item">
         <h2 className="accordion-header d-flex align-items-center justify-content-between" id="selectedPartnerHeading">
@@ -109,7 +111,7 @@ return (
           </div>
         </div>
       </div>
-    </div>
+    </div>   </div>
     <Modal show={showModal} onClose={() => setShowModal(false)} title="Search Partner">
       <BusinessPartnerFind
         // customers={assigneeData}
@@ -124,6 +126,7 @@ return (
         </button>
       </BusinessPartnerFind>
     </Modal>
+ 
   </>
 );
 }

@@ -218,8 +218,9 @@ const DataTable = ({ data = [], columns = [], name, children, onRowSelect }) => 
        <div className="card  "> 
         <div className="card-body row ">
           {children?
-          (<div className="col-sm-2"> {children}</div>):''}
-          <div className="col-sm-8">
+          (<div className="col-sm-6"> {children}</div>):(<div className="col-sm-6"> '</div>)}
+          
+          <div className="col-sm-6">
 
             <div className="d-block d-sm-none mb-1">
               <span className="fw-semibold">Filter by :</span>
@@ -250,7 +251,9 @@ const DataTable = ({ data = [], columns = [], name, children, onRowSelect }) => 
             </div>
           </div>
 
-          <div className=" ">
+ 
+        </div>
+                 <div className=" ">
             <button
               className="btn settings-btn"
               onClick={() => setShowColumnModal(true)}
@@ -266,7 +269,6 @@ const DataTable = ({ data = [], columns = [], name, children, onRowSelect }) => 
               onClose={() => setShowColumnModal(false)}
             />
           </div>
-        </div>
 </div>
 <div className="mt-3 card">
         <div className=" table-responsive ">
