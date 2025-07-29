@@ -5,10 +5,10 @@ import InputField from "../helpers/InputField";
 import { useFormikBuilder } from "../helpers/formikBuilder";
 import useConfirm from "../hooks/useConfirm";
 import InvoiceLineItems from "../components/InvoiceLineItems";
-import SelectedCustomerBox from "./BusinessPartners/card-selectedBP";
+import SelectedBusinessPartnerBox from "./BusinessPartners/select-bp";
 
 function Invoice() {
-    // const [selectedCustomer, setSelectedCustomer] = useState(null);
+    const [selectedPartner, setSelectedCustomer] = useState(null);
   const [ConfirmationDialog, confirm] = useConfirm();
   // Define columns for InvoiceLineItems
   const lineItemColumns = [
@@ -162,12 +162,12 @@ function Invoice() {
           <InputField {...fields.date} formik={formik} className="col-md-6" />
           <div className="col-sm-12" > 
                     <label className="form-label">Customer</label>
-   <SelectedCustomerBox
+   <SelectedBusinessPartnerBox
             showChange={false}
             showContinue={false}
-            // selectedCustomer={selectedCustomer}
-            // onContinue={() => setActiveTab("inquiry-details")}
-            // onChangeCustomer={() => setCustomerOption("select")}
+            selectedPartner={selectedPartner}
+            // onContinue={() => setActiveTab("partner-details")}
+            // onChangePartner={() => setPartnerOption("select")}
             isOpen={false}
           />
 </div>
