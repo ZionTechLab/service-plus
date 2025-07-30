@@ -2,6 +2,10 @@
 
 This document provides a comprehensive overview of the React application, its structure, and how to contribute.
 
+## Project Overview
+
+This application is a comprehensive tool designed to streamline the management of service inquiries, customer data, and item masters. It offers a user-friendly interface for efficient creation, viewing, and management of service-related information. The primary goal is to provide a robust and intuitive platform for businesses to handle their service operations, improve customer interactions, and maintain accurate inventory records.
+
 ## Overview
 
 This application is a comprehensive tool for managing service inquiries, customer data, and item masters. It provides a user-friendly interface for creating, viewing, and managing service-related information.
@@ -12,7 +16,7 @@ This application is a comprehensive tool for managing service inquiries, custome
 *   **Redux:** A predictable state container for JavaScript apps.
 *   **React Router:** A declarative routing library for React.
 *   **Formik & Yup:** For building and validating forms.
-*   **Pico.css:** A lightweight CSS framework for styling.
+<!-- *   **Pico.css:** A lightweight CSS framework for styling. -->
 
 ## Features
 
@@ -77,6 +81,15 @@ The project follows a standard React application structure:
     ```
     The application will be available at `http://localhost:3000`.
 
+## Development Scripts
+
+In the project directory, you can run the following scripts:
+
+*   `npm start`: Runs the app in development mode. Opens [http://localhost:3000](http://localhost:3000) in your browser. The page reloads on edits.
+*   `npm test`: Launches the test runner in interactive watch mode.
+*   `npm run build`: Builds the app for production to the `build` folder. Optimizes and minifies the build for best performance.
+*   `npm run eject`: **Use with caution!** This is a one-way operation that removes the single build dependency and copies configuration files and transitive dependencies into your project, giving you full control over them.
+
 ## Build & Deployment
 
 ### Building for Production
@@ -121,7 +134,7 @@ API integration is not explicitly defined in the provided code. However, a stand
 
 ## UI/Styling
 
-*   **CSS Framework:** The application uses **Pico.css**, a lightweight and semantic CSS framework.
+<!-- *   **CSS Framework:** The application uses **Pico.css**, a lightweight and semantic CSS framework. -->
 *   **Custom Styles:** Custom styles are defined in individual CSS files for each component (e.g., `Drawer.css`).
 
 ## Environment Variables
@@ -145,6 +158,16 @@ The project is set up with **React Testing Library** and **Jest**.
 
 *   The application currently uses mock data (`src/data.js`) and does not have a real backend integration.
 *   Some features may not be fully implemented.
+
+## Future Enhancements
+
+*   **Backend Integration:** Implement a robust backend to replace mock data, enabling persistent storage and real-time data updates.
+*   **Advanced Reporting:** Develop comprehensive reporting features for service inquiries, customer data, and item masters.
+*   **User Roles and Permissions:** Introduce a role-based access control system to manage user permissions more granularly.
+*   **Notifications:** Implement in-app and email notification systems for important events (e.g., new inquiry, status change).
+*   **Search and Filtering:** Enhance search and filtering capabilities across all data tables for improved usability.
+*   **Internationalization (i18n):** Add support for multiple languages to cater to a broader user base.
+*   **Offline Support:** Explore implementing offline capabilities for critical features using service workers.
 
 ## Contribution Guidelines
 
