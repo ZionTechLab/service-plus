@@ -3,6 +3,7 @@ import AppRoutes from "./AppRoutes";
 import { useSelector } from "react-redux";
 import { selectIsLoggedIn } from "./features/auth/authSlice";
 import "./App.css";
+import { ModalProvider } from "./helpers/ModalService";
 
 
 function App() {
@@ -18,9 +19,11 @@ function App() {
   }, []);
 
   return (
-    <div className="App">
-      <AppRoutes isLoggedIn={isLoggedIn} />
-    </div>
+    <ModalProvider>
+      <div className="App">
+        <AppRoutes isLoggedIn={isLoggedIn} />
+      </div>
+    </ModalProvider>
   );
 }
 
