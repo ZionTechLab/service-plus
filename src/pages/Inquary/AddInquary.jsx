@@ -2,42 +2,37 @@
 import * as Yup from "yup";
 import { useParams } from "react-router-dom";
 import { useEffect, useState } from "react";
+import { useNavigate } from "react-router-dom";
 import InputField from "../../helpers/InputField";
 import { useFormikBuilder } from "../../helpers/formikBuilder";
+import useConfirm from "../../hooks/useConfirm";
 import PartnerService from "../BusinessPartners/PartnerService";
 import InquaryService from "./InquaryService";
 import InquiryView from "./InquiryView";
-import useConfirm from "../../hooks/useConfirm";
-import { useNavigate } from "react-router-dom";
 import SelectedBusinessPartnerBox from "../BusinessPartners/select-bp";
-// import SelectedCustomerBox from "../BusinessPartners/card-selectedBP";
 import { inquiryTypes, priorities } from "./inquiryOptions";
 
 function ServiceInquiry() {
   const { id } = useParams();
-  const [assigneeData, setAssigneeData] = useState([]);
-  // const [selectedCustomer, setSelectedCustomer] = useState(null);
-  const [ConfirmationDialog, confirm] = useConfirm();
   const navigate = useNavigate();
-    const [selectedPartner] = useState(null);
+  const [assigneeData, setAssigneeData] = useState([]);
+  const [selectedPartner] = useState(null);
+  const [ConfirmationDialog, confirm] = useConfirm();
 
   useEffect(() => {
     const fetchPartners = async () => {
       const storedPartners = await PartnerService.getAllPartners();
-      var cc = storedPartners ? storedPartners.filter(p => p.isEmployee === true) : [];
-      setAssigneeData(cc);
+      const employees = storedPartners ? storedPartners.filter(p => p.isEmployee === true) : [];
+      setAssigneeData(employees);
     };
     fetchPartners();
-
-    // setCustomerOption("select");
   }, []);
 
   useEffect(() => {
-
     if (id) {
       const inquiry = InquaryService.getInquaryById(parseInt(id));
       if (inquiry) {
-            console.log("Selected Customer:", inquiry);
+        console.log("Selected Customer:", inquiry);
         formik.setValues(inquiry);
       }
     }
@@ -49,9 +44,8 @@ function ServiceInquiry() {
       name: "id",
       type: "text",
       placeholder: "Job No",
-        initialValue: "<New>",
-        disabled: true,
-      // validation: Yup.string().required("Job No is required"),
+      initialValue: "<New>",
+      disabled: true,
     },
     jobDate: {
       name: "jobDate",
@@ -66,7 +60,6 @@ function ServiceInquiry() {
       placeholder: "Delivered By",
       initialValue: "ssss",
       validation: Yup.string().required("Delivered By is required"),
-   
     },
     customer: {
       name: "customer",
@@ -187,7 +180,9 @@ function ServiceInquiry() {
       type: "select",
       placeholder: "Assignee",
       dataBinding: {
-        data: assigneeData,keyField: "id",valueField: "partnerName",
+        data: assigneeData,
+        keyField: "id",
+        valueField: "partnerName",
       },
       initialValue: assigneeData[0]?.id,
       validation: Yup.string(),
@@ -204,17 +199,15 @@ function ServiceInquiry() {
   const handleInquirySubmit = (values, { resetForm }) => {
     console.log("Form values:", values);
 
-    let result;
     if (id) {
       // Update existing inquiry
-      result = InquaryService.createInquary({
-       
-        ...values, id: parseInt(id)
+      InquaryService.createInquary({
+        ...values, 
+        id: parseInt(id)
       });
     } else {
       // Create new inquiry
-      // eslint-disable-next-line no-unused-vars
-      result = InquaryService.createInquary({
+      InquaryService.createInquary({
         ...values,
         id: 0,
         status: "new",
@@ -233,154 +226,63 @@ function ServiceInquiry() {
 
   const formik = useFormikBuilder(fields, handleInquirySubmit);
 
-
-
-  // const onCustomerSelect = (customer) => {
-  //   formik.setFieldValue("customer", customer.id);
-  //   setSelectedCustomer(customer);
-  //   setCustomerOption("selected");
-  //   setActiveTab("inquiry-details");
-  // };
-
-  // const handleCustomerCreated = (newCustomer) => {
-  //   // Handle when a new customer is created from AddBusinessPartner
-  //   formik.setFieldValue("customer", newCustomer.id);
-  //   setSelectedCustomer(newCustomer);
-  //   setCustomerOption("selected");
-  //   setActiveTab("inquiry-details");
-  // };
-
-  // const handleTabChange = (tabId) => {
-  //   setActiveTab(tabId);
-  //   if (selectedCustomer) setCustomerOption("selected");
-  // };
-
-  let content = "";
-  // switch (true) {
-    // case activeTab === "select-customer" && customerOption === "select":
-    //   content = (
-    //     <div>
-    //       <BusinessPartnerFind
-    //         // customers={assigneeData}
-    //         onCustomerSelect={onCustomerSelect}
-    //         onNewCustomer={() => setCustomerOption("add")}
-    //       >
-    //         <button
-    //           className="btn btn-primary "
-    //           onClick={() => setCustomerOption("add")}
-    //         >
-    //           Add New Customer
-    //         </button>
-    //       </BusinessPartnerFind>
-    //     </div>
-    //   );
-    //   break;
-    // case activeTab === "select-customer" && customerOption === "selected":
-    //   content = (
-    //     <SelectedCustomerBox
-    //       selectedCustomer={selectedCustomer}
-    //       onContinue={() => setActiveTab("inquiry-details")}
-    //       onChangeCustomer={() => setCustomerOption("select")}
-    //     />
-    //   );
-    //   break;
-    // case activeTab === "select-customer" && customerOption === "add":
-    //   content = (
-    //     <div>
-    //       <AddBusinessPartner onCustomerCreated={handleCustomerCreated} />
-    //       <div>
-    //         <button
-    //           className="btn btn-outline-primary btn-sm"
-    //           onClick={() => setCustomerOption("select")}
-    //         >
-    //           Select Customer
-    //         </button>
-    //       </div>
-    //     </div>
-    //   );
-    //   break;
-    // case activeTab === "inquiry-details":
-      content = (
-        <div>
-       
-
-          <div className="row  mt-3">
-            <div className="col-md-7 col-lg-8">
-              <form onSubmit={formik.handleSubmit} noValidate>
-                <div className="row g-3">
-                  <InputField {...fields.id} formik={formik} className="col-sm-6"/>
-                  <InputField {...fields.jobDate} formik={formik} className="col-sm-6"/>
-                  
-   <SelectedBusinessPartnerBox
-            showChange={false}
-            showContinue={false}
-            selectedPartner={selectedPartner}
-            // onContinue={() => setActiveTab("partner-details")}
-            // onChangePartner={() => setPartnerOption("select")}
-            isOpen={false}
-          />
-
-                  <InputField {...fields.deliveredBy} formik={formik} />
-                  <InputField {...fields.itemName} formik={formik} />
-                  <InputField {...fields.serialNo} formik={formik} />
-                  <InputField {...fields.description} formik={formik} />
-<div className="col-sm-12" > 
-                <label className="form-label">Items / Accessories</label>
-                                          <div className="card">
-     <div className="card-body">
-      {/* <h5>Selected Customer</h5> */}
-     
-           <div className=" row g-2">
-                    <InputField {...fields.charger} formik={formik} className="  col-4 col-lg-3  col-xl-2"/>
-                    <InputField {...fields.powerCable} formik={formik} className="  col-4  col-lg-3 col-xl-2"/>
-                    <InputField {...fields.bag} formik={formik} className="col-4 col-lg-3 col-xl-2"/>
-                    <InputField {...fields.toner} formik={formik} className="col-4 col-lg-3 col-xl-2"/>
-                    <InputField {...fields.cartridge} formik={formik} className="col-4 col-lg-3 col-xl-2"/>
-                    <InputField {...fields.ribbon} formik={formik} className="col-4 col-lg-3 col-xl-2"/>
-                    <InputField {...fields.mouse} formik={formik} className="col-4 col-lg-3 col-xl-2"/>
-                    <InputField {...fields.usbcable} formik={formik} className="col-4 col-lg-3 col-xl-2"/>
-                    <InputField {...fields.videoCable} formik={formik} className="col-4 col-lg-3 col-xl-2"/>
-              </div></div></div></div>
-               <InputField {...fields.toDo} formik={formik} />
-                  <InputField
-                    className="col-sm-6"
-                    {...fields.serviceType}
-                    formik={formik}
-                  />
-                  <InputField
-                    className="col-sm-6"
-                    {...fields.priority}
-                    formik={formik}
-                  />
-                  <InputField {...fields.assignee} formik={formik}  className="col-sm-6"/>
-                  <InputField {...fields.dueDate} formik={formik}  className="col-sm-6"/>
-                  <button
-                    className="w-100 btn btn-primary "
-                    type="submit"
-                  >
-                    Submit
-                  </button>
-                </div>
-              </form>
-            </div>
-            <div className="col-md-5 col-lg-4 order-md-last ">
-              <InquiryView />
-            </div>
-          </div>
-        </div>
-      );
-      // break;
-    // You can add more cases here for other combinations if needed
-  //   default:
-  //     content = "";
-  // }
-
   return (
     <div>
       <ConfirmationDialog />
-      {/* <Tabs tabs={tabs} activeTab={activeTab} onTabChange={handleTabChange}> */}
-        {content}
-      {/* </Tabs> */}
+      <div className="row mt-3">
+        <div className="col-md-7 col-lg-8">
+          <form onSubmit={formik.handleSubmit} noValidate>
+            <div className="row g-3">
+              <InputField {...fields.id} formik={formik} className="col-sm-6"/>
+              <InputField {...fields.jobDate} formik={formik} className="col-sm-6"/>
+              
+              <SelectedBusinessPartnerBox
+                showChange={false}
+                showContinue={false}
+                selectedPartner={selectedPartner}
+                isOpen={false}
+              />
+
+              <InputField {...fields.deliveredBy} formik={formik} />
+              <InputField {...fields.itemName} formik={formik} />
+              <InputField {...fields.serialNo} formik={formik} />
+              <InputField {...fields.description} formik={formik} />
+              
+              <div className="col-sm-12"> 
+                <label className="form-label">Items / Accessories</label>
+                <div className="card">
+                  <div className="card-body">
+                    <div className="row g-2">
+                      <InputField {...fields.charger} formik={formik} className="col-4 col-lg-3 col-xl-2"/>
+                      <InputField {...fields.powerCable} formik={formik} className="col-4 col-lg-3 col-xl-2"/>
+                      <InputField {...fields.bag} formik={formik} className="col-4 col-lg-3 col-xl-2"/>
+                      <InputField {...fields.toner} formik={formik} className="col-4 col-lg-3 col-xl-2"/>
+                      <InputField {...fields.cartridge} formik={formik} className="col-4 col-lg-3 col-xl-2"/>
+                      <InputField {...fields.ribbon} formik={formik} className="col-4 col-lg-3 col-xl-2"/>
+                      <InputField {...fields.mouse} formik={formik} className="col-4 col-lg-3 col-xl-2"/>
+                      <InputField {...fields.usbcable} formik={formik} className="col-4 col-lg-3 col-xl-2"/>
+                      <InputField {...fields.videoCable} formik={formik} className="col-4 col-lg-3 col-xl-2"/>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              
+              <InputField {...fields.toDo} formik={formik} />
+              <InputField className="col-sm-6" {...fields.serviceType} formik={formik} />
+              <InputField className="col-sm-6" {...fields.priority} formik={formik} />
+              <InputField {...fields.assignee} formik={formik} className="col-sm-6"/>
+              <InputField {...fields.dueDate} formik={formik} className="col-sm-6"/>
+              
+              <button className="w-100 btn btn-primary" type="submit">
+                Submit
+              </button>
+            </div>
+          </form>
+        </div>
+        <div className="col-md-5 col-lg-4 order-md-last">
+          <InquiryView />
+        </div>
+      </div>
     </div>
   );
 }
