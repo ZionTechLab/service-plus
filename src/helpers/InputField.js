@@ -104,7 +104,7 @@ function InputField({
           id={name}
           placeholder={placeholder}
           {...inputProps}
-          autoComplete="off"
+          autoComplete="new-password"
           rows={4}
         />
       );
@@ -198,16 +198,15 @@ function InputField({
     }
     // Default input
     return (
-      <input
-        className="form-control"
-        id={name}
-        type={type}
-        placeholder={placeholder}
-        {...inputProps}
-      // readOnly
-     disabled={disabled}
-        autoComplete="off"
-      />
+    <input
+      className="form-control"
+      id={name}
+      type={type}
+      placeholder={placeholder}
+      {...inputProps}
+      disabled={disabled}
+      autoComplete="new-password"
+    />
     );
   };
 

@@ -90,7 +90,7 @@ const fields = {
   },
 };
 
-function AddBusinessPartner({ onCustomerCreated, noForm = false }) {
+function AddBusinessPartner({ onCustomerCreated }) {
   const { id } = useParams();
   const [ConfirmationDialog, confirm] = useConfirm();
 
@@ -137,8 +137,7 @@ function AddBusinessPartner({ onCustomerCreated, noForm = false }) {
       <ConfirmationDialog />
       <div className="row g-5">
         <div className="col-md-12 col-lg-12">
-          {noForm ? (
-            // Render without form wrapper for use within other forms
+          <form onSubmit={formik.handleSubmit} noValidate>
             <div className="row g-3">
               <InputField
                 className="col-sm-12"
@@ -170,7 +169,7 @@ function AddBusinessPartner({ onCustomerCreated, noForm = false }) {
                 {...fields.phone1}
                 formik={formik}
               />
-              <InputField
+                      <InputField
                 className="col-sm-3"
                 {...fields.phone2}
                 formik={formik}
@@ -197,81 +196,11 @@ function AddBusinessPartner({ onCustomerCreated, noForm = false }) {
                 {...fields.active}
                 formik={formik}
               />
-              <button 
-                className="w-100 btn btn-primary btn-lg" 
-                type="button"
-                onClick={() => formik.handleSubmit()}
-              >
+              <button className="w-100 btn btn-primary btn-lg" type="submit">
                 Save
               </button>
             </div>
-          ) : (
-            // Render with form wrapper for standalone use
-            <form onSubmit={formik.handleSubmit} noValidate>
-              <div className="row g-3">
-                <InputField
-                  className="col-sm-12"
-                  {...fields.partnerCode}
-                  formik={formik}
-                />
-                <InputField
-                  className="col-sm-6"
-                  {...fields.partnerName}
-                  formik={formik}
-                />
-                <InputField
-                  className="col-sm-6"
-                  {...fields.contactPerson}
-                  formik={formik}
-                />
-                <InputField
-                  className="col-sm-12"
-                  {...fields.email}
-                  formik={formik}
-                />
-                <InputField
-                  className="col-sm-12"
-                  {...fields.address}
-                  formik={formik}
-                />
-                <InputField
-                  className="col-sm-3"
-                  {...fields.phone1}
-                  formik={formik}
-                />
-                <InputField
-                  className="col-sm-3"
-                  {...fields.phone2}
-                  formik={formik}
-                />
-                <div className="col-sm-6 row g-2">
-                <InputField
-                  className="col-4"
-                  {...fields.isCustomer}
-                  formik={formik}
-                />
-                <InputField
-                  className="col-4"
-                  {...fields.isSupplier}
-                  formik={formik}
-                />
-                <InputField
-                  className="col-4"
-                  {...fields.isEmployee}
-                  formik={formik}
-                />
-                </div>
-                <InputField
-                  className="col-sm-6"
-                  {...fields.active}
-                  formik={formik}
-                />
-                <button className="w-100 btn btn-primary btn-lg" type="submit">
-                  Save
-                </button>
-              </div>
-            </form>
-          )}
+          </form>
         </div>
       </div>
     </div>
