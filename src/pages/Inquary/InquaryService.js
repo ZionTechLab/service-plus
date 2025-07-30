@@ -5,6 +5,7 @@ class InquaryService {
     this.storageKey = "inquiries";
   }
 
+  
   createInquary(inquaryData) {
     try {
       const inquaries = this.getAllInquairies();
