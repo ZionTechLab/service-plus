@@ -11,30 +11,35 @@ function SelectedBusinessPartnerBox({
   selectedPartner,
   onContinue,
   onChangePartner,
-  showContinue = true,
-  showChange = true,
-  isOpen = true,
+  // showContinue = true,
+  // showChange = true,
+  // isOpen = true,
   onCustomerSelect = () => {},
   setCustomerOption = () => {},
   ...props
 }) {
-  const [open, setOpen] = React.useState(isOpen);
+  const [open, setOpen] = React.useState(formik.isOpen);
   const [showModal, setShowModal] = React.useState(false);
   const [localSelectedPartner, setLocalSelectedPartner] = React.useState(selectedPartner);
 
   // If field and formik are provided, use field object pattern
-  const isFieldMode = field && formik;
-  const fieldName = field?.name || '';
-  const hasError = isFieldMode && formik.errors[fieldName] && formik.touched[fieldName];
-  const label = field?.placeholder || "Customer";
+  // const isFieldMode = field && formik;
+  // const fieldName = field?.name || '';
+  // const hasError = isFieldMode && formik.errors[fieldName] && formik.touched[fieldName];
+  // const label = field?.placeholder || "Customer";
 
-  React.useEffect(() => {
-    setOpen(isOpen);
-  }, [isOpen]);
+  // React.useEffect(() => {
+  //   setOpen(isOpen);
+  // }, [isOpen]);
 
   React.useEffect(() => {
     setLocalSelectedPartner(selectedPartner);
   }, [selectedPartner]);
+
+  React.useEffect(() => {
+    console.log("Selected partner updated:", formik.values[field?.name]);
+          formik.setFieldTouched(field?.name, true);
+  }, [formik.values[field?.name]]);
 
   const handleCustomerSelect = (customer) => {
     console.log("handleCustomerSelect", customer);
@@ -42,10 +47,13 @@ function SelectedBusinessPartnerBox({
     setShowModal(false);
     
     // Field object pattern - update formik
-    if (isFieldMode) {
-      formik.setFieldValue(fieldName, customer?.id || "");
-      formik.setFieldTouched(fieldName, true);
-    }
+    // if (isFieldMode) {
+          console.log(field?.name);
+      // Ensure fieldName matches Formik initialValues key and initialValue is set correctly
+      formik.setFieldValue(field?.name, customer.id || "");
+
+      console.log("Formik values after setFieldValue:", formik.values);
+    // }
     
     // Original pattern callbacks
     if (onCustomerSelect) {
@@ -59,7 +67,7 @@ function SelectedBusinessPartnerBox({
 //   if (!selectedPartner) return null;
 return (
   <div className={className || "col-sm-12"}>      
-    <label className="form-label">{label}</label>
+    <label className="form-label">{field?.placeholder || "Customer"}</label>
     <div className="accordion" id="selectedPartnerAccordion">
       <div className="accordion-item">
         <h2 className="accordion-header d-flex align-items-center justify-content-between" id="selectedPartnerHeading">
@@ -116,7 +124,7 @@ return (
                 <br />
               </div>
             </div>
-            <div className="mt-3">
+            {/* <div className="mt-3">
               {showContinue && (
                 <button
                   className="btn btn-primary me-2"
@@ -126,22 +134,21 @@ return (
                   Continue to Partner Details
                 </button>
               )}
-            </div>
+            </div> */}
           </div>
         </div>
       </div>
     </div>
     
     {/* Error display for field pattern */}
-    {hasError && (
+    {formik.errors[field?.name] && formik.touched[field?.name] && (
       <div className="text-danger small mt-1">
-        {formik.errors[fieldName]}
+        {formik.errors[field?.name]}
       </div>
     )}
     
     <Modal show={showModal} onClose={() => setShowModal(false)} title="Search Partner">
       <BusinessPartnerFind
-        // customers={assigneeData}
         onCustomerSelect={handleCustomerSelect}
         onNewCustomer={() => setCustomerOption("add")}
       >

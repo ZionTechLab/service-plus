@@ -73,6 +73,9 @@ function ServiceInquiry() {
       // },
       initialValue: "",
       validation: Yup.string().required("Customer is required"),
+      // showChange: true,
+      // showContinue: false,
+      isOpen: false,
     },
     itemName: {
       name: "itemName",
@@ -245,9 +248,7 @@ function ServiceInquiry() {
               <SelectedBusinessPartnerBox 
                 field={fields.customer} 
                 formik={formik}
-                showChange={true}
-                showContinue={false}
-                isOpen={false}
+             
               />
 
               <InputField {...fields.deliveredBy} formik={formik} />
