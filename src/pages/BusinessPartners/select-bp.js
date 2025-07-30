@@ -93,8 +93,41 @@ function SelectedBusinessPartnerBox({
     closeModal();
   };
 
+  // Show modal with current tab
+  const showModal = (tabId = activeTab) => {
+    openModal({
+      title: tabId === 'add-customer' ? "Add New Customer" : "Select Customer",
+      component: (
+        <Tabs tabs={tabs} activeTab={tabId} onTabChange={handleTabChange}>
+          {tabId === 'search' && (
+            <BusinessPartnerFind
+              onCustomerSelect={handleCustomerSelect}
+              onNewCustomer={handleNewCustomerClick}
+            >
+              {/* <button
+                className="btn btn-primary"
+                onClick={handleNewCustomerClick}
+              >
+                Add New Customer
+              </button> */}
+            </BusinessPartnerFind>
+          )}
+          {tabId === 'add-customer' && (
+            <div className="mt-3">
+              <AddBusinessPartner 
+                onCustomerCreated={handleCustomerCreated} 
+                noForm={true} 
+              />
+            </div>
+          )}
+        </Tabs>
+      ),
+    });
+  };
+
   const handleTabChange = (tabId) => {
     setActiveTab(tabId);
+    showModal(tabId);
   };
 
   const tabs = [
@@ -121,36 +154,7 @@ function SelectedBusinessPartnerBox({
             </button>
             <button
               className="btn btn-outline-secondary ms-2"
-              onClick={() => {
-                openModal({
-                  title: activeTab === 'add-customer' ? "Add New Customer" : "Select Customer",
-                  component: (
-                    <Tabs tabs={tabs} activeTab={activeTab} onTabChange={handleTabChange}>
-                      {activeTab === 'search' && (
-                        <BusinessPartnerFind
-                          onCustomerSelect={handleCustomerSelect}
-                          onNewCustomer={handleNewCustomerClick}
-                        >
-                          <button
-                            className="btn btn-primary"
-                            onClick={handleNewCustomerClick}
-                          >
-                            Add New Customer
-                          </button>
-                        </BusinessPartnerFind>
-                      )}
-                      {activeTab === 'add-customer' && (
-                        <div className="mt-3">
-                          <AddBusinessPartner 
-                            onCustomerCreated={handleCustomerCreated} 
-                            noForm={true} 
-                          />
-                        </div>
-                      )}
-                    </Tabs>
-                  ),
-                });
-              }}
+              onClick={() => showModal()}
               type="button"
             >
               <i className="bi bi-search"></i>
