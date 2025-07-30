@@ -2,6 +2,8 @@ import React from "react";
 import Modal from "../../components/Modal";
 import BusinessPartnerFind from "./BusinessPartnerFind";
 import PartnerService from "./PartnerService";
+import Tabs from "../../components/Tabs";
+import AddBusinessPartner from "./AddBusinessPartner";
 
 function SelectedBusinessPartnerBox({
   field,
@@ -17,6 +19,8 @@ function SelectedBusinessPartnerBox({
   const [open, setOpen] = React.useState(formik.isOpen);
   const [showModal, setShowModal] = React.useState(false);
   const [localSelectedPartner, setLocalSelectedPartner] = React.useState(selectedPartner);
+  const [activeTab, setActiveTab] = React.useState('search');
+  const [tabsInitialized, setTabsInitialized] = React.useState(false);
 
   // React.useEffect(() => {
   //   console.log("init:", formik.values[field?.name]);
@@ -79,6 +83,30 @@ function SelectedBusinessPartnerBox({
       onChangePartner(customer);
     }
   };
+
+  const handleNewCustomerClick = () => {
+    setActiveTab('add-customer');
+    if (!tabsInitialized) {
+      setTabsInitialized(true);
+    }
+  };
+
+  const handleCustomerCreated = (newCustomer) => {
+    console.log("New customer created:", newCustomer);
+    // Customer was successfully created, now select it
+    handleCustomerSelect(newCustomer);
+    setActiveTab('search');
+    setShowModal(false);
+  };
+
+  const handleTabChange = (tabId) => {
+    setActiveTab(tabId);
+  };
+
+  const tabs = [
+    { id: 'search', label: 'Search Customer', disabled: false },
+    { id: 'add-customer', label: 'Add New Customer', disabled: false }
+  ];
 
 //   if (!selectedPartner) return null;
 return (
@@ -153,18 +181,35 @@ return (
       </div>
     )}
     
-    <Modal show={showModal} onClose={() => setShowModal(false)} title="Search Partner">
-      <BusinessPartnerFind
-        onCustomerSelect={handleCustomerSelect}
-        onNewCustomer={() => setCustomerOption("add")}
-      >
-        <button
-          className="btn btn-primary "
-          onClick={() => setCustomerOption("add")}
-        >
-          Add New Customer
-        </button>
-      </BusinessPartnerFind>
+    <Modal 
+      show={showModal} 
+      onClose={() => setShowModal(false)} 
+      title={activeTab === 'add-customer' ? "Add New Customer" : "Select Customer"}
+    >
+      <Tabs tabs={tabs} activeTab={activeTab} onTabChange={handleTabChange}>
+        {activeTab === 'search' && (
+          <BusinessPartnerFind
+            onCustomerSelect={handleCustomerSelect}
+            onNewCustomer={handleNewCustomerClick}
+          >
+            <button
+              className="btn btn-primary"
+              onClick={handleNewCustomerClick}
+            >
+              Add New Customer
+            </button>
+          </BusinessPartnerFind>
+        )}
+        
+        {activeTab === 'add-customer' && (
+          <div className="mt-3">
+            <AddBusinessPartner 
+              onCustomerCreated={handleCustomerCreated} 
+              noForm={true} 
+            />
+          </div>
+        )}
+      </Tabs>
     </Modal>
   </div>
 );
