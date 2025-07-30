@@ -8,7 +8,7 @@ import InvoiceLineItems from "../components/InvoiceLineItems";
 import SelectedBusinessPartnerBox from "./BusinessPartners/select-bp";
 
 function Invoice() {
-    const [selectedPartner] = useState(null);
+    // Remove selectedPartner state, use formik and fields config for partner selection
   const [ConfirmationDialog, confirm] = useConfirm();
   // Define columns for InvoiceLineItems
   const lineItemColumns = [
@@ -39,6 +39,14 @@ function Invoice() {
       initialValue: "<Auto>",
       validation: Yup.string().required("Invoice No is required"),
       disabled: true,
+    },
+    partner: {
+      name: "partner",
+      type: "partner-select",
+      placeholder: "Business Partner",
+      initialValue: "",
+      validation: Yup.string().required("Business Partner is required"),
+      isOpen: false,
     },
     to: {
       name: "to",
@@ -79,7 +87,6 @@ function Invoice() {
       initialValue: new Date().toISOString().split("T")[0],
       validation: Yup.string().required("Invoice Date is required"),
     },
-    // Remove single description/amount fields, handled by lineItems
     kmHours: {
       name: "kmHours",
       type: "text",
@@ -160,16 +167,7 @@ function Invoice() {
         <div className="row g-3">
           <InputField {...fields.invoiceNo} formik={formik} className="col-md-6" />
           <InputField {...fields.date} formik={formik} className="col-md-6" />
-
-   <SelectedBusinessPartnerBox
-            showChange={false}
-            showContinue={false}
-            selectedPartner={selectedPartner}
-            // onContinue={() => setActiveTab("partner-details")}
-            // onChangePartner={() => setPartnerOption("select")}
-            isOpen={false}
-          />
-
+          <SelectedBusinessPartnerBox field={fields.partner} formik={formik} />
         </div>
         <div className="row g-3 mt-2">
           {/* <InputField {...fields.to} formik={formik} className="col-md-6" /> */}
