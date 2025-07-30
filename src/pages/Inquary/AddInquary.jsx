@@ -7,36 +7,19 @@ import { useFormikBuilder } from "../../helpers/formikBuilder";
 import PartnerService from "../BusinessPartners/PartnerService";
 import InquaryService from "./InquaryService";
 import InquiryView from "./InquiryView";
-import AddBusinessPartner from "../BusinessPartners/AddBusinessPartner";
-import BusinessPartnerFind from "../BusinessPartners/BusinessPartnerFind";
 import useConfirm from "../../hooks/useConfirm";
 import { useNavigate } from "react-router-dom";
-import Tabs from "../../components/Tabs";
-import SelectedCustomerBox from "../BusinessPartners/card-selectedBP";
+import SelectedBusinessPartnerBox from "../BusinessPartners/select-bp";
+// import SelectedCustomerBox from "../BusinessPartners/card-selectedBP";
 import { inquiryTypes, priorities } from "./inquiryOptions";
 
 function ServiceInquiry() {
   const { id } = useParams();
-  const [activeTab, setActiveTab] = useState("select-customer");
-  const [customerOption, setCustomerOption] = useState("select"); // 'select' or 'add'
   const [assigneeData, setAssigneeData] = useState([]);
-  const [selectedCustomer, setSelectedCustomer] = useState(null);
+  // const [selectedCustomer, setSelectedCustomer] = useState(null);
   const [ConfirmationDialog, confirm] = useConfirm();
   const navigate = useNavigate();
-
-  // Tab configuration
-  const tabs = [
-    {
-      id: "select-customer",
-      label: "Select Customer",
-      disabled: false,
-    },
-    {
-      id: "inquiry-details",
-      label: "Inquiry Details",
-      disabled: !selectedCustomer && !id,
-    },
-  ];
+    const [selectedPartner] = useState(null);
 
   useEffect(() => {
     const fetchPartners = async () => {
@@ -46,7 +29,7 @@ function ServiceInquiry() {
     };
     fetchPartners();
 
-    setCustomerOption("select");
+    // setCustomerOption("select");
   }, []);
 
   useEffect(() => {
@@ -252,71 +235,71 @@ function ServiceInquiry() {
 
 
 
-  const onCustomerSelect = (customer) => {
-    formik.setFieldValue("customer", customer.id);
-    setSelectedCustomer(customer);
-    setCustomerOption("selected");
-    setActiveTab("inquiry-details");
-  };
+  // const onCustomerSelect = (customer) => {
+  //   formik.setFieldValue("customer", customer.id);
+  //   setSelectedCustomer(customer);
+  //   setCustomerOption("selected");
+  //   setActiveTab("inquiry-details");
+  // };
 
-  const handleCustomerCreated = (newCustomer) => {
-    // Handle when a new customer is created from AddBusinessPartner
-    formik.setFieldValue("customer", newCustomer.id);
-    setSelectedCustomer(newCustomer);
-    setCustomerOption("selected");
-    setActiveTab("inquiry-details");
-  };
+  // const handleCustomerCreated = (newCustomer) => {
+  //   // Handle when a new customer is created from AddBusinessPartner
+  //   formik.setFieldValue("customer", newCustomer.id);
+  //   setSelectedCustomer(newCustomer);
+  //   setCustomerOption("selected");
+  //   setActiveTab("inquiry-details");
+  // };
 
-  const handleTabChange = (tabId) => {
-    setActiveTab(tabId);
-    if (selectedCustomer) setCustomerOption("selected");
-  };
+  // const handleTabChange = (tabId) => {
+  //   setActiveTab(tabId);
+  //   if (selectedCustomer) setCustomerOption("selected");
+  // };
 
   let content = "";
-  switch (true) {
-    case activeTab === "select-customer" && customerOption === "select":
-      content = (
-        <div>
-          <BusinessPartnerFind
-            // customers={assigneeData}
-            onCustomerSelect={onCustomerSelect}
-            onNewCustomer={() => setCustomerOption("add")}
-          >
-            <button
-              className="btn btn-primary "
-              onClick={() => setCustomerOption("add")}
-            >
-              Add New Customer
-            </button>
-          </BusinessPartnerFind>
-        </div>
-      );
-      break;
-    case activeTab === "select-customer" && customerOption === "selected":
-      content = (
-        <SelectedCustomerBox
-          selectedCustomer={selectedCustomer}
-          onContinue={() => setActiveTab("inquiry-details")}
-          onChangeCustomer={() => setCustomerOption("select")}
-        />
-      );
-      break;
-    case activeTab === "select-customer" && customerOption === "add":
-      content = (
-        <div>
-          <AddBusinessPartner onCustomerCreated={handleCustomerCreated} />
-          <div>
-            <button
-              className="btn btn-outline-primary btn-sm"
-              onClick={() => setCustomerOption("select")}
-            >
-              Select Customer
-            </button>
-          </div>
-        </div>
-      );
-      break;
-    case activeTab === "inquiry-details":
+  // switch (true) {
+    // case activeTab === "select-customer" && customerOption === "select":
+    //   content = (
+    //     <div>
+    //       <BusinessPartnerFind
+    //         // customers={assigneeData}
+    //         onCustomerSelect={onCustomerSelect}
+    //         onNewCustomer={() => setCustomerOption("add")}
+    //       >
+    //         <button
+    //           className="btn btn-primary "
+    //           onClick={() => setCustomerOption("add")}
+    //         >
+    //           Add New Customer
+    //         </button>
+    //       </BusinessPartnerFind>
+    //     </div>
+    //   );
+    //   break;
+    // case activeTab === "select-customer" && customerOption === "selected":
+    //   content = (
+    //     <SelectedCustomerBox
+    //       selectedCustomer={selectedCustomer}
+    //       onContinue={() => setActiveTab("inquiry-details")}
+    //       onChangeCustomer={() => setCustomerOption("select")}
+    //     />
+    //   );
+    //   break;
+    // case activeTab === "select-customer" && customerOption === "add":
+    //   content = (
+    //     <div>
+    //       <AddBusinessPartner onCustomerCreated={handleCustomerCreated} />
+    //       <div>
+    //         <button
+    //           className="btn btn-outline-primary btn-sm"
+    //           onClick={() => setCustomerOption("select")}
+    //         >
+    //           Select Customer
+    //         </button>
+    //       </div>
+    //     </div>
+    //   );
+    //   break;
+    // case activeTab === "inquiry-details":
       content = (
         <div>
        
@@ -328,17 +311,14 @@ function ServiceInquiry() {
                   <InputField {...fields.id} formik={formik} className="col-sm-6"/>
                   <InputField {...fields.jobDate} formik={formik} className="col-sm-6"/>
                   
-<div className="col-sm-12" > 
-                    <label className="form-label">Customer</label>
-   <SelectedCustomerBox
+   <SelectedBusinessPartnerBox
             showChange={false}
             showContinue={false}
-            selectedCustomer={selectedCustomer}
-            onContinue={() => setActiveTab("inquiry-details")}
-            onChangeCustomer={() => setCustomerOption("select")}
+            selectedPartner={selectedPartner}
+            // onContinue={() => setActiveTab("partner-details")}
+            // onChangePartner={() => setPartnerOption("select")}
             isOpen={false}
           />
-</div>
 
                   <InputField {...fields.deliveredBy} formik={formik} />
                   <InputField {...fields.itemName} formik={formik} />
@@ -389,18 +369,18 @@ function ServiceInquiry() {
           </div>
         </div>
       );
-      break;
+      // break;
     // You can add more cases here for other combinations if needed
-    default:
-      content = "";
-  }
+  //   default:
+  //     content = "";
+  // }
 
   return (
     <div>
       <ConfirmationDialog />
-      <Tabs tabs={tabs} activeTab={activeTab} onTabChange={handleTabChange}>
+      {/* <Tabs tabs={tabs} activeTab={activeTab} onTabChange={handleTabChange}> */}
         {content}
-      </Tabs>
+      {/* </Tabs> */}
     </div>
   );
 }
