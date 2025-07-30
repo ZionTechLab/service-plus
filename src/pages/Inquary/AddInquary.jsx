@@ -59,7 +59,7 @@ function ServiceInquiry() {
       name: "deliveredBy",
       type: "text",
       placeholder: "Delivered By",
-      initialValue: "ssss",
+      initialValue: "",
       validation: Yup.string().required("Delivered By is required"),
     },
     customer: {

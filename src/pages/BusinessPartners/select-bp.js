@@ -1,19 +1,15 @@
 import React from "react";
 import Modal from "../../components/Modal";
 import BusinessPartnerFind from "./BusinessPartnerFind";
+import PartnerService from "./PartnerService";
 
 function SelectedBusinessPartnerBox({
-  // Field object pattern props
   field,
   formik,
   className,
-  // Original props
   selectedPartner,
   onContinue,
   onChangePartner,
-  // showContinue = true,
-  // showChange = true,
-  // isOpen = true,
   onCustomerSelect = () => {},
   setCustomerOption = () => {},
   ...props
@@ -22,15 +18,21 @@ function SelectedBusinessPartnerBox({
   const [showModal, setShowModal] = React.useState(false);
   const [localSelectedPartner, setLocalSelectedPartner] = React.useState(selectedPartner);
 
-  // If field and formik are provided, use field object pattern
-  // const isFieldMode = field && formik;
-  // const fieldName = field?.name || '';
-  // const hasError = isFieldMode && formik.errors[fieldName] && formik.touched[fieldName];
-  // const label = field?.placeholder || "Customer";
-
   // React.useEffect(() => {
-  //   setOpen(isOpen);
-  // }, [isOpen]);
+  //   console.log("init:", formik.values[field?.name]);
+  // if(formik.values[field?.name]) {
+  // console.log("Selected partner updated:", formik.values[field?.name]);
+  //   const fetchPartners = async () => {
+  //     const storedPartners = await PartnerService.getPartnerById();
+  //      console.log(storedPartners);
+  //      setLocalSelectedPartner(storedPartners);
+  //     // const employees = storedPartners ? storedPartners.filter(p => p.isEmployee === true) : [];
+  //     // setAssigneeData(employees);
+  //   };
+  //   fetchPartners();
+
+  // }
+  // }, []);
 
   React.useEffect(() => {
     setLocalSelectedPartner(selectedPartner);
@@ -38,7 +40,21 @@ function SelectedBusinessPartnerBox({
 
   React.useEffect(() => {
     console.log("Selected partner updated:", formik.values[field?.name]);
+  if(formik.values[field?.name]) {
+  console.log("Selected partner updated:", formik.values[field?.name]);
+    const fetchPartners = async () => {
+      const storedPartners = await PartnerService.getPartnerById(formik.values[field?.name]);
+       console.log(storedPartners);
+       setLocalSelectedPartner(storedPartners);
+      // const employees = storedPartners ? storedPartners.filter(p => p.isEmployee === true) : [];
+      // setAssigneeData(employees);
+    };
+    fetchPartners();
+
+  }
+
           formik.setFieldTouched(field?.name, true);
+  // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values[field?.name]]);
 
   const handleCustomerSelect = (customer) => {
@@ -124,17 +140,7 @@ return (
                 <br />
               </div>
             </div>
-            {/* <div className="mt-3">
-              {showContinue && (
-                <button
-                  className="btn btn-primary me-2"
-                  onClick={onContinue}
-                  type="button"
-                >
-                  Continue to Partner Details
-                </button>
-              )}
-            </div> */}
+
           </div>
         </div>
       </div>
