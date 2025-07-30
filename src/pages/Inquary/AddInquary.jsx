@@ -16,7 +16,8 @@ function ServiceInquiry() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [assigneeData, setAssigneeData] = useState([]);
-  const [selectedPartner] = useState(null);
+  // const [customerData, setCustomerData] = useState([]);
+  // const [selectedPartner, setSelectedPartner] = useState(null);
   const [ConfirmationDialog, confirm] = useConfirm();
 
   useEffect(() => {
@@ -32,7 +33,7 @@ function ServiceInquiry() {
     if (id) {
       const inquiry = InquaryService.getInquaryById(parseInt(id));
       if (inquiry) {
-        console.log("Selected Customer:", inquiry);
+        console.log("Loading inquiry:", inquiry);
         formik.setValues(inquiry);
       }
     }
@@ -63,8 +64,13 @@ function ServiceInquiry() {
     },
     customer: {
       name: "customer",
-      type: "text",
+      type: "partner-select",
       placeholder: "Customer",
+      // dataBinding: {
+      //   data: customerData,
+      //   keyField: "id",
+      //   valueField: "partnerName",
+      // },
       initialValue: "",
       validation: Yup.string().required("Customer is required"),
     },
@@ -236,10 +242,11 @@ function ServiceInquiry() {
               <InputField {...fields.id} formik={formik} className="col-sm-6"/>
               <InputField {...fields.jobDate} formik={formik} className="col-sm-6"/>
               
-              <SelectedBusinessPartnerBox
-                showChange={false}
+              <SelectedBusinessPartnerBox 
+                field={fields.customer} 
+                formik={formik}
+                showChange={true}
                 showContinue={false}
-                selectedPartner={selectedPartner}
                 isOpen={false}
               />
 

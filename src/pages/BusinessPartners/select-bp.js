@@ -3,6 +3,11 @@ import Modal from "../../components/Modal";
 import BusinessPartnerFind from "./BusinessPartnerFind";
 
 function SelectedBusinessPartnerBox({
+  // Field object pattern props
+  field,
+  formik,
+  className,
+  // Original props
   selectedPartner,
   onContinue,
   onChangePartner,
@@ -10,11 +15,18 @@ function SelectedBusinessPartnerBox({
   showChange = true,
   isOpen = true,
   onCustomerSelect = () => {},
-  setCustomerOption = () => {}
+  setCustomerOption = () => {},
+  ...props
 }) {
   const [open, setOpen] = React.useState(isOpen);
   const [showModal, setShowModal] = React.useState(false);
   const [localSelectedPartner, setLocalSelectedPartner] = React.useState(selectedPartner);
+
+  // If field and formik are provided, use field object pattern
+  const isFieldMode = field && formik;
+  const fieldName = field?.name || '';
+  const hasError = isFieldMode && formik.errors[fieldName] && formik.touched[fieldName];
+  const label = field?.placeholder || "Customer";
 
   React.useEffect(() => {
     setOpen(isOpen);
@@ -28,6 +40,14 @@ function SelectedBusinessPartnerBox({
     console.log("handleCustomerSelect", customer);
     setLocalSelectedPartner(customer);
     setShowModal(false);
+    
+    // Field object pattern - update formik
+    if (isFieldMode) {
+      formik.setFieldValue(fieldName, customer?.id || "");
+      formik.setFieldTouched(fieldName, true);
+    }
+    
+    // Original pattern callbacks
     if (onCustomerSelect) {
       onCustomerSelect(customer);
     }
@@ -38,9 +58,8 @@ function SelectedBusinessPartnerBox({
 
 //   if (!selectedPartner) return null;
 return (
-  <>      
-   <div className="col-sm-12" > 
-                    <label className="form-label">Customer</label>
+  <div className={className || "col-sm-12"}>      
+    <label className="form-label">{label}</label>
     <div className="accordion" id="selectedPartnerAccordion">
       <div className="accordion-item">
         <h2 className="accordion-header d-flex align-items-center justify-content-between" id="selectedPartnerHeading">
@@ -111,7 +130,15 @@ return (
           </div>
         </div>
       </div>
-    </div>   </div>
+    </div>
+    
+    {/* Error display for field pattern */}
+    {hasError && (
+      <div className="text-danger small mt-1">
+        {formik.errors[fieldName]}
+      </div>
+    )}
+    
     <Modal show={showModal} onClose={() => setShowModal(false)} title="Search Partner">
       <BusinessPartnerFind
         // customers={assigneeData}
@@ -126,8 +153,7 @@ return (
         </button>
       </BusinessPartnerFind>
     </Modal>
- 
-  </>
+  </div>
 );
 }
 
