@@ -10,6 +10,7 @@ const menuItems = [
   { route: '/user-master/add', displayName: 'Add User', icon: 'bi bi-person-plus' },
   { route: '/user-master/edit/:id', displayName: 'Edit User', icon: 'bi bi-pencil' },
   { route: '/item-master', displayName: 'Item Master', icon: 'bi bi-box-seam-fill',isMenuItem: true },
+    { route: '/item-master/add', displayName: 'Item Master', icon: 'bi bi-box-seam-fill',isMenuItem: false },
   { route: '/item-category', displayName: 'Item Category', icon: 'bi bi-tags',isMenuItem: true },
   { route: '/grn', displayName: 'GRN', icon: 'bi bi-receipt',isMenuItem: true },
   { route: '/invoice', displayName: 'Invoice', icon: 'bi bi-file-earmark-text', isMenuItem: true },

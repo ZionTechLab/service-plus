@@ -14,10 +14,11 @@ import InquiryView from "./pages/Inquary/InquiryView";
 
 
 import ItemMaster from "./pages/ItemMaster";
+import AddItem from "./pages/ItemMaster/AddItem";
 import ItemCategory from "./pages/ItemCategory";
 
 
-import AddItem from "./pages/AddItem";
+
 import Profile from "./pages/Profile";
 import Grn from "./pages/Grn";
 
@@ -60,6 +61,7 @@ const AppRoutes = ({ isLoggedIn }) => (
       <Route path="user-master/edit/:id" element={<AddUser />} />
 
       <Route path="item-master" element={<ItemMaster />} />
+        <Route path="item-master/add" element={<AddItem />} />
       <Route path="item-category" element={<ItemCategory />} />
 
       <Route path="inquiry/:id" element={<InquiryView />} />
