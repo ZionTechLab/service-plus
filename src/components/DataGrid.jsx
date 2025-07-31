@@ -47,13 +47,25 @@ function DataGrid({ columns, items: initialItems, onItemsChange }) {
               <tr key={idx} className={styles.tr}>
                 {columns.map((col, cidx) => (
                   <td key={col.field || cidx} className={styles.td}>
-                    <input
-                      type={col.type || "text"}
-                      className={`form-control ${styles.sd}`}
-                      value={item[col.field] ?? ""}
-                      onChange={e => handleChange(idx, { ...item, [col.field]: e.target.value })}
-                      placeholder={col.placeholder || col.header}
-                    />
+                    {col.type === "amount" ? (
+                      <input
+                        type="number"
+                        step="0.01"
+                        min="0"
+                        className={`form-control text-end ${styles.sd}`}
+                        value={item[col.field] ?? ""}
+                        onChange={e => handleChange(idx, { ...item, [col.field]: e.target.value })}
+                        placeholder={col.placeholder || col.header}
+                      />
+                    ) : (
+                      <input
+                        type={col.type || "text"}
+                        className={`form-control ${styles.sd}`}
+                        value={item[col.field] ?? ""}
+                        onChange={e => handleChange(idx, { ...item, [col.field]: e.target.value })}
+                        placeholder={col.placeholder || col.header}
+                      />
+                    )}
                   </td>
                 ))}
                 <td>

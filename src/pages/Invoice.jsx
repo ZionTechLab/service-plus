@@ -29,7 +29,7 @@ function Invoice() {
     {
       header: "Total",
       field: "total",
-      type: "number",
+      type: "amount",
       placeholder: "Amount",
       width: "25%"
     }
@@ -96,7 +96,7 @@ function Invoice() {
     },
     kmHours: {
       name: "kmHours",
-      type: "text",
+      type: "amount",
       placeholder: "K.M. / Hours",
       initialValue: "",
       validation: Yup.string(),
@@ -124,7 +124,7 @@ function Invoice() {
     },
     totalAmount: {
       name: "totalAmount",
-      type: "number",
+      type: "amount",
       placeholder: "Total Amount",
       initialValue: "",
       validation: Yup.number().typeError("Total Amount must be a number"),
@@ -134,7 +134,9 @@ function Invoice() {
 
   // Calculate total from line items
   const calcTotal = () => {
-    return lineItems.reduce((sum, item) => sum + (parseFloat(item.amount) || 0), 0);
+    let xx=lineItems.reduce((sum, item) => sum + (parseFloat(item.amount) || 0), 0);
+    console.log("Total calculated:", xx);
+    return xx;
   };
 
   // Remove handleLineChange, handleLineAdd, handleLineRemove
