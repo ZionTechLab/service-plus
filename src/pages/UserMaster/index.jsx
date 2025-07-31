@@ -2,6 +2,7 @@ import { Link, useNavigate } from 'react-router-dom';
 import DataTable from '../../components/DataTable';
 import { useEffect, useState } from 'react';
 import useConfirm from '../../hooks/useConfirm';
+import UserService from './UserService';
 
 function UserMaster() {
   const [dataset, setDataset] = useState([]);
@@ -10,7 +11,7 @@ function UserMaster() {
 
   useEffect(() => {
     const fetchUsers = async () => {
-      const storedUsers = JSON.parse(localStorage.getItem('users') || '[]');
+      const storedUsers = await UserService.getAllUsers();
       setDataset(storedUsers);
     };
     fetchUsers();
@@ -19,9 +20,8 @@ function UserMaster() {
   const handleDelete = async (id) => {
     confirm('Are you sure you want to delete this user?', { confirmText: "Delete", cancelText: "Cancel", type: "danger" }).then((result) => {
       if (result) {
-        const updated = dataset.filter((data) => data.id !== id);
+        const updated = UserService.deleteUser(id);
         setDataset(updated);
-        localStorage.setItem('users', JSON.stringify(updated));
       }
     });
   };

@@ -3,6 +3,7 @@ import * as Yup from 'yup';
 import { useFormikBuilder } from '../../helpers/formikBuilder';
 import InputField from '../../helpers/InputField';
 import useConfirm from '../../hooks/useConfirm';
+import UserService from './UserService';
 
 const fields = {
   username: {
@@ -68,16 +69,7 @@ function AddUser() {
   const [ConfirmationDialog, confirm] = useConfirm();
 
   const handleSubmit = (values, { resetForm }) => {
-    const users = JSON.parse(localStorage.getItem('users') || '[]');
-    const newUser = {
-      ...values,
-      id: Date.now().toString(),
-      last_login: "",
-      created_at: new Date().toISOString(),
-      updated_at: new Date().toISOString(),
-      deleted_at: ""
-    };
-    localStorage.setItem('users', JSON.stringify([...users, newUser]));
+    UserService.createUser(values);
     confirm("User added successfully!").then(() => navigate('/user-master'));
     resetForm();
   };
