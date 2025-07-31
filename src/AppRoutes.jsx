@@ -5,6 +5,8 @@ import LoginPage from "./pages/LoginPage";
 import MainLayout from "./layout/MainLayout";
 import BusinessPartner from "./pages/BusinessPartners";
 import AddBusinessPartner from "./pages/BusinessPartners/AddBusinessPartner";
+import UserMaster from "./pages/UserMaster";
+import AddUser from "./pages/UserMaster/AddUser";
 import Inquary from "./pages/Inquary";
 import AddInquary from "./pages/Inquary/AddInquary";
 import InquiryView from "./pages/Inquary/InquiryView";
@@ -53,8 +55,9 @@ const AppRoutes = ({ isLoggedIn }) => (
       <Route path="inquiry/add" element={<AddInquary />} />
       <Route path="inquiry/edit/:id" element={<AddInquary />} />
 
-      {/* <Route path="business-partner/edit/:id" element={<AddBusinessPartner />} /> */}
-      {/* <Route path="service-inquiry/:id" element={<AddInquary />} /> */}
+      <Route path="user-master" element={<UserMaster />} />
+      <Route path="user-master/add" element={<AddUser />} />
+      <Route path="user-master/edit/:id" element={<AddUser />} />
 
       <Route path="item-master" element={<ItemMaster />} />
       <Route path="item-category" element={<ItemCategory />} />
