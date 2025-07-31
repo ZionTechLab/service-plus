@@ -324,11 +324,60 @@ const defaultInquiries = [
   },
 ];
 
+const defaultUsers = [
+  {
+    "id": "1753951587118",
+    "username": "voyaadmin",
+    "email": "anoj@hhh.dd",
+    "password_hash": "voya@admin",
+    "full_name": "dsdsd",
+    "phone": "888888888888888888888888",
+    "profile_picture": "sd",
+    "role": "admin",
+    "status": "active",
+    "last_login": "",
+    "created_at": "2025-07-31T08:46:27.118Z",
+    "updated_at": "2025-07-31T08:46:27.118Z",
+    "deleted_at": ""
+  },
+  {
+    "id": "1753951587119",
+    "username": "ppcadmin",
+    "email": "ppc@hhh.dd",
+    "password_hash": "ppc@admin",
+    "full_name": "PPC Admin",
+    "phone": "0777123456",
+    "profile_picture": "",
+    "role": "ppcadmin",
+    "status": "active",
+    "last_login": "",
+    "created_at": "2025-07-31T08:50:00.000Z",
+    "updated_at": "2025-07-31T08:50:00.000Z",
+    "deleted_at": ""
+  },
+  {
+    "id": "1753951587120",
+    "username": "admin",
+    "email": "john@hhh.dd",
+    "password_hash": "admin@123",
+    "full_name": "John Doe",
+    "phone": "0712345678",
+    "profile_picture": "",
+    "role": "user",
+    "status": "inactive",
+    "last_login": "2025-07-30T18:00:00.000Z",
+    "created_at": "2025-07-30T07:00:00.000Z",
+    "updated_at": "2025-07-31T08:51:00.000Z",
+    "deleted_at": ""
+  }
+]
+
 export default function runAppMigrations() {
   const localVersion = localStorage.getItem("appVersion");
   if (localVersion !== appConfig.version) {
     localStorage.setItem("appVersion", appConfig.version);
     localStorage.setItem("partners", JSON.stringify(defaultPartners));
     localStorage.setItem("inquiries", JSON.stringify(defaultInquiries));
+        localStorage.setItem("users", JSON.stringify(defaultUsers));
   }
 }
