@@ -36,6 +36,22 @@ code {
     --divider-color: #e0e0e0;
 }
 
+[data-bs-theme="dark"] {
+  --bs-body-bg: #181a1b;
+  --bs-border-color: #343a40;
+  --primary-color: #90caf9;
+  --primary-dark: #1976d2;
+  --secondary-color: #bdbdbd;
+  --success-color: #66bb6a;
+  --warning-color: #ffa726;
+  --error-color: #ef5350;
+  --surface-color: #23272b;
+  --background-color: #181a1b;
+  --text-primary: #f5f5f5;
+  --text-secondary: #bdbdbd;
+  --divider-color: #424242;
+}
+
 .overlay {
   position: fixed;
   top: 0;
