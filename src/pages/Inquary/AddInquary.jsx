@@ -66,15 +66,8 @@ function ServiceInquiry() {
       name: "customer",
       type: "partner-select",
       placeholder: "Customer",
-      // dataBinding: {
-      //   data: customerData,
-      //   keyField: "id",
-      //   valueField: "partnerName",
-      // },
       initialValue: "",
       validation: Yup.string().required("Customer is required"),
-      // showChange: true,
-      // showContinue: false,
       isOpen: false,
     },
     itemName: {

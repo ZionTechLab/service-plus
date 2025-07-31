@@ -4,24 +4,31 @@ import React, { useState } from "react";
 import InputField from "../helpers/InputField";
 import { useFormikBuilder } from "../helpers/formikBuilder";
 import useConfirm from "../hooks/useConfirm";
-import InvoiceLineItems from "../components/InvoiceLineItems";
+import DataGrid from "../components/DataGrid";
 import SelectedBusinessPartnerBox from "./BusinessPartners/select-bp";
 
 function Invoice() {
     // Remove selectedPartner state, use formik and fields config for partner selection
   const [ConfirmationDialog, confirm] = useConfirm();
-  // Define columns for InvoiceLineItems
+  // Define columns for DataGrid
   const lineItemColumns = [
     {
       header: "Description",
       field: "description",
       type: "text",
       placeholder: "Description",
-      width: "60%"
+      // width: "60%"
     },
     {
       header: "Amount",
       field: "amount",
+      type: "number",
+      placeholder: "Amount",
+      width: "25%"
+    },
+    {
+      header: "Total",
+      field: "total",
       type: "number",
       placeholder: "Amount",
       width: "25%"
@@ -41,11 +48,11 @@ function Invoice() {
       disabled: true,
     },
     partner: {
-      name: "partner",
+      name: "customer",
       type: "partner-select",
-      placeholder: "Business Partner",
+      placeholder: "Customer",
       initialValue: "",
-      validation: Yup.string().required("Business Partner is required"),
+      validation: Yup.string().required("Customer is required"),
       isOpen: false,
     },
     to: {
@@ -130,19 +137,7 @@ function Invoice() {
     return lineItems.reduce((sum, item) => sum + (parseFloat(item.amount) || 0), 0);
   };
 
-  const handleLineChange = (idx, newItem) => {
-    const updated = [...lineItems];
-    updated[idx] = newItem;
-    setLineItems(updated);
-  };
-  const handleLineAdd = () => {
-    setLineItems([...lineItems, { ...emptyLineItem }]);
-  };
-  const handleLineRemove = idx => {
-    if (lineItems.length > 1) {
-      setLineItems(lineItems.filter((_, i) => i !== idx));
-    }
-  };
+  // Remove handleLineChange, handleLineAdd, handleLineRemove
 
   const handleSubmit = (values, { resetForm }) => {
     // For now, just show confirmation
@@ -155,6 +150,7 @@ function Invoice() {
 
   // Keep totalAmount in sync
   React.useEffect(() => {
+    console.log("Line items changed:", lineItems);
     formik.setFieldValue("totalAmount", calcTotal());
     // eslint-disable-next-line
   }, [lineItems]);
@@ -176,12 +172,10 @@ function Invoice() {
         </div>
         <div className="row g-3 mt-2">
           <div className="col-12">
-            <InvoiceLineItems
+            <DataGrid
               items={lineItems}
               columns={lineItemColumns}
-              onChange={handleLineChange}
-              onAdd={handleLineAdd}
-              onRemove={handleLineRemove}
+              onItemsChange={setLineItems}
             />
           </div>
         </div>
