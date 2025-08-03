@@ -11,6 +11,7 @@ function BusinessPartners() {
 
   useEffect(() => {
     const fetchInquiries = async () => {
+      console.log('Fetching business partners...');
       const storedInquiries = await PartnerService.getAllPartners();
       setDataset(storedInquiries);
     };
@@ -39,6 +40,7 @@ function BusinessPartners() {
   };
 
   const handleEdit = (id) => {
+    console.log('Editing business partner with ID:', id);
     navigate(`/business-partner/edit/${id}`);
   };
 

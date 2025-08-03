@@ -1,12 +1,20 @@
-import * as Yup from 'yup';
-import InputField from '../../helpers/InputField';
-import { useParams } from 'react-router-dom';
-import { useEffect } from 'react';
-import { useFormikBuilder } from '../../helpers/formikBuilder';
-import PartnerService from './PartnerService';
-import useConfirm from '../../hooks/useConfirm';
+import * as Yup from "yup";
+import InputField from "../../helpers/InputField";
+import { useParams } from "react-router-dom";
+import { useEffect } from "react";
+import { useFormikBuilder } from "../../helpers/formikBuilder";
+import PartnerService from "./PartnerService";
+import useConfirm from "../../hooks/useConfirm";
 
 const fields = {
+  ID: {
+    name: "id",
+    type: "text",
+    placeholder: "ID",
+    initialValue: "<New>",
+    disabled: true,
+    validation: Yup.string().required("ID is required"),
+  },
   partnerCode: {
     name: "partnerCode",
     type: "text",
@@ -95,24 +103,26 @@ function AddBusinessPartner({ onCustomerCreated }) {
   const [ConfirmationDialog, confirm] = useConfirm();
 
   const handleInquirySubmit = async (values, { resetForm }) => {
-    const savedPartner = await PartnerService.createPartner(values);
+    console.log("Submitting business partner:", values);
+    const param = !id ? { ...values, id: parseInt(id) } : { ...values, id: parseInt(0) };
+    const savedPartner = await PartnerService.createPartner(param);
 
-    if (onCustomerCreated && typeof onCustomerCreated === 'function') {
+    if (onCustomerCreated && typeof onCustomerCreated === "function") {
       // If this is being used in the inquiry flow, notify parent
-      confirm(
-        "Customer created successfully! Proceeding to inquiry details.",
-        { confirmText: "Continue", type: "success" }
-      ).then(() => {
+      confirm("Customer created successfully! Proceeding to inquiry details.", {
+        confirmText: "Continue",
+        type: "success",
+      }).then(() => {
         resetForm();
         onCustomerCreated(savedPartner);
       });
     } else {
       // If this is being used standalone, show confirmation
       resetForm();
-      confirm(
-        "Business partner saved successfully!",
-        { confirmText: "OK", type: "success" }
-      );
+      confirm("Business partner saved successfully!", {
+        confirmText: "OK",
+        type: "success",
+      });
     }
   };
 
@@ -122,15 +132,14 @@ function AddBusinessPartner({ onCustomerCreated }) {
     if (id) {
       const fetchInquiries = async () => {
         const inquiries = await PartnerService.getPartnerById(id);
-       if (inquiries) {
-         formik.setValues(inquiries);
-       }
+        if (inquiries) {
+          formik.setValues(inquiries);
+        }
       };
       fetchInquiries();
     }
-  // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [ id]);
-
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [id]);
 
   return (
     <div className="">
@@ -139,64 +148,21 @@ function AddBusinessPartner({ onCustomerCreated }) {
         <div className="col-md-12 col-lg-12">
           <form onSubmit={formik.handleSubmit} noValidate>
             <div className="row g-3">
-              <InputField
-                className="col-sm-12"
-                {...fields.partnerCode}
-                formik={formik}
-              />
-              <InputField
-                className="col-sm-6"
-                {...fields.partnerName}
-                formik={formik}
-              />
-              <InputField
-                className="col-sm-6"
-                {...fields.contactPerson}
-                formik={formik}
-              />
-              <InputField
-                className="col-sm-12"
-                {...fields.email}
-                formik={formik}
-              />
-              <InputField
-                className="col-sm-12"
-                {...fields.address}
-                formik={formik}
-              />
-              <InputField
-                className="col-sm-3"
-                {...fields.phone1}
-                formik={formik}
-              />
-                      <InputField
-                className="col-sm-3"
-                {...fields.phone2}
-                formik={formik}
-              />
+              <InputField className="col-sm-12" {...fields.ID} formik={formik} />
+              <InputField className="col-sm-12" {...fields.partnerCode} formik={formik} />
+              <InputField className="col-sm-6" {...fields.partnerName} formik={formik} />
+              <InputField className="col-sm-6" {...fields.contactPerson} formik={formik} />
+              <InputField className="col-sm-12" {...fields.email} formik={formik} />
+              <InputField className="col-sm-12" {...fields.address} formik={formik} />
+              <InputField className="col-sm-3" {...fields.phone1} formik={formik} />
+              <InputField className="col-sm-3" {...fields.phone2} formik={formik} />
               <div className="col-sm-6 row g-2">
-              <InputField
-                className="col-4"
-                {...fields.isCustomer}
-                formik={formik}
-              />
-              <InputField
-                className="col-4"
-                {...fields.isSupplier}
-                formik={formik}
-              />
-              <InputField
-                className="col-4"
-                {...fields.isEmployee}
-                formik={formik}
-              />
+                <InputField className="col-4" {...fields.isCustomer} formik={formik} />
+                <InputField className="col-4" {...fields.isSupplier} formik={formik} />
+                <InputField className="col-4" {...fields.isEmployee} formik={formik} />
               </div>
-              <InputField
-                className="col-sm-6"
-                {...fields.active}
-                formik={formik}
-              />
-              <button className="w-100 btn btn-primary btn-lg" type="submit">
+              <InputField className="col-sm-6" {...fields.active} formik={formik} />
+              <button className="w-100 btn btn-primary btn-lg" type="submit"  onClick={() => console.log("Button clicked")}>
                 Save
               </button>
             </div>
