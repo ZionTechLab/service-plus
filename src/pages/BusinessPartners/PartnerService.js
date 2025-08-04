@@ -1,4 +1,4 @@
-import axios from '../../helpers/axiosMiddleware';
+import axios, { axiosRequest } from '../../helpers/axiosMiddleware';
 
 class PartnerService {
   constructor() {
@@ -6,17 +6,17 @@ class PartnerService {
   }
 
   async createPartner(partnerData) {
-    const res = await axios.post(this.apiBase, partnerData);
+    const res = await axiosRequest(axios.post(this.apiBase, partnerData));
     return res.data;
   }
 
   async getPartnerById(id) {
-    const res = await axios.get(`${this.apiBase}/${id}`);
+    const res = await axiosRequest(axios.get(`${this.apiBase}/${id}`));
     return res.data;
   }
 
   async getAllPartners() {
-    const res = await axios.get(this.apiBase);
+    const res = await axiosRequest(axios.get(this.apiBase));
     return res.data;
   }
 }

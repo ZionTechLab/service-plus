@@ -1,4 +1,5 @@
 import React, { useEffect } from "react";
+import { MessageBoxProvider } from "./components/MessageBoxProvider";
 import AppRoutes from "./AppRoutes";
 import { useSelector } from "react-redux";
 import { selectIsLoggedIn } from "./features/auth/authSlice";
@@ -27,9 +28,11 @@ function App() {
   return (
     <LoadingSpinnerProvider>
       <ModalProvider>
-        <div className="App">
-          <AppRoutes isLoggedIn={isLoggedIn} />
-        </div>
+        <MessageBoxProvider>
+          <div className="App">
+            <AppRoutes isLoggedIn={isLoggedIn} />
+          </div>
+        </MessageBoxProvider>
       </ModalProvider>
     </LoadingSpinnerProvider>
   );
