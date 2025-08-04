@@ -2,7 +2,7 @@ import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { useFormikBuilder } from '../../helpers/formikBuilder';
 import InputField from '../../helpers/InputField';
-import useConfirm from '../../hooks/useConfirm';
+import usePopupMessage from '../../components/PopupMessage';
 import UserService from './UserService';
 
 const fields = {
@@ -66,7 +66,7 @@ const fields = {
 
 function AddUser() {
   const navigate = useNavigate();
-  const [ConfirmationDialog, confirm] = useConfirm();
+  const [ConfirmationDialog, confirm] = usePopupMessage();
 
   const handleSubmit = (values, { resetForm }) => {
     UserService.createUser(values);
@@ -78,7 +78,7 @@ function AddUser() {
 
   return (
     <div className="container py-4">
-      <ConfirmationDialog />
+      {ConfirmationDialog}
       <h3>Add User</h3>
       <form onSubmit={formik.handleSubmit}>
         <div className="row">

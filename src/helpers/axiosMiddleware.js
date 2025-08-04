@@ -1,24 +1,21 @@
 import axios from 'axios';
-
-// Axios response interceptor for global error handling
-axios.interceptors.response.use(
-  response => response,
-  error => {
-    if (error.response) {
-      // API responded with error status
-      console.error('API Error:', error.response.status, error.response.data);
-      // Optionally, you can trigger a confirmation popup or custom UI here
-      // Example: useConfirm(`Error: ${error.response.data.message || 'API error occurred.'}`);
-    } else if (error.request) {
-      // No response received
-      console.error('Network Error:', error.message);
-    } else {
-      // Other errors
-      console.error('Error:', error.message);
-    }
-    // Always reject so service methods can handle if needed
-    return Promise.reject(error);
+// ...existing code...
+// Generic error handler for Axios errors
+export function handleAxiosError(error, confirm) {
+  
+  if (error.response) {
+    // API responded with error status
+    confirm(`API Error: ${error.response.data?.message || error.response.statusText || 'API error occurred.'}`);
+  } else if (error.request) {
+    // No response received
+    confirm(`Network Error: ${error.message}`);
+  } else {
+    // Other errors
+    confirm(`Error: ${error.message}`);
   }
-);
+  // Always reject so service methods can handle if needed
+  throw new Error('Failed to create partner');
+}
+// ...existing code...
 
 export default axios;

@@ -2,27 +2,35 @@ import { Link, useNavigate } from 'react-router-dom';
 import DataTable from '../../components/DataTable';
 import PartnerService from './PartnerService';
 import { useEffect, useState } from 'react';
-import useConfirm from '../../hooks/useConfirm';
+import usePopupMessage from '../../components/PopupMessage';
+import useLoadingSpinner from '../../hooks/useLoadingSpinner';
 
 function BusinessPartners() {
-  const [dataset, setDataset] = useState([]);
+  const [dataset, setDataset] = useState({ loading: false, error: '', data: [] });
   const navigate = useNavigate();
-  const [ConfirmationDialog, confirm] = useConfirm();
+  const [ConfirmationDialog, confirm] = usePopupMessage();
+  const loadingSpinner = useLoadingSpinner(dataset.loading);
 
   useEffect(() => {
     const fetchInquiries = async () => {
-      console.log('Fetching business partners...');
-      const storedInquiries = await PartnerService.getAllPartners();
-      setDataset(storedInquiries);
+      setDataset(prev => ({ ...prev, loading: true, error: '' }));
+      try {
+        const storedInquiries = await PartnerService.getAllPartners();
+        setDataset({ loading: false, error: '', data: storedInquiries });
+      } catch (error) {
+        // console.error('Failed to fetch business partners:', error);
+        setDataset({ loading: false, error: 'Failed to fetch business partners. Please try again later.', data: [] });
+        // confirm('Failed to fetch business partners. Please try again later.', { type: 'danger', confirmText: 'OK', showCancel: false });
+      }
     };
     fetchInquiries();
   }, []);
 
   const handleDelete = async (id) => {
- confirm('Are you sure you want to delete this business partner?', { confirmText: "Delete", cancelText: "Cancel", type: "danger" }).then((result) => {
+    confirm('Are you sure you want to delete this business partner?', { confirmText: "Delete", cancelText: "Cancel", type: "danger" }).then((result) => {
       if (result) {
-        const updated = dataset.filter((data) => data.id !== id);
-        setDataset(updated);
+        const updated = dataset.data.filter((data) => data.id !== id);
+        setDataset({ ...dataset, data: updated });
         localStorage.setItem('partners', JSON.stringify(updated));
       }
     });
@@ -74,21 +82,18 @@ function BusinessPartners() {
     { header: 'Active', isAction: true, actionTemplate: (row) => (<input type="checkbox" checked={row.active} readOnly/>), field: 'active' },
   ];
 
+
   return (
-    <div>    
-        {/* <Link to="/business-partner/add">
-        <div className="py-3">
-          <button className=" btn btn-primary btn-lg ">Add Business Partner</button>
-        </div>
-      </Link> */}
-      <ConfirmationDialog />
-      <DataTable name="User Export" data={dataset} columns={columns} >
-     <Link to="/business-partner/add">
-   
-          <button className=" btn btn-primary  ">New</button>
-       
-      </Link>
-      </DataTable>
+    <div>
+      {ConfirmationDialog}
+      {loadingSpinner}
+      {!dataset.loading && (
+        <DataTable name="User Export" data={dataset.data} columns={columns} >
+          <Link to="/business-partner/add">
+            <button className=" btn btn-primary  ">New</button>
+          </Link>
+        </DataTable>
+      )}
     </div>
   );
 }

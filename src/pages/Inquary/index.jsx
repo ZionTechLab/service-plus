@@ -1,13 +1,13 @@
 import  { useState, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import DataTable from '../../components/DataTable';
-import useConfirm from '../../hooks/useConfirm';
+import usePopupMessage from '../../components/PopupMessage';
 import InquaryService from './InquaryService';
 
 function InquiryList() {
   const [dataset, setDataset] = useState([]);
   const navigate = useNavigate();
-  const [ConfirmationDialog, confirm] = useConfirm();
+  const [ConfirmationDialog, confirm] = usePopupMessage();
 
   useEffect(() => {
     const fetchData = async () => {
@@ -68,7 +68,7 @@ function InquiryList() {
 
   return (
     <div>     
-      <ConfirmationDialog />
+      {ConfirmationDialog}
       <DataTable columns={columns} data={dataset} >
         <Link to="/Inquiry/add">
           <button className=" btn btn-primary ">New</button>

@@ -1,13 +1,13 @@
 import { Link, useNavigate } from 'react-router-dom';
 import DataTable from '../../components/DataTable';
 import { useEffect, useState } from 'react';
-import useConfirm from '../../hooks/useConfirm';
+import usePopupMessage from '../../components/PopupMessage';
 import UserService from './UserService';
 
 function UserMaster() {
   const [dataset, setDataset] = useState([]);
   const navigate = useNavigate();
-  const [ConfirmationDialog, confirm] = useConfirm();
+  const [ConfirmationDialog, confirm] = usePopupMessage();
 
   useEffect(() => {
     const fetchUsers = async () => {
@@ -61,7 +61,7 @@ function UserMaster() {
 
   return (
     <div>
-      <ConfirmationDialog />
+      {ConfirmationDialog}
       <DataTable name="User Master" data={dataset} columns={columns}>
         <Link to="/user-master/add">
           <button className="btn btn-primary">New</button>

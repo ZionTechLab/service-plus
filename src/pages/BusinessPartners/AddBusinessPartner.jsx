@@ -4,7 +4,7 @@ import { useParams } from "react-router-dom";
 import { useEffect } from "react";
 import { useFormikBuilder } from "../../helpers/formikBuilder";
 import PartnerService from "./PartnerService";
-import useConfirm from "../../hooks/useConfirm";
+import usePopupMessage from "../../components/PopupMessage";
 
 const fields = {
   ID: {
@@ -100,7 +100,7 @@ const fields = {
 
 function AddBusinessPartner({ onCustomerCreated }) {
   const { id } = useParams();
-  const [ConfirmationDialog, confirm] = useConfirm();
+  const [ConfirmationDialog, confirm] = usePopupMessage();
 
   const handleInquirySubmit = async (values, { resetForm }) => {
     console.log("Submitting business partner:", values);
@@ -151,7 +151,7 @@ function AddBusinessPartner({ onCustomerCreated }) {
 
   return (
     <div className="">
-      <ConfirmationDialog />
+      {ConfirmationDialog}
       <div className="row g-5">
         <div className="col-md-12 col-lg-12">
           <form onSubmit={formik.handleSubmit} >

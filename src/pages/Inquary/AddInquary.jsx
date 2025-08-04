@@ -5,7 +5,7 @@ import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import InputField from "../../helpers/InputField";
 import { useFormikBuilder } from "../../helpers/formikBuilder";
-import useConfirm from "../../hooks/useConfirm";
+import usePopupMessage from "../../components/PopupMessage";
 import PartnerService from "../BusinessPartners/PartnerService";
 import InquaryService from "./InquaryService";
 import InquiryView from "./InquiryView";
@@ -18,7 +18,7 @@ function ServiceInquiry() {
   const [assigneeData, setAssigneeData] = useState([]);
   // const [customerData, setCustomerData] = useState([]);
   // const [selectedPartner, setSelectedPartner] = useState(null);
-  const [ConfirmationDialog, confirm] = useConfirm();
+  const [ConfirmationDialog, confirm] = usePopupMessage();
 
   useEffect(() => {
     const fetchPartners = async () => {
@@ -230,7 +230,7 @@ function ServiceInquiry() {
 
   return (
     <div>
-      <ConfirmationDialog />
+      {ConfirmationDialog}
       <div className="row mt-3">
         <div className="col-md-7 col-lg-8">
           <form onSubmit={formik.handleSubmit} noValidate>

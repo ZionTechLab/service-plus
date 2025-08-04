@@ -3,13 +3,13 @@ import * as Yup from "yup";
 import React, { useState } from "react";
 import InputField from "../helpers/InputField";
 import { useFormikBuilder } from "../helpers/formikBuilder";
-import useConfirm from "../hooks/useConfirm";
+import usePopupMessage from "../components/PopupMessage";
 import DataGrid from "../components/DataGrid";
 import SelectedBusinessPartnerBox from "./BusinessPartners/select-bp";
 
 function Invoice() {
     // Remove selectedPartner state, use formik and fields config for partner selection
-  const [ConfirmationDialog, confirm] = useConfirm();
+  const [ConfirmationDialog, confirm] = usePopupMessage();
   // Define columns for DataGrid
   const lineItemColumns = [
     {
@@ -159,7 +159,7 @@ function Invoice() {
 
   return (
     <div className="container mt-4">
-      <ConfirmationDialog />
+      {ConfirmationDialog}
       <h2 className="mb-3">Invoice</h2>
       <form onSubmit={formik.handleSubmit} noValidate>
         <div className="row g-3">
