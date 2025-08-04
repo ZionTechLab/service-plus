@@ -2,23 +2,22 @@ import { Link, useNavigate } from 'react-router-dom';
 import DataTable from '../../components/DataTable';
 import PartnerService from './PartnerService';
 import { useEffect, useState } from 'react';
-import usePopupMessage from '../../components/PopupMessage';
+import MessageBoxService from '../../services/MessageBoxService';
 import { useLoadingSpinner } from '../../hooks/useLoadingSpinner';
 
 function BusinessPartners() {
-  const [dataset, setDataset] = useState({ error: '', data: [] });
+  const [uiData, setUiData] = useState({ error: '', data: [] });
   const navigate = useNavigate();
-  const [ConfirmationDialog, confirm] = usePopupMessage();
   const { showSpinner, hideSpinner } = useLoadingSpinner();
 
   useEffect(() => {
     const fetchInquiries = async () => {
-      showSpinner("Loading business partners...");
+      showSpinner();
       try {
         const storedInquiries = await PartnerService.getAllPartners();
-        setDataset({ error: '', data: storedInquiries });
+        setUiData({ error: '', data: storedInquiries });
       } catch (error) {
-        setDataset({ error: 'Failed to fetch business partners. Please try again later.', data: [] });
+        setUiData({ error: 'Failed to fetch business partners. Please try again later.', data: [] });
       } finally {
         hideSpinner();
       }
@@ -27,25 +26,19 @@ function BusinessPartners() {
     // eslint-disable-next-line
   }, []);
 
-  const handleDelete = async (id) => {
-    confirm('Are you sure you want to delete this business partner?', { confirmText: "Delete", cancelText: "Cancel", type: "danger" }).then((result) => {
-      if (result) {
-        const updated = dataset.data.filter((data) => data.id !== id);
-        setDataset({ ...dataset, data: updated });
+  const handleDelete = (id) => {
+    MessageBoxService.show({
+      message: 'Are you sure you want to delete this business partner?',
+      type: 'danger',
+      confirmText: 'Delete',
+      cancelText: 'Cancel',
+      onConfirm: () => {
+        const updated = uiData.data.filter((data) => data.id !== id);
+        setUiData({ ...uiData, data: updated });
         localStorage.setItem('partners', JSON.stringify(updated));
-      }
+      },
+      onClose: null
     });
-
-    // const isConfirmed = await confirm(
-    //   "Are you sure you want to delete this business partner?",
-    //   { confirmText: "Delete", cancelText: "Cancel", type: "danger" }
-    // );
-    // if (isConfirmed) {
-    //   const partners = await PartnerService.getAllPartners();
-    //   const updated = partners.filter(p => p.id !== id);
-    //   localStorage.setItem('partners', JSON.stringify(updated));
-    //   setDataset(updated);
-    // }
   };
 
   const handleEdit = (id) => {
@@ -53,47 +46,80 @@ function BusinessPartners() {
     navigate(`/business-partner/edit/${id}`);
   };
 
-  const columns = [{
-      header: 'Actions',
+  const columns = [
+    {
+      header: "Actions",
       isAction: true,
       actionTemplate: (row) => (
         <div className="d-flex gap-2 justify-content-center">
-<button class="btn btn-outline-primary btn-icon btn-sm" title="Edit" onClick={() => handleEdit(row.id)}>
-                                           <i className="bi bi-pencil"></i>
-                                        </button>
-<button class="btn btn-outline-danger btn-icon btn-sm" title="Edit" onClick={() => handleDelete(row.id)}>
-                                            <i className="bi bi-trash"></i>
-                                        </button>
-
-          {/* <button className="btn btn-sm btn-outline-primary" onClick={() => handleEdit(row.id)}>Edit</button>
-          <button className="btn btn-sm btn-outline-danger" onClick={() => handleDelete(row.id)}>Delete</button> */}
+          <button
+            class="btn btn-outline-primary btn-icon btn-sm"
+            title="Edit"
+            onClick={() => handleEdit(row.id)}
+          >
+            <i className="bi bi-pencil"></i>
+          </button>
+          <button
+            class="btn btn-outline-danger btn-icon btn-sm"
+            title="Edit"
+            onClick={() => handleDelete(row.id)}
+          >
+            <i className="bi bi-trash"></i>
+          </button>
         </div>
-      )
+      ),
     },
-    { header: 'ID', field: 'id' },
-    { header: 'Code', field: 'partnerCode' },
-    { header: 'Partner Name', field: 'partnerName',class:'text-nowrap' },
-    { header: 'Contact Person', field: 'contactPerson' ,class:'text-nowrap'},
-    { header: 'Email', field: 'email' },
-    { header: 'Address', field: 'address' },
-    { header: 'Phone', field: 'phone' },
-    { header: 'Customer', isAction: true, actionTemplate: (row) => (<input type="checkbox" checked={row.isCustomer} readOnly/>), field: 'isCustomer' },
-    { header: 'Supplier', isAction: true, actionTemplate: (row) => (<input type="checkbox" checked={row.isSupplier} readOnly/>), field: 'isSupplier' },
-    { header: 'Employee', isAction: true, actionTemplate: (row) => (<input type="checkbox" checked={row.isEmployee} readOnly/>), field: 'isEmployee' },
-    { header: 'Active', isAction: true, actionTemplate: (row) => (<input type="checkbox" checked={row.active} readOnly/>), field: 'active' },
+    { header: "ID", field: "id" },
+    { header: "Code", field: "partnerCode" },
+    { header: "Partner Name", field: "partnerName", class: "text-nowrap" },
+    { header: "Contact Person", field: "contactPerson", class: "text-nowrap" },
+    { header: "Email", field: "email" },
+    { header: "Address", field: "address" },
+    { header: "Phone", field: "phone" },
+    {
+      header: "Customer",
+      isAction: true,
+      actionTemplate: (row) => (
+        <input type="checkbox" checked={row.isCustomer} readOnly />
+      ),
+      field: "isCustomer",
+    },
+    {
+      header: "Supplier",
+      isAction: true,
+      actionTemplate: (row) => (
+        <input type="checkbox" checked={row.isSupplier} readOnly />
+      ),
+      field: "isSupplier",
+    },
+    {
+      header: "Employee",
+      isAction: true,
+      actionTemplate: (row) => (
+        <input type="checkbox" checked={row.isEmployee} readOnly />
+      ),
+      field: "isEmployee",
+    },
+    {
+      header: "Active",
+      isAction: true,
+      actionTemplate: (row) => (
+        <input type="checkbox" checked={row.active} readOnly />
+      ),
+      field: "active",
+    },
   ];
 
 
   return (
     <div>
-      {ConfirmationDialog}
-      <DataTable name="User Export" data={dataset.data} columns={columns} >
+      <DataTable name="User Export" data={uiData.data} columns={columns} >
         <Link to="/business-partner/add">
           <button className=" btn btn-primary  ">New</button>
         </Link>
       </DataTable>
-      {dataset.error && (
-        <div className="alert alert-danger mt-3">{dataset.error}</div>
+      {uiData.error && (
+        <div className="alert alert-danger mt-3">{uiData.error}</div>
       )}
     </div>
   );
