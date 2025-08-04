@@ -4,6 +4,7 @@ import { useSelector } from "react-redux";
 import { selectIsLoggedIn } from "./features/auth/authSlice";
 import "./App.css";
 import { ModalProvider } from "./helpers/ModalService";
+import { LoadingSpinnerProvider } from "./hooks/useLoadingSpinner";
 import runAppMigrations from "./helpers/runAppMigrations";
 
 
@@ -24,11 +25,13 @@ function App() {
   }, []);
 
   return (
-    <ModalProvider>
-      <div className="App">
-        <AppRoutes isLoggedIn={isLoggedIn} />
-      </div>
-    </ModalProvider>
+    <LoadingSpinnerProvider>
+      <ModalProvider>
+        <div className="App">
+          <AppRoutes isLoggedIn={isLoggedIn} />
+        </div>
+      </ModalProvider>
+    </LoadingSpinnerProvider>
   );
 }
 

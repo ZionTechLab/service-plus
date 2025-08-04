@@ -7,6 +7,7 @@ export function useModalService() {
   return useContext(ModalContext);
 }
 
+
 export function ModalProvider({ children }) {
   const [modalConfig, setModalConfig] = useState(null);
 

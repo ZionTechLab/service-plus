@@ -3,27 +3,28 @@ import DataTable from '../../components/DataTable';
 import PartnerService from './PartnerService';
 import { useEffect, useState } from 'react';
 import usePopupMessage from '../../components/PopupMessage';
-import useLoadingSpinner from '../../hooks/useLoadingSpinner';
+import { useLoadingSpinner } from '../../hooks/useLoadingSpinner';
 
 function BusinessPartners() {
-  const [dataset, setDataset] = useState({ loading: false, error: '', data: [] });
+  const [dataset, setDataset] = useState({ error: '', data: [] });
   const navigate = useNavigate();
   const [ConfirmationDialog, confirm] = usePopupMessage();
-  const loadingSpinner = useLoadingSpinner(dataset.loading);
+  const { showSpinner, hideSpinner } = useLoadingSpinner();
 
   useEffect(() => {
     const fetchInquiries = async () => {
-      setDataset(prev => ({ ...prev, loading: true, error: '' }));
+      showSpinner("Loading business partners...");
       try {
         const storedInquiries = await PartnerService.getAllPartners();
-        setDataset({ loading: false, error: '', data: storedInquiries });
+        setDataset({ error: '', data: storedInquiries });
       } catch (error) {
-        // console.error('Failed to fetch business partners:', error);
-        setDataset({ loading: false, error: 'Failed to fetch business partners. Please try again later.', data: [] });
-        // confirm('Failed to fetch business partners. Please try again later.', { type: 'danger', confirmText: 'OK', showCancel: false });
+        setDataset({ error: 'Failed to fetch business partners. Please try again later.', data: [] });
+      } finally {
+        hideSpinner();
       }
     };
     fetchInquiries();
+    // eslint-disable-next-line
   }, []);
 
   const handleDelete = async (id) => {
@@ -86,13 +87,13 @@ function BusinessPartners() {
   return (
     <div>
       {ConfirmationDialog}
-      {loadingSpinner}
-      {!dataset.loading && (
-        <DataTable name="User Export" data={dataset.data} columns={columns} >
-          <Link to="/business-partner/add">
-            <button className=" btn btn-primary  ">New</button>
-          </Link>
-        </DataTable>
+      <DataTable name="User Export" data={dataset.data} columns={columns} >
+        <Link to="/business-partner/add">
+          <button className=" btn btn-primary  ">New</button>
+        </Link>
+      </DataTable>
+      {dataset.error && (
+        <div className="alert alert-danger mt-3">{dataset.error}</div>
       )}
     </div>
   );
