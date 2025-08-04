@@ -165,21 +165,18 @@ function InputField({
     }
     if (type === 'switch') {
       return (  <div className="form-check form-switch ">
-          {/* <input className="form-check-input" type="checkbox" role="switch" id="switchCheckDefault"/> */}
          <input
           className="form-check-input"
           id={name}
           type="checkbox" role="switch"// keep spinner away
-          // placeholder={placeholder}
           {...inputProps}
             checked={inputProps.value}
-          // autoComplete="off"
-          // onKeyDown={handleKeyDownNumber}
         />
-         {/* <label className="form-check-label" htmlFor="switchCheckDefault">{placeholder}</label> */}
+        {inputProps.value}
         </div>
       );
-    }    if (type === 'checkbox') {
+    }  
+      if (type === 'checkbox') {
       return (  <div className="form-check  ">
           {/* <input className="form-check-input" type="checkbox" role="switch" id="switchCheckDefault"/> */}
          <input

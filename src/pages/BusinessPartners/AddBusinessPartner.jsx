@@ -13,7 +13,7 @@ const fields = {
     placeholder: "ID",
     initialValue: "<New>",
     disabled: true,
-    validation: Yup.string().required("ID is required"),
+    // validation: Yup.string().required("ID is required"),
   },
   partnerCode: {
     name: "partnerCode",
@@ -104,8 +104,9 @@ function AddBusinessPartner({ onCustomerCreated }) {
 
   const handleInquirySubmit = async (values, { resetForm }) => {
     console.log("Submitting business partner:", values);
-    const param = !id ? { ...values, id: parseInt(id) } : { ...values, id: parseInt(0) };
-    const savedPartner = await PartnerService.createPartner(param);
+    const param = id ? { ...values, id: parseInt(id) } : { ...values, id: parseInt(0) };
+
+    const savedPartner = await PartnerService.createPartner({...param,isSupplier:'ddd'});
 
     if (onCustomerCreated && typeof onCustomerCreated === "function") {
       // If this is being used in the inquiry flow, notify parent
@@ -132,8 +133,15 @@ function AddBusinessPartner({ onCustomerCreated }) {
     if (id) {
       const fetchInquiries = async () => {
         const inquiries = await PartnerService.getPartnerById(id);
+        console.log("Fetched inquiries:", inquiries);
         if (inquiries) {
-          formik.setValues(inquiries);
+          formik.setValues({
+            ...inquiries,
+            isCustomer: inquiries.isCustomer ? true : false,
+            isSupplier: inquiries.isSupplier ? true : false,
+            isEmployee: inquiries.isEmployee ? true : false,
+            active: inquiries.active ? true : false,
+          });
         }
       };
       fetchInquiries();
@@ -146,7 +154,7 @@ function AddBusinessPartner({ onCustomerCreated }) {
       <ConfirmationDialog />
       <div className="row g-5">
         <div className="col-md-12 col-lg-12">
-          <form onSubmit={formik.handleSubmit} noValidate>
+          <form onSubmit={formik.handleSubmit} >
             <div className="row g-3">
               <InputField className="col-sm-12" {...fields.ID} formik={formik} />
               <InputField className="col-sm-12" {...fields.partnerCode} formik={formik} />
@@ -162,7 +170,7 @@ function AddBusinessPartner({ onCustomerCreated }) {
                 <InputField className="col-4" {...fields.isEmployee} formik={formik} />
               </div>
               <InputField className="col-sm-6" {...fields.active} formik={formik} />
-              <button className="w-100 btn btn-primary btn-lg" type="submit"  onClick={() => console.log("Button clicked")}>
+              <button className="w-100 btn btn-primary btn-lg" type="submit" >
                 Save
               </button>
             </div>
