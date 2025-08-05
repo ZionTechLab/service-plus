@@ -1,14 +1,17 @@
 
 import * as Yup from "yup";
 import React, { useState } from "react";
-import InputField from "../helpers/InputField";
-import { useFormikBuilder } from "../helpers/formikBuilder";
-import usePopupMessage from "../components/PopupMessage";
-import DataGrid from "../components/DataGrid";
-import SelectedBusinessPartnerBox from "./BusinessPartners/select-bp";
-
+import { useParams } from "react-router-dom";
+import InputField from "../../helpers/InputField";
+import { useFormikBuilder } from "../../helpers/formikBuilder";
+import usePopupMessage from "../../components/PopupMessage";
+import DataGrid from "../../components/DataGrid";
+import SelectedBusinessPartnerBox from "../BusinessPartners/select-bp";
+import InvoiceService from "./InvoiceService";
 import  "./Invoice.css";
+
 function Invoice() {
+    const { id } = useParams();
     // Remove selectedPartner state, use formik and fields config for partner selection
   const [ConfirmationDialog, confirm] = usePopupMessage();
   // Define columns for DataGrid
@@ -135,9 +138,13 @@ function Invoice() {
 
   // Remove handleLineChange, handleLineAdd, handleLineRemove
 
-  const handleSubmit = (values, { resetForm }) => {
+  const handleSubmit = async (values, { resetForm }) => {
     console.log("Form submitted:", values);
     console.log("Line items:", lineItems);
+    const param = { ...values, invoiceNo: parseInt(id ? id : 0), lineItems };
+    console.log("Line items:", param);
+    const savedInvoice = await InvoiceService.createInvoice({...param});
+    console.log("Saved invoice:", savedInvoice);
     // For now, just show confirmation
     // confirm("Invoice saved!", { confirmText: "OK", type: "success" });
     resetForm();

@@ -106,6 +106,7 @@ function AddBusinessPartner({ onCustomerCreated }) {
     console.log("Submitting business partner:", values);
     const param = id ? { ...values, id: parseInt(id) } : { ...values, id: parseInt(0) };
 
+    
     const savedPartner = await PartnerService.createPartner({...param,isSupplier:'ddd'});
 
     if (onCustomerCreated && typeof onCustomerCreated === "function") {

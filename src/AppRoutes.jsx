@@ -1,4 +1,4 @@
-import Invoice from "./pages/Invoice";
+import Invoice from "./pages/Invoice/Invoice";
 import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
