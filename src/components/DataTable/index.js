@@ -314,7 +314,7 @@ const DataTable = ({ data = [], columns = [], name, children, onRowSelect }) => 
                       }}
                     >
                       {displayColumns.map((col, j) => (
-                        <td key={j}>
+                        <td key={j} className={` ${col.class || ""}`}>
                           {!col.isAction
                             ? row[col.field]
                             : col.actionTemplate

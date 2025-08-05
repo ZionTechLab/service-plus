@@ -1,5 +1,3 @@
-import Invoice from "./pages/Invoice/Invoice";
-import React from "react";
 import { Routes, Route, Navigate } from "react-router-dom";
 import LoginPage from "./pages/LoginPage";
 import MainLayout from "./layout/MainLayout";
@@ -10,6 +8,8 @@ import AddUser from "./pages/UserMaster/AddUser";
 import Inquary from "./pages/Inquary";
 import AddInquary from "./pages/Inquary/AddInquary";
 import InquiryView from "./pages/Inquary/InquiryView";
+import Invoice from "./pages/Invoice";
+// import AddInvoice from "./pages/Invoice/Invoice";
 // import AddBusinessPartner from "./pages/BusinessPartners/AddBusinessPartner";
 
 

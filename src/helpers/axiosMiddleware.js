@@ -6,7 +6,7 @@ export function handleAxiosError(error) {
   console.error("fff");
   let message;
   if (error.response) {
-    message = `API Error: ${
+    message = ` ${
       error.response.data?.message ||
       error.response.statusText ||
       "API error occurred."
@@ -20,7 +20,7 @@ export function handleAxiosError(error) {
   MessageBoxService.show({
     message,
     type: "danger",
-    confirmText: "Okay",
+    // confirmText: "Okay",
     onClose: null,
   });
   // Always reject so service methods can handle if needed
