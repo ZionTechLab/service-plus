@@ -45,31 +45,25 @@ function Invoice() {
       type: "text",
       placeholder: "Invoice No",
       initialValue: "<Auto>",
-      validation: Yup.string().required("Invoice No is required"),
+      // validation: Yup.string().required("Invoice No is required"),
       disabled: true,
+    },  
+      date: {
+      name: "date",
+      type: "date",
+      placeholder: "Invoice Date",
+      initialValue: new Date().toISOString().split("T")[0],
+      validation: Yup.string().required("Invoice Date is required"),
     },
     partner: {
-      name: "customer",
+      name: "partner",
       type: "partner-select",
       placeholder: "Customer",
       initialValue: "",
-      validation: Yup.string().required("Customer is required"),
+      // validation: Yup.string().required("Customer is required"),
       isOpen: false,
     },
-    to: {
-      name: "to",
-      type: "text",
-      placeholder: "To",
-      initialValue: "",
-      validation: Yup.string().required("To is required"),
-    },
-    address: {
-      name: "address",
-      type: "text",
-      placeholder: "Address",
-      initialValue: "",
-      validation: Yup.string().required("Address is required"),
-    },
+
     typeOfVehicle: {
       name: "typeOfVehicle",
       type: "select",
@@ -88,33 +82,21 @@ function Invoice() {
       initialValue: "car",
       validation: Yup.string().required("Type of Vehicle is required"),
     },
-    date: {
-      name: "date",
-      type: "date",
-      placeholder: "Invoice Date",
-      initialValue: new Date().toISOString().split("T")[0],
-      validation: Yup.string().required("Invoice Date is required"),
-    },
-    kmHours: {
-      name: "kmHours",
-      type: "amount",
-      placeholder: "K.M. / Hours",
-      initialValue: "",
-      validation: Yup.string(),
-    },
+
+
     preparedBy: {
       name: "preparedBy",
       type: "text",
       placeholder: "Prepared By",
       initialValue: "",
-      validation: Yup.string(),
+      // validation: Yup.string(),
     },
     receivedBy: {
       name: "receivedBy",
       type: "text",
       placeholder: "Received By",
       initialValue: "",
-      validation: Yup.string(),
+      // validation: Yup.string(),
     },
     amount: {
       name: "amount",
@@ -130,7 +112,7 @@ function Invoice() {
       type: "amount",
       placeholder: "Advance",
       initialValue: 0,
-      validation: Yup.number().typeError("Advance must be a number"),
+      // validation: Yup.number().typeError("Advance must be a number"),
        labelOnTop:false
     },
     totalAmount: {
@@ -154,8 +136,10 @@ function Invoice() {
   // Remove handleLineChange, handleLineAdd, handleLineRemove
 
   const handleSubmit = (values, { resetForm }) => {
+    console.log("Form submitted:", values);
+    console.log("Line items:", lineItems);
     // For now, just show confirmation
-    confirm("Invoice saved!", { confirmText: "OK", type: "success" });
+    // confirm("Invoice saved!", { confirmText: "OK", type: "success" });
     resetForm();
     setLineItems([{ ...emptyLineItem }]);
   };
@@ -208,9 +192,9 @@ function calculateTotal()
         <InputField {...fields.totalAmount} formik={formik} className="col-md-6 text-end" />
       </div>
       <div className="row g-3 mt-2">
-        <InputField {...fields.kmHours} formik={formik} className="col-md-4" />
-        <InputField {...fields.preparedBy} formik={formik} className="col-md-4" />
-        <InputField {...fields.receivedBy} formik={formik} className="col-md-4" />
+        {/* <InputField {...fields.kmHours} formik={formik} className="col-md-4" /> */}
+        <InputField {...fields.preparedBy} formik={formik} className="col-md-6" />
+        <InputField {...fields.receivedBy} formik={formik} className="col-md-6" />
       </div>
 
       <button className="w-100 btn btn-primary mt-3" type="submit">

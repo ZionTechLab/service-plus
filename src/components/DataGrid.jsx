@@ -34,6 +34,7 @@ function DataGrid({ columns, items: initialItems, onItemsChange }) {
         <table className="table table-bordered align-middle mb-0">
           <thead>
             <tr>
+              <th style={{ width: "40px" }}>#</th>
               {columns.map((col, i) => (
                 <th key={col.field || i} style={col.width ? { width: col.width } : {}}>
                   {col.header}
@@ -45,6 +46,7 @@ function DataGrid({ columns, items: initialItems, onItemsChange }) {
           <tbody>
             {items.map((item, idx) => (
               <tr key={idx} className={styles.tr}>
+                <td >{idx + 1}</td>
                 {columns.map((col, cidx) => (
                   <td key={col.field || cidx} className={styles.td}>
                     {col.type === "amount" ? (
@@ -91,18 +93,16 @@ function DataGrid({ columns, items: initialItems, onItemsChange }) {
                   </button>
                 </td>
               </tr>
-            ))}  
-             <tr  className={styles.tr}>
-              
-       {columns.map((col, i) => (
+            ))}
+            <tr className={styles.tr}>
+              <td></td>
+              {columns.map((col, i) => (
                 <td key={col.field || i} style={col.width ? { width: col.width } : {}}>
                   {/* {col.header} */}
                 </td>
               ))}
               <td style={{ width: "40px" }}></td>
-
-              
-                </tr>
+            </tr>
           </tbody>
         </table>
       </div>
