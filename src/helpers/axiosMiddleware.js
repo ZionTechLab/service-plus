@@ -12,7 +12,7 @@ export function handleAxiosError(error) {
       "API error occurred."
     }`;
   } else if (error.request) {
-    message = `Network Error: ${error.message}`;
+    message = ` ${error.message || "Network error occurred."}`;
   } else {
     message = `Error: ${error.message}`;
   }

@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import styles from "./InvoiceLineItems.module.css";
 // columns: [{ header, field, type, placeholder, width }]
 
-function DataGrid({ columns, items: initialItems, onItemsChange }) {
+function DataGrid({ columns,  initialItems, onItemsChange }) {
   const emptyLineItem = columns.reduce((acc, col) => ({ ...acc, [col.field]: "" }), {});
   const [items, setItems] = useState(initialItems && initialItems.length ? initialItems : [{ ...emptyLineItem }]);
 
@@ -12,6 +12,11 @@ function DataGrid({ columns, items: initialItems, onItemsChange }) {
     }
     // eslint-disable-next-line
   }, [items]);
+
+useEffect(() => {
+  setItems(initialItems);
+    // eslint-disable-next-line
+  }, [initialItems]);
 
   const handleChange = (idx, newItem) => {
     const updated = [...items];

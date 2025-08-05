@@ -1,4 +1,3 @@
-
 import { Link, useNavigate } from 'react-router-dom';
 import DataTable from '../../components/DataTable';
 import InvoiceService from './InvoiceService';
@@ -80,13 +79,14 @@ function InvoiceIndex() {
   ];
 
   return (
-    <div> 
-        {!uiData.loading && !uiData.error && (
-      <DataTable name="Invoice Export" data={uiData.data} columns={columns} >
-        <Link to="/invoice/add">
-          <button className="btn btn-primary">New</button>
-        </Link>
-      </DataTable>  )}
+    <div>
+      {!uiData.loading && !uiData.error && (
+        <DataTable name="Invoice Export" data={uiData.data} columns={columns}>
+          <Link to="/invoice/add">
+            <button className="btn btn-primary">New</button>
+          </Link>
+        </DataTable>
+      )}
       {uiData.error && (
         <div className="alert alert-danger mt-3">{uiData.error}</div>
       )}

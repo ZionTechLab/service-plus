@@ -21,7 +21,7 @@ export function MessageBoxProvider({ children }) {
             <div className="modal-dialog modal-dialog-centered">
               <div className="modal-content">
                 <div className={`modal-header bg-${options.type} text-white`}>
-                  <h5 className="modal-title">{options.type === 'danger' ? 'Confirm' : 'Success'}</h5>
+                  <h5 className="modal-title">{options.type === 'danger' ? 'Oops!' : 'Success'}</h5>
                 </div>
                 <div className="modal-body">
                   <p>{options.message}</p>

@@ -4,16 +4,16 @@ import React, { useState } from "react";
 import { useParams } from "react-router-dom";
 import InputField from "../../helpers/InputField";
 import { useFormikBuilder } from "../../helpers/formikBuilder";
-import usePopupMessage from "../../components/PopupMessage";
 import DataGrid from "../../components/DataGrid";
 import SelectedBusinessPartnerBox from "../BusinessPartners/select-bp";
 import InvoiceService from "./InvoiceService";
 import  "./Invoice.css";
+import MessageBoxService from "../../services/MessageBoxService";
 
 function Invoice() {
     const { id } = useParams();
     // Remove selectedPartner state, use formik and fields config for partner selection
-  const [ConfirmationDialog, confirm] = usePopupMessage();
+  // const [ConfirmationDialog, confirm] = usePopupMessage();
   // Define columns for DataGrid
   const lineItemColumns = [
     {
@@ -139,12 +139,16 @@ function Invoice() {
   // Remove handleLineChange, handleLineAdd, handleLineRemove
 
   const handleSubmit = async (values, { resetForm }) => {
-    console.log("Form submitted:", values);
-    console.log("Line items:", lineItems);
+
     const param = { ...values, invoiceNo: parseInt(id ? id : 0), lineItems };
-    console.log("Line items:", param);
+
     const savedInvoice = await InvoiceService.createInvoice({...param});
     console.log("Saved invoice:", savedInvoice);
+      MessageBoxService.show({
+    'message': 'Invoice saved successfully!',
+    'type': 'success',
+    onClose: null,
+  });
     // For now, just show confirmation
     // confirm("Invoice saved!", { confirmText: "OK", type: "success" });
     resetForm();
@@ -171,7 +175,7 @@ function calculateTotal()
 
   return (
     <div className="container mt-4">
-      {ConfirmationDialog}
+      {/* {ConfirmationDialog} */}
       <form onSubmit={formik.handleSubmit} noValidate>
       <div className="row g-3">
         <InputField {...fields.invoiceNo} formik={formik} className="col-md-6" />
@@ -183,7 +187,7 @@ function calculateTotal()
       <div className="row g-3 mt-2">
         <div className="col-12">
         <DataGrid
-          items={lineItems}
+          initialItems={lineItems}
           columns={lineItemColumns}
           onItemsChange={setLineItems}
         />
