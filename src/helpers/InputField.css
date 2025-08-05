@@ -2,3 +2,14 @@
   white-space: nowrap;
   margin-left: 0px !important;
 }
+.input-group label{
+width: 120px;
+padding-top: 5px;
+padding-bottom: 0px;
+}
+
+.input-group label::after {
+  content: ": ";
+  margin-left: 2px;
+   margin-right: 6px;
+}

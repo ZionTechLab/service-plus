@@ -12,7 +12,8 @@ function InputField({
   onChange,
   error,
   touched,
-  dataBinding,children,disabled
+  dataBinding,children,disabled,
+  labelOnTop=true
 }) {
 
   const hasFormik = !!formik;
@@ -229,8 +230,9 @@ function InputField({
   // Default return for other types
   return (
     <div className={`form-group ${className}`}>
-      <label className="form-label">{placeholder}</label>
+    {labelOnTop &&(<label className="form-label">{placeholder}</label>)}  
       <div className="input-group">
+            {!labelOnTop &&(<label className="form-label ">{placeholder}</label>)} 
         {renderInput()}
         {children}
       </div>

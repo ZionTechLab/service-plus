@@ -1,18 +1,32 @@
-import React, { useEffect ,useState} from "react";
+import React, { useEffect, useState } from "react";
 import DataTable from "../../components/DataTable";
 import PartnerService from "./PartnerService";
+import { useLoadingSpinner } from "../../hooks/useLoadingSpinner";
 
 function BusinessPartnerFind({ onCustomerSelect, onNewCustomer, children }) {
-    const [customers, setCustomers] = useState([]);
+  const { showSpinner, hideSpinner } = useLoadingSpinner();
+  const [uiData, setUiData] = useState({ loading: false, error: "", data: [] });
 
-    useEffect(() => {
-    const fetchPartners = async () => {
-      const storedPartners = await PartnerService.getAllPartners();
-      setCustomers(storedPartners);
+  useEffect(() => {
+    const fetchInquiries = async () => {
+      setUiData({ loading: true, error: "", data: [] });
+      showSpinner();
+      try {
+        const data = await PartnerService.getAllPartners();
+        setUiData((prev) => ({ ...prev, data }));
+      } catch (error) {
+        setUiData((prev) => ({
+          ...prev,
+          error: "Failed to fetch business partners. Please try again later.",
+        }));
+      } finally {
+        setUiData((prev) => ({ ...prev, loading: false }));
+        hideSpinner();
+      }
     };
-    fetchPartners();
+    fetchInquiries();
   }, []);
-  
+
   const customerColumns = [
     {
       field: "partnerName",
@@ -24,11 +38,13 @@ function BusinessPartnerFind({ onCustomerSelect, onNewCustomer, children }) {
     },
     {
       field: "phone1",
-      header: "Phone 1",class:'text-nowrap' 
+      header: "Phone 1",
+      class: "text-nowrap",
     },
     {
       field: "phone2",
-      header: "Phone 2",class:'text-nowrap' 
+      header: "Phone 2",
+      class: "text-nowrap",
     },
     {
       field: "email",
@@ -51,16 +67,19 @@ function BusinessPartnerFind({ onCustomerSelect, onNewCustomer, children }) {
 
   return (
     <div>
-      <DataTable
-        data={customers}
-        columns={customerColumns}
-        onRowSelect={onCustomerSelect}
-      >
-        {children}
-      </DataTable>
-      {/* <button className="btn btn-secondary mt-3" onClick={onNewCustomer}>
-        New Customer
-      </button> */}
+      {!uiData.loading && !uiData.error && (
+        <DataTable
+          data={uiData.data}
+          columns={customerColumns}
+          onRowSelect={onCustomerSelect}
+        >
+          {children}
+        </DataTable>
+      )}
+
+      {uiData.error && (
+        <div className="alert alert-danger mt-3">{uiData.error}</div>
+      )}
     </div>
   );
 }

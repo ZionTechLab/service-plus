@@ -4,6 +4,8 @@ import BusinessPartnerFind from "./BusinessPartnerFind";
 import PartnerService from "./PartnerService";
 import Tabs from "../../components/Tabs";
 import AddBusinessPartner from "./AddBusinessPartner";
+import MessageBoxService from '../../services/MessageBoxService';
+import { useLoadingSpinner } from '../../hooks/useLoadingSpinner';
 
 function SelectedBusinessPartnerBox({
   field,
@@ -17,11 +19,12 @@ function SelectedBusinessPartnerBox({
   ...props
 }) {
   const [open, setOpen] = React.useState(formik.isOpen);
+    const [uiData, setUiData] = React.useState({ error: '', data: [] });
   // Remove local modal state
   const [localSelectedPartner, setLocalSelectedPartner] = React.useState(selectedPartner);
   const [activeTab, setActiveTab] = React.useState('search');
   const [tabsInitialized, setTabsInitialized] = React.useState(false);
-
+  const { showSpinner, hideSpinner } = useLoadingSpinner();
   // React.useEffect(() => {
   //   console.log("init:", formik.values[field?.name]);
   // if(formik.values[field?.name]) {
@@ -43,19 +46,37 @@ function SelectedBusinessPartnerBox({
   }, [selectedPartner]);
 
   React.useEffect(() => {
-    console.log("Selected partner updated:", formik.values[field?.name]);
-  if(formik.values[field?.name]) {
-  console.log("Selected partner updated:", formik.values[field?.name]);
-    const fetchPartners = async () => {
-      const storedPartners = await PartnerService.getPartnerById(formik.values[field?.name]);
-       console.log(storedPartners);
-       setLocalSelectedPartner(storedPartners);
-      // const employees = storedPartners ? storedPartners.filter(p => p.isEmployee === true) : [];
-      // setAssigneeData(employees);
+      if(formik.values[field?.name]) {
+    const fetchInquiries = async () => {
+      showSpinner();
+      try {
+        const storedPartners = await PartnerService.getPartnerById(formik.values[field?.name]);
+        setLocalSelectedPartner(storedPartners);
+      } catch (error) {
+         setLocalSelectedPartner(null);
+        // setUiData({ error: 'Failed to fetch business partners. Please try again later.', data: [] });
+      } finally {
+        hideSpinner();
+      }
     };
-    fetchPartners();
+    fetchInquiries();
 
   }
+
+
+  //   console.log("Selected partner updated:", formik.values[field?.name]);
+  // if(formik.values[field?.name]) {
+  // console.log("Selected partner updated:", formik.values[field?.name]);
+  //   const fetchPartners = async () => {
+  //     const storedPartners = await PartnerService.getPartnerById(formik.values[field?.name]);
+  //      console.log(storedPartners);
+  //      setLocalSelectedPartner(storedPartners);
+  //     // const employees = storedPartners ? storedPartners.filter(p => p.isEmployee === true) : [];
+  //     // setAssigneeData(employees);
+  //   };
+  //   fetchPartners();
+
+  // }
 
           formik.setFieldTouched(field?.name, true);
   // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -150,7 +171,7 @@ function SelectedBusinessPartnerBox({
               onClick={() => setOpen((prev) => !prev)}
               style={{ flex: 1 }}
             >
-             {localSelectedPartner?.partnerName || localSelectedPartner?.partnerCode || "-"}
+          {localSelectedPartner?.partnerName || localSelectedPartner?.partnerCode || "-"}
             </button>
             <button
               className="btn btn-outline-secondary ms-2"

@@ -29,7 +29,7 @@ function DataGrid({ columns, items: initialItems, onItemsChange }) {
 
   return (
     <div className="mb-3">
-      <label className="form-label">Line Items</label>
+      {/* <label className="form-label">Line Items</label> */}
       <div className="table-responsive">
         <table className="table table-bordered align-middle mb-0">
           <thead>
@@ -39,7 +39,7 @@ function DataGrid({ columns, items: initialItems, onItemsChange }) {
                   {col.header}
                 </th>
               ))}
-              <th style={{ width: "15%" }}></th>
+              <th style={{ width: "40px" }}></th>
             </tr>
           </thead>
           <tbody>
@@ -49,13 +49,25 @@ function DataGrid({ columns, items: initialItems, onItemsChange }) {
                   <td key={col.field || cidx} className={styles.td}>
                     {col.type === "amount" ? (
                       <input
-                        type="number"
-                        step="0.01"
-                        min="0"
+                        type="text"
+                        inputMode="decimal"
+                        pattern="^\\d*(\\.\\d{0,2})?$"
                         className={`form-control text-end ${styles.sd}`}
-                        value={item[col.field] ?? ""}
-                        onChange={e => handleChange(idx, { ...item, [col.field]: e.target.value })}
+                        value={
+                          item[col.field] !== undefined && item[col.field] !== ""
+                            ? Number(item[col.field]).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                            : ""
+                        }
+                        onChange={e => {
+                          // Remove non-numeric except dot, allow max 2 decimals
+                          let val = e.target.value.replace(/[^\d.]/g, "");
+                          if (val.split(".").length > 2) val = val.replace(/\.+$/, "");
+                          if (/^\d*(\.\d{0,2})?$/.test(val)) {
+                            handleChange(idx, { ...item, [col.field]: val });
+                          }
+                        }}
                         placeholder={col.placeholder || col.header}
+                        maxLength={15}
                       />
                     ) : (
                       <input
@@ -79,7 +91,18 @@ function DataGrid({ columns, items: initialItems, onItemsChange }) {
                   </button>
                 </td>
               </tr>
-            ))}
+            ))}  
+             <tr  className={styles.tr}>
+              
+       {columns.map((col, i) => (
+                <td key={col.field || i} style={col.width ? { width: col.width } : {}}>
+                  {/* {col.header} */}
+                </td>
+              ))}
+              <td style={{ width: "40px" }}></td>
+
+              
+                </tr>
           </tbody>
         </table>
       </div>

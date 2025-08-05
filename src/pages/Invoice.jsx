@@ -7,6 +7,7 @@ import usePopupMessage from "../components/PopupMessage";
 import DataGrid from "../components/DataGrid";
 import SelectedBusinessPartnerBox from "./BusinessPartners/select-bp";
 
+import  "./Invoice.css";
 function Invoice() {
     // Remove selectedPartner state, use formik and fields config for partner selection
   const [ConfirmationDialog, confirm] = usePopupMessage();
@@ -22,17 +23,17 @@ function Invoice() {
     {
       header: "Amount",
       field: "amount",
-      type: "number",
-      placeholder: "Amount",
-      width: "25%"
-    },
-    {
-      header: "Total",
-      field: "total",
       type: "amount",
       placeholder: "Amount",
       width: "25%"
-    }
+    },
+    // {
+    //   header: "Total",
+    //   field: "total",
+    //   type: "amount",
+    //   placeholder: "Amount",
+    //   width: "25%"
+    // }
   ];
   const emptyLineItem = lineItemColumns.reduce((acc, col) => ({ ...acc, [col.field]: "" }), {});
   const [lineItems, setLineItems] = useState([ { ...emptyLineItem } ]);
@@ -115,12 +116,22 @@ function Invoice() {
       initialValue: "",
       validation: Yup.string(),
     },
+    amount: {
+      name: "amount",
+      type: "amount",
+      placeholder: "Amount",
+      initialValue: "",
+      validation: Yup.number().typeError("Amount must be a number"),
+            disabled: true,
+      labelOnTop:false
+    },
     advance: {
       name: "advance",
       type: "amount",
       placeholder: "Advance",
-      initialValue: "",
+      initialValue: 0,
       validation: Yup.number().typeError("Advance must be a number"),
+       labelOnTop:false
     },
     totalAmount: {
       name: "totalAmount",
@@ -129,6 +140,7 @@ function Invoice() {
       initialValue: "",
       validation: Yup.number().typeError("Total Amount must be a number"),
       disabled: true,
+       labelOnTop:false
     },
   };
 
@@ -152,50 +164,61 @@ function Invoice() {
 
   // Keep totalAmount in sync
   React.useEffect(() => {
-    console.log("Line items changed:", lineItems);
-    formik.setFieldValue("totalAmount", calcTotal());
+    calculateTotal();
     // eslint-disable-next-line
   }, [lineItems]);
+  React.useEffect(() => {
+    calculateTotal();
+    // eslint-disable-next-line
+  }, [formik.values.advance]);
+function calculateTotal()
+{
+    let c = calcTotal();
+    formik.setFieldValue("amount", c);
+    formik.setFieldValue("totalAmount", c - (parseFloat(formik.values.advance) || 0));
+}
 
   return (
     <div className="container mt-4">
       {ConfirmationDialog}
-      <h2 className="mb-3">Invoice</h2>
       <form onSubmit={formik.handleSubmit} noValidate>
-        <div className="row g-3">
-          <InputField {...fields.invoiceNo} formik={formik} className="col-md-6" />
-          <InputField {...fields.date} formik={formik} className="col-md-6" />
-          <SelectedBusinessPartnerBox field={fields.partner} formik={formik} />
+      <div className="row g-3">
+        <InputField {...fields.invoiceNo} formik={formik} className="col-md-6" />
+        <InputField {...fields.date} formik={formik} className="col-md-6" />
+        <SelectedBusinessPartnerBox field={fields.partner} formik={formik} />      
+        <InputField {...fields.typeOfVehicle} formik={formik} className="col-md-6" />
+      </div>
+
+      <div className="row g-3 mt-2">
+        <div className="col-12">
+        <DataGrid
+          items={lineItems}
+          columns={lineItemColumns}
+          onItemsChange={setLineItems}
+        />
         </div>
-        <div className="row g-3 mt-2">
-          {/* <InputField {...fields.to} formik={formik} className="col-md-6" /> */}
-          <InputField {...fields.typeOfVehicle} formik={formik} className="col-md-6" />
-          {/* <InputField {...fields.address} formik={formik} className="col-md-12" /> */}
-        </div>
-        <div className="row g-3 mt-2">
-          <div className="col-12">
-            <DataGrid
-              items={lineItems}
-              columns={lineItemColumns}
-              onItemsChange={setLineItems}
-            />
-          </div>
-        </div>
-        <div className="row g-3 mt-2">
-          <InputField {...fields.kmHours} formik={formik} className="col-md-4" />
-          <InputField {...fields.preparedBy} formik={formik} className="col-md-4" />
-          <InputField {...fields.receivedBy} formik={formik} className="col-md-4" />
-        </div>
-        <div className="row g-3 mt-2">
-          <InputField {...fields.advance} formik={formik} className="col-md-4" />
-          <InputField {...fields.totalAmount} formik={formik} className="col-md-4" />
-        </div>
-        <button className="w-100 btn btn-primary mt-3" type="submit">
-          Submit
-        </button>
+      </div>      
+      <div className="row  justify-content-end">
+        <InputField {...fields.amount} formik={formik} className="col-md-6 text-end " />
+      </div>
+      <div className="row  justify-content-end">
+        <InputField {...fields.advance} formik={formik} className="col-md-6 text-end" />
+      </div>
+      <div className="row  justify-content-end">
+        <InputField {...fields.totalAmount} formik={formik} className="col-md-6 text-end" />
+      </div>
+      <div className="row g-3 mt-2">
+        <InputField {...fields.kmHours} formik={formik} className="col-md-4" />
+        <InputField {...fields.preparedBy} formik={formik} className="col-md-4" />
+        <InputField {...fields.receivedBy} formik={formik} className="col-md-4" />
+      </div>
+
+      <button className="w-100 btn btn-primary mt-3" type="submit">
+        Submit
+      </button>
       </form>
     </div>
-  );
+    );
 }
 
 export default Invoice;
