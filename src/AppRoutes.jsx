@@ -70,7 +70,7 @@ const AppRoutes = ({ isLoggedIn }) => (
       <Route path="profile" element={<Profile />} />
       <Route path="grn" element={<Grn />} />
       <Route path="invoice" element={<Invoice />} />
-           <Route path="invoice/add" element={<AddInvoice />} />
+      <Route path="invoice/add" element={<AddInvoice />} />
     </Route>
   </Routes>
 );
