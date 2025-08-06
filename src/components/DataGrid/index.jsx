@@ -13,11 +13,6 @@ function DataGrid({ columns,  initialItems, onItemsChange }) {
     // eslint-disable-next-line
   }, [items]);
 
-useEffect(() => {
-  setItems(initialItems);
-    // eslint-disable-next-line
-  }, [initialItems]);
-
   const handleChange = (idx, newItem) => {
     const updated = [...items];
     updated[idx] = newItem;
