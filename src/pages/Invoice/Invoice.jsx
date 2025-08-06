@@ -1,6 +1,6 @@
 
 import * as Yup from "yup";
-import React, { useState } from "react";
+import React, { useState,useRef } from "react";
 import { useParams } from "react-router-dom";
 import InputField from "../../helpers/InputField";
 import { useFormikBuilder } from "../../helpers/formikBuilder";
@@ -12,6 +12,7 @@ import MessageBoxService from "../../services/MessageBoxService";
 
 function Invoice() {
     const { id } = useParams();
+    const dataGridRef = useRef();
     // Remove selectedPartner state, use formik and fields config for partner selection
   // const [ConfirmationDialog, confirm] = usePopupMessage();
   // Define columns for DataGrid
@@ -152,6 +153,7 @@ function Invoice() {
     // For now, just show confirmation
     // confirm("Invoice saved!", { confirmText: "OK", type: "success" });
     resetForm();
+    dataGridRef.current.reset();
     setLineItems([{ ...emptyLineItem }]);
   };
 
@@ -186,11 +188,12 @@ function calculateTotal()
 
       <div className="row g-3 mt-2">
         <div className="col-12">
-        <DataGrid
+          <DataGrid ref={dataGridRef}   initialItems={lineItems} columns={lineItemColumns} onItemsChange={setLineItems} />
+        {/* <DataGrid
           initialItems={lineItems}
           columns={lineItemColumns}
           onItemsChange={setLineItems}
-        />
+        /> */}
         </div>
       </div>      
       <div className="row  justify-content-end">

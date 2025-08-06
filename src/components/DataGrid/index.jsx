@@ -1,10 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, forwardRef, useImperativeHandle } from "react";
 import styles from "./InvoiceLineItems.module.css";
 // columns: [{ header, field, type, placeholder, width }]
 
-function DataGrid({ columns,  initialItems, onItemsChange }) {
+const DataGrid = forwardRef(({ columns,  initialItems, onItemsChange }, ref) => {
   const emptyLineItem = columns.reduce((acc, col) => ({ ...acc, [col.field]: "" }), {});
   const [items, setItems] = useState(initialItems && initialItems.length ? initialItems : [{ ...emptyLineItem }]);
+
+  useImperativeHandle(ref, () => ({
+    reset: () => {
+      setItems([{ ...emptyLineItem }]);
+    }
+  }));
+
+
 
   useEffect(() => {
     if (typeof onItemsChange === "function") {
@@ -111,6 +119,8 @@ function DataGrid({ columns,  initialItems, onItemsChange }) {
       </button>
     </div>
   );
-}
+});
+
+DataGrid.displayName = 'DataGrid';
 
 export default DataGrid;
