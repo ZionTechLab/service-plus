@@ -18,7 +18,6 @@ function SelectedBusinessPartnerBox({
   ...props
 }) {
   const [open, setOpen] = React.useState(formik.isOpen);
-    // const [uiData, setUiData] = React.useState({ error: '', data: [] });
   const [localSelectedPartner, setLocalSelectedPartner] = React.useState(selectedPartner);
   const [activeTab, setActiveTab] = React.useState('search');
   const [tabsInitialized, setTabsInitialized] = React.useState(false);
@@ -33,47 +32,31 @@ function SelectedBusinessPartnerBox({
       const fetchInquiries = async () => {
         showSpinner();
         try {
-          const storedPartners = await PartnerService.getPartnerById(
-            formik.values[field?.name]
-          );
+          const storedPartners = await PartnerService.getPartnerById(formik.values[field?.name]);
           setLocalSelectedPartner(storedPartners);
         } catch (error) {
           setLocalSelectedPartner(null);
-          // setUiData({ error: 'Failed to fetch business partners. Please try again later.', data: [] });
         } finally {
           hideSpinner();
         }
       };
       fetchInquiries();
     }
-
-    //   console.log("Selected partner updated:", formik.values[field?.name]);
-    // if(formik.values[field?.name]) {
-    // console.log("Selected partner updated:", formik.values[field?.name]);
-    //   const fetchPartners = async () => {
-    //     const storedPartners = await PartnerService.getPartnerById(formik.values[field?.name]);
-    //      console.log(storedPartners);
-    //      setLocalSelectedPartner(storedPartners);
-    //     // const employees = storedPartners ? storedPartners.filter(p => p.isEmployee === true) : [];
-    //     // setAssigneeData(employees);
-    //   };
-    //   fetchPartners();
-
-    // }
-
-    formik.setFieldTouched(field?.name, true);
+else{
+  setLocalSelectedPartner(null)
+}
+    // formik.setFieldTouched(field?.name, true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values[field?.name]]);
 
   const { openModal, closeModal } = useModalService();
 
   const handleCustomerSelect = (customer) => {
-    console.log("handleCustomerSelect", customer);
+    // console.log("handleCustomerSelect", customer);
     setLocalSelectedPartner(customer);
     closeModal();
-    // Field object pattern - update formik
     formik.setFieldValue(field?.name, customer.id || "");
-    console.log("Formik values after setFieldValue:", formik.values);
+    // console.log("Formik values after setFieldValue:", formik.values);
     if (onCustomerSelect) {
       onCustomerSelect(customer);
     }
@@ -83,15 +66,13 @@ function SelectedBusinessPartnerBox({
   };
 
   const handleNewCustomerClick = () => {
-    setActiveTab('add-customer');
+    setActiveTab("add-customer");
     if (!tabsInitialized) {
       setTabsInitialized(true);
     }
   };
 
   const handleCustomerCreated = (newCustomer) => {
-    console.log("New customer created:", newCustomer);
-    // Customer was successfully created, now select it
     handleCustomerSelect(newCustomer);
     setActiveTab('search');
     closeModal();
@@ -108,12 +89,6 @@ function SelectedBusinessPartnerBox({
               onCustomerSelect={handleCustomerSelect}
               onNewCustomer={handleNewCustomerClick}
             >
-              {/* <button
-                className="btn btn-primary"
-                onClick={handleNewCustomerClick}
-              >
-                Add New Customer
-              </button> */}
             </BusinessPartnerFind>
           )}
           {tabId === 'add-customer' && (
@@ -139,7 +114,6 @@ function SelectedBusinessPartnerBox({
     { id: 'add-customer', label: 'Add New Customer', disabled: false }
   ];
 
-//   if (!selectedPartner) return null;
   return (
     <div className={className || "col-sm-12"}>      
       <label className="form-label">{field?.placeholder || "Customer"}</label>
@@ -201,7 +175,6 @@ function SelectedBusinessPartnerBox({
           </div>
         </div>
       </div>
-      {/* Error display for field pattern */}
       {formik.errors[field?.name] && formik.touched[field?.name] && (
         <div className="text-danger small mt-1">
           {formik.errors[field?.name]}

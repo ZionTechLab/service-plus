@@ -1,4 +1,3 @@
-
 import * as Yup from "yup";
 import React, { useState,useRef } from "react";
 import { useParams } from "react-router-dom";
@@ -7,42 +6,30 @@ import { useFormikBuilder } from "../../helpers/formikBuilder";
 import DataGrid from "../../components/DataGrid";
 import SelectedBusinessPartnerBox from "../BusinessPartners/select-bp";
 import InvoiceService from "./InvoiceService";
-import  "./Invoice.css";
 import MessageBoxService from "../../services/MessageBoxService";
+import  "./Invoice.css";
 
 function Invoice() {
-    const { id } = useParams();
-    const dataGridRef = useRef();
-    // Remove selectedPartner state, use formik and fields config for partner selection
-  // const [ConfirmationDialog, confirm] = usePopupMessage();
-  // Define columns for DataGrid
+  const { id } = useParams();
+  const dataGridRef = useRef();
+  const [lineItems, setLineItems] = useState([]);
+
   const lineItemColumns = [
     {
       header: "Description",
       field: "description",
       type: "text",
       placeholder: "Description",
-      // width: "60%"
     },
     {
       header: "Amount",
       field: "amount",
       type: "amount",
       placeholder: "Amount",
-      width: "25%"
+      width: "25%",
     },
-    // {
-    //   header: "Total",
-    //   field: "total",
-    //   type: "amount",
-    //   placeholder: "Amount",
-    //   width: "25%"
-    // }
   ];
-  const emptyLineItem = lineItemColumns.reduce((acc, col) => ({ ...acc, [col.field]: "" }), {});
-  const [lineItems, setLineItems] = useState([ { ...emptyLineItem } ]);
 
-  // Field configuration based on invoice image
   const fields = {
     invoiceNo: {
       name: "invoiceNo",
@@ -51,8 +38,8 @@ function Invoice() {
       initialValue: "<Auto>",
       // validation: Yup.string().required("Invoice No is required"),
       disabled: true,
-    },  
-      date: {
+    },
+    date: {
       name: "date",
       type: "date",
       placeholder: "Invoice Date",
@@ -87,7 +74,6 @@ function Invoice() {
       validation: Yup.string().required("Type of Vehicle is required"),
     },
 
-
     preparedBy: {
       name: "preparedBy",
       type: "text",
@@ -108,8 +94,8 @@ function Invoice() {
       placeholder: "Amount",
       initialValue: "",
       validation: Yup.number().typeError("Amount must be a number"),
-            disabled: true,
-      labelOnTop:false
+      disabled: true,
+      labelOnTop: false,
     },
     advance: {
       name: "advance",
@@ -117,7 +103,7 @@ function Invoice() {
       placeholder: "Advance",
       initialValue: 0,
       // validation: Yup.number().typeError("Advance must be a number"),
-       labelOnTop:false
+      labelOnTop: false,
     },
     totalAmount: {
       name: "totalAmount",
@@ -126,97 +112,120 @@ function Invoice() {
       initialValue: "",
       validation: Yup.number().typeError("Total Amount must be a number"),
       disabled: true,
-       labelOnTop:false
+      labelOnTop: false,
     },
   };
 
-  // Calculate total from line items
   const calcTotal = () => {
-    let xx=lineItems.reduce((sum, item) => sum + (parseFloat(item.amount) || 0), 0);
-    console.log("Total calculated:", xx);
+    let xx = lineItems.reduce(
+      (sum, item) => sum + (parseFloat(item.amount) || 0), 0
+    );
     return xx;
   };
 
-  // Remove handleLineChange, handleLineAdd, handleLineRemove
-
   const handleSubmit = async (values, { resetForm }) => {
-
     const param = { ...values, invoiceNo: parseInt(id ? id : 0), lineItems };
+    const savedInvoice = await InvoiceService.createInvoice({ ...param });
 
-    const savedInvoice = await InvoiceService.createInvoice({...param});
-    console.log("Saved invoice:", savedInvoice);
-      MessageBoxService.show({
-    'message': 'Invoice saved successfully!',
-    'type': 'success',
-    onClose: null,
-  });
-    // For now, just show confirmation
-    // confirm("Invoice saved!", { confirmText: "OK", type: "success" });
+    MessageBoxService.show({
+      message: "Invoice saved successfully!",
+      type: "success",
+      onClose: null,
+    });
     resetForm();
     dataGridRef.current.reset();
-    setLineItems([{ ...emptyLineItem }]);
+    setLineItems([]);
   };
 
   const formik = useFormikBuilder(fields, handleSubmit);
 
-  // Keep totalAmount in sync
   React.useEffect(() => {
     calculateTotal();
     // eslint-disable-next-line
   }, [lineItems]);
+
   React.useEffect(() => {
     calculateTotal();
     // eslint-disable-next-line
   }, [formik.values.advance]);
-function calculateTotal()
-{
+  
+  function calculateTotal() {
     let c = calcTotal();
     formik.setFieldValue("amount", c);
-    formik.setFieldValue("totalAmount", c - (parseFloat(formik.values.advance) || 0));
-}
+    formik.setFieldValue(
+      "totalAmount",
+      c - (parseFloat(formik.values.advance) || 0)
+    );
+  }
 
   return (
     <div className="container mt-4">
-      {/* {ConfirmationDialog} */}
       <form onSubmit={formik.handleSubmit} noValidate>
-      <div className="row g-3">
-        <InputField {...fields.invoiceNo} formik={formik} className="col-md-6" />
-        <InputField {...fields.date} formik={formik} className="col-md-6" />
-        <SelectedBusinessPartnerBox field={fields.partner} formik={formik} />      
-        <InputField {...fields.typeOfVehicle} formik={formik} className="col-md-6" />
-      </div>
-
-      <div className="row g-3 mt-2">
-        <div className="col-12">
-          <DataGrid ref={dataGridRef}   initialItems={lineItems} columns={lineItemColumns} onItemsChange={setLineItems} />
-        {/* <DataGrid
-          initialItems={lineItems}
-          columns={lineItemColumns}
-          onItemsChange={setLineItems}
-        /> */}
+        <div className="row g-3">
+          <InputField
+            {...fields.invoiceNo}
+            formik={formik}
+            className="col-md-6"
+          />
+          <InputField {...fields.date} formik={formik} className="col-md-6" />
+          <SelectedBusinessPartnerBox field={fields.partner} formik={formik} />
+          <InputField
+            {...fields.typeOfVehicle}
+            formik={formik}
+            className="col-md-6"
+          />
         </div>
-      </div>      
-      <div className="row  justify-content-end">
-        <InputField {...fields.amount} formik={formik} className="col-md-6 text-end " />
-      </div>
-      <div className="row  justify-content-end">
-        <InputField {...fields.advance} formik={formik} className="col-md-6 text-end" />
-      </div>
-      <div className="row  justify-content-end">
-        <InputField {...fields.totalAmount} formik={formik} className="col-md-6 text-end" />
-      </div>
-      <div className="row g-3 mt-2">
-        {/* <InputField {...fields.kmHours} formik={formik} className="col-md-4" /> */}
-        <InputField {...fields.preparedBy} formik={formik} className="col-md-6" />
-        <InputField {...fields.receivedBy} formik={formik} className="col-md-6" />
-      </div>
 
-      <button className="w-100 btn btn-primary mt-3" type="submit">
-        Submit
-      </button>
+        <div className="row g-3 mt-2">
+          <div className="col-12">
+            <DataGrid
+              ref={dataGridRef}
+              initialItems={lineItems}
+              columns={lineItemColumns}
+              onItemsChange={setLineItems}
+            />
+          </div>
+        </div>
+        <div className="row  justify-content-end">
+          <InputField
+            {...fields.amount}
+            formik={formik}
+            className="col-md-6 text-end "
+          />
+        </div>
+        <div className="row  justify-content-end">
+          <InputField
+            {...fields.advance}
+            formik={formik}
+            className="col-md-6 text-end"
+          />
+        </div>
+        <div className="row  justify-content-end">
+          <InputField
+            {...fields.totalAmount}
+            formik={formik}
+            className="col-md-6 text-end"
+          />
+        </div>
+        <div className="row g-3 mt-2">
+          <InputField
+            {...fields.preparedBy}
+            formik={formik}
+            className="col-md-6"
+          />
+          <InputField
+            {...fields.receivedBy}
+            formik={formik}
+            className="col-md-6"
+          />
+        </div>
+
+        <button className="w-100 btn btn-primary mt-3" type="submit">
+          Submit
+        </button>
       </form>
     </div>
-    );
+  );
 }
 
 export default Invoice;
