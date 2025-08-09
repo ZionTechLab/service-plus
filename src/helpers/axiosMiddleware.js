@@ -1,9 +1,8 @@
 import axios from "axios";
 import MessageBoxService from "../services/MessageBoxService";
-// ...existing code...
-// Generic error handler for Axios errors
+
 export function handleAxiosError(error) {
-  console.error("fff");
+
   let message;
   if (error.response) {
     message = ` ${
@@ -16,26 +15,34 @@ export function handleAxiosError(error) {
   } else {
     message = `Error: ${error.message}`;
   }
-  console.error(message);
   MessageBoxService.show({
     message,
     type: "danger",
-    // confirmText: "Okay",
     onClose: null,
   });
-  // Always reject so service methods can handle if needed
-  throw new Error("Failed to create partner");
+  return message;
 }
+
 // Centralized axios request wrapper
 export async function axiosRequest(requestPromise) {
   try {
+    // console.log("Sending request...");
     const res = await requestPromise;
-    return res;
+    return {
+      data: res.data,
+      error: null,
+      success: true,
+    };
   } catch (error) {
-    handleAxiosError(error);
-    throw error;
+    // console.log("Request failed:");
+    const errorMessage = handleAxiosError(error);
+    // console.log("Request failed:", errorMessage);
+    return {
+      data: null,
+      error: errorMessage,
+      success: false,
+    };
   }
 }
-// ...existing code...
 
 export default axios;

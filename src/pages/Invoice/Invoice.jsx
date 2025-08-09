@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import React, { useState,useRef } from "react";
+import React, { useState,useRef,useEffect } from "react";
 import { useParams } from "react-router-dom";
 import InputField from "../../helpers/InputField";
 import { useFormikBuilder } from "../../helpers/formikBuilder";
@@ -9,10 +9,44 @@ import InvoiceService from "./InvoiceService";
 import MessageBoxService from "../../services/MessageBoxService";
 import  "./Invoice.css";
 
+// Helper to cast date to yyyy-mm-dd format
+function castDate(date) {
+  if (!date) return "";
+  const d = new Date(date);
+  
+  if (isNaN(d)) return "";
+  return d.toISOString().split("T")[0];
+}
+
 function Invoice() {
   const { id } = useParams();
   const dataGridRef = useRef();
   const [lineItems, setLineItems] = useState([]);
+
+  useEffect(() => {
+    if (id) {
+      const fetchInquiries = async () => {
+        console.log("Fetching inquiries with ID:", id);
+        const inquiries = await InvoiceService.getInvoiceById(id);
+        console.log("Fetched inquiries:", inquiries);
+        if (inquiries) {
+          console.log(inquiries.date );
+          formik.setValues({
+            ...inquiries,
+            preparedBy: 'dddd',
+            date: inquiries.date ? inquiries.date.split("T")[0] : "",
+            // isCustomer: inquiries.isCustomer ? true : false,
+            // isSupplier: inquiries.isSupplier ? true : false,
+            // isEmployee: inquiries.isEmployee ? true : false,
+            // active: inquiries.active ? true : false,
+          });
+        }
+      };
+      fetchInquiries();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
 
   const lineItemColumns = [
     {
@@ -139,12 +173,12 @@ function Invoice() {
 
   const formik = useFormikBuilder(fields, handleSubmit);
 
-  React.useEffect(() => {
+  useEffect(() => {
     calculateTotal();
     // eslint-disable-next-line
   }, [lineItems]);
 
-  React.useEffect(() => {
+  useEffect(() => {
     calculateTotal();
     // eslint-disable-next-line
   }, [formik.values.advance]);

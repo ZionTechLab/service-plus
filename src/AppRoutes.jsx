@@ -69,8 +69,10 @@ const AppRoutes = ({ isLoggedIn }) => (
       <Route path="add-item" element={<AddItem />} />
       <Route path="profile" element={<Profile />} />
       <Route path="grn" element={<Grn />} />
+
       <Route path="invoice" element={<Invoice />} />
       <Route path="invoice/add" element={<AddInvoice />} />
+        <Route path="invoice/edit/:id" element={<AddInvoice />} />
     </Route>
   </Routes>
 );

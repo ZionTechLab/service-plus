@@ -11,6 +11,9 @@ function BusinessPartners() {
   const { showSpinner, hideSpinner } = useLoadingSpinner();
 
   useEffect(() => {
+
+
+    
     const fetchInquiries = async () => {
       showSpinner();
       try {
@@ -46,6 +49,7 @@ function BusinessPartners() {
     navigate(`/business-partner/edit/${id}`);
   };
 
+  
   const columns = [
     {
       header: "Actions",

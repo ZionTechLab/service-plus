@@ -6,7 +6,7 @@ import MessageBoxService from '../../services/MessageBoxService';
 import { useLoadingSpinner } from '../../hooks/useLoadingSpinner';
 
 function InvoiceIndex() {
-  const [uiData, setUiData] = useState({loading: false, error: '', data: [] });
+  const [uiData, setUiData] = useState({loading: false, success: false, error: '', data: [] });
   const navigate = useNavigate();
   const { showSpinner, hideSpinner } = useLoadingSpinner();
 
@@ -14,15 +14,9 @@ function InvoiceIndex() {
     const fetchInvoices = async () => {
       setUiData(prev => ({ ...prev, loading: true, error: '', data: [] }));
       showSpinner();
-      try {
         const data = await InvoiceService.getAllInvoices();
-        setUiData(prev => ({ ...prev, data }));
-      } catch (error) {
-        setUiData(prev => ({ ...prev, error: 'Failed to fetch invoices. Please try again later.' }));
-      } finally {
-        setUiData(prev => ({ ...prev, loading: false }));
+        setUiData(prev => ({ ...prev, ...data , loading: false }));
         hideSpinner();
-      }
     };
     fetchInvoices();
     // eslint-disable-next-line
@@ -44,7 +38,7 @@ function InvoiceIndex() {
   };
 
   const handleEdit = (id) => {
-    navigate(`/invoice/${id}`);
+    navigate(`/invoice/edit/${id}`);
   };
 
   const columns = [
@@ -56,20 +50,21 @@ function InvoiceIndex() {
           <button
             className="btn btn-outline-primary btn-icon btn-sm"
             title="Edit"
-            onClick={() => handleEdit(row.id)}
+            onClick={() => handleEdit(row.txnIndex)}
           >
             <i className="bi bi-pencil"></i>
           </button>
           <button
             className="btn btn-outline-danger btn-icon btn-sm"
             title="Delete"
-            onClick={() => handleDelete(row.id)}
+            onClick={() => handleDelete(row.txnIndex)}
           >
             <i className="bi bi-trash"></i>
           </button>
         </div>
       ),
-    },
+    },  
+      { header: 'txnIndex', field: 'txnIndex',class:'text-nowrap d-none' },
     { header: 'Invoice No', field: 'invoiceNo',class:'text-nowrap' },
     { header: 'Date', field: 'date',class:'text-nowrap' },
     { header: 'Customer', field: 'partner',class:'text-nowrap' },

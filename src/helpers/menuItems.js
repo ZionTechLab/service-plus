@@ -14,7 +14,7 @@ const menuItems = [
   { route: '/item-category', displayName: 'Item Category', icon: 'bi bi-tags',isMenuItem: true },
   { route: '/grn', displayName: 'GRN', icon: 'bi bi-receipt',isMenuItem: true },
   { route: '/invoice', displayName: 'Invoice', icon: 'bi bi-file-earmark-text', isMenuItem: true },
-  { route: '/invoice/add', displayName: 'Add Invoice', icon: 'bi bi-file-earmark-text', isMenuItem: true },
+  { route: '/invoice/add', displayName: 'Add Invoice', icon: 'bi bi-file-earmark-text' },
 ];
 
 export default menuItems;
