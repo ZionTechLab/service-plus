@@ -156,7 +156,8 @@ function Invoice() {
   const handleInquirySubmit = async (values, { resetForm } ) => {
     const param = { ...values, invoiceNo: parseInt(id ? id : 0), lineItems };
     console.log("Submitting invoice with values:", param);
-    const savedInvoice = await InvoiceService.createInvoice({ ...param });
+    // const savedInvoice = 
+    await InvoiceService.createInvoice({ ...param });
 
     MessageBoxService.show({
       message: "Invoice saved successfully!",
