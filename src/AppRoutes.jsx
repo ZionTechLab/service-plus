@@ -3,6 +3,8 @@ import LoginPage from "./pages/LoginPage";
 import MainLayout from "./layout/MainLayout";
 import BusinessPartner from "./pages/BusinessPartners";
 import AddBusinessPartner from "./pages/BusinessPartners/AddBusinessPartner";
+import VehicaleConfirmation from "./pages/VehicaleConfirmation";
+import AddConfirmation from "./pages/VehicaleConfirmation/AddConfirmation";
 import UserMaster from "./pages/UserMaster";
 import AddUser from "./pages/UserMaster/AddUser";
 import Inquary from "./pages/Inquary";
@@ -52,6 +54,10 @@ const AppRoutes = ({ isLoggedIn }) => (
     > <Route path="business-partner" element={<BusinessPartner />} />
       <Route path="business-partner/add" element={<AddBusinessPartner />} />
       <Route path="business-partner/edit/:id" element={<AddBusinessPartner />} />   
+
+      <Route path="vehicale-confirmation" element={<VehicaleConfirmation />} />
+      <Route path="vehicale-confirmation/add" element={<AddConfirmation />} />
+      <Route path="vehicale-confirmation/edit/:id" element={<AddConfirmation />} />
       <Route path="inquiry" element={<Inquary />} />
       <Route path="inquiry/add" element={<AddInquary />} />
       <Route path="inquiry/edit/:id" element={<AddInquary />} />

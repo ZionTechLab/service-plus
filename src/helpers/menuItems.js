@@ -15,6 +15,9 @@ const menuItems = [
   { route: '/grn', displayName: 'GRN', icon: 'bi bi-receipt',isMenuItem: true },
   { route: '/invoice', displayName: 'Invoice', icon: 'bi bi-file-earmark-text', isMenuItem: true },
   { route: '/invoice/add', displayName: 'Add Invoice', icon: 'bi bi-file-earmark-text' },
+
+  { route: '/vehicale-confirmation', displayName: 'Vehicle Confirmation', icon: 'bi bi-file-earmark-text', isMenuItem: true },
+  { route: '/vehicale-confirmation/add', displayName: 'Add Vehicle Confirmation', icon: 'bi bi-file-earmark-text' },
 ];
 
 export default menuItems;
