@@ -34,7 +34,22 @@ const DataGrid = forwardRef(({ columns,  initialItems, onItemsChange }, ref) => 
       setItems(items.filter((_, i) => i !== idx));
     }
   };
+  const formatAmount = (val) => {
+    if (val === undefined || val === null || val === '') return '';
+    // Remove all non-numeric except dot
+    let cleaned = String(val).replace(/[^\d.]/g, '');
+    // Only allow one dot
+    const parts = cleaned.split('.');
+    if (parts.length > 2) cleaned = parts[0] + '.' + parts.slice(1).join('');
+    // Limit to 2 decimals
+    if (cleaned.includes('.')) {
+      const [intPart, decPart] = cleaned.split('.');
+      cleaned = intPart + '.' + decPart.slice(0, 2);
 
+    }
+       cleaned = cleaned.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
+    return cleaned;
+  };
   return (
     <div className="mb-3">
       {/* <label className="form-label">Line Items</label> */}
@@ -61,20 +76,21 @@ const DataGrid = forwardRef(({ columns,  initialItems, onItemsChange }, ref) => 
                       <input
                         type="text"
                         inputMode="decimal"
-                        pattern="^\\d*(\\.\\d{0,2})?$"
+                        // pattern="^\\d*(\\.\\d{0,2})?$"
                         className={`form-control text-end ${styles.sd}`}
-                        value={
-                          item[col.field] !== undefined && item[col.field] !== ""
-                            ? Number(item[col.field]).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
-                            : ""
-                        }
+                            value={formatAmount(item[col.field])}
+                        // value={
+                        //   item[col.field] !== undefined && item[col.field] !== ""
+                        //     ? Number(item[col.field]).toLocaleString(undefined, { minimumFractionDigits: 2, maximumFractionDigits: 2 })
+                        //     : ""
+                        // }
                         onChange={e => {
                           // Remove non-numeric except dot, allow max 2 decimals
-                          let val = e.target.value.replace(/[^\d.]/g, "");
-                          if (val.split(".").length > 2) val = val.replace(/\.+$/, "");
-                          if (/^\d*(\.\d{0,2})?$/.test(val)) {
-                            handleChange(idx, { ...item, [col.field]: val });
-                          }
+                          // let val = e.target.value.replace(/[^\d.]/g, "");
+                          // if (val.split(".").length > 2) val = val.replace(/\.+$/, "");
+                          // if (/^\d*(\.\d{0,2})?$/.test(val)) {
+                            handleChange(idx, { ...item, [col.field]: e.target.value });
+                          // }
                         }}
                         placeholder={col.placeholder || col.header}
                         maxLength={15}

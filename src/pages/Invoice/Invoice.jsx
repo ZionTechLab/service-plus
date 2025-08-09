@@ -1,5 +1,5 @@
 import * as Yup from "yup";
-import React, { useState,useRef,useEffect } from "react";
+import { useState,useRef,useEffect } from "react";
 import { useParams } from "react-router-dom";
 import InputField from "../../helpers/InputField";
 import { useFormikBuilder } from "../../helpers/formikBuilder";
@@ -26,10 +26,6 @@ function Invoice() {
             ...inquiries,
             preparedBy: 'dddd',
             date: inquiries.date ? inquiries.date.split("T")[0] : "",
-            // isCustomer: inquiries.isCustomer ? true : false,
-            // isSupplier: inquiries.isSupplier ? true : false,
-            // isEmployee: inquiries.isEmployee ? true : false,
-            // active: inquiries.active ? true : false,
           });
         }
       };
@@ -76,7 +72,7 @@ function Invoice() {
       type: "partner-select",
       placeholder: "Customer",
       initialValue: "",
-      // validation: Yup.string().required("Customer is required"),
+      validation: Yup.string().required("Customer is required"),
       isOpen: false,
     },
 
@@ -111,14 +107,16 @@ function Invoice() {
       type: "text",
       placeholder: "Received By",
       initialValue: "",
-      validation: Yup.string(),
+    //  validation: Yup.string().required("Received By is required"),
     },
     amount: {
       name: "amount",
       type: "amount",
       placeholder: "Amount",
       initialValue: "",
-      validation: Yup.number().typeError("Amount must be a number"),
+      // validation: Yup.number()
+      // .typeError("Amount must be a number")
+      // .positive( "Amount must be greater than 0"),
       disabled: true,
       labelOnTop: false,
     },
@@ -135,16 +133,23 @@ function Invoice() {
       type: "amount",
       placeholder: "Total Amount",
       initialValue: "",
-      validation: Yup.number().typeError("Total Amount must be a number"),
+      // validation: Yup.number()
+      // .typeError("Total Amount must be a number")
+      // .positive("Amount must be greater than 0"),
       disabled: true,
       labelOnTop: false,
     },
   };
 
   const calcTotal = () => {
+
     let xx = lineItems.reduce(
-      (sum, item) => sum + (parseFloat(item.amount) || 0), 0
+
+
+
+      (sum, item) => sum + (parseFloat(item.amount.replace(/,/g, '')) || 0), 0
     );
+
     return xx;
   };
 
@@ -180,7 +185,7 @@ function Invoice() {
     formik.setFieldValue("amount", c);
     formik.setFieldValue(
       "totalAmount",
-      c - (parseFloat(formik.values.advance) || 0)
+      c - (parseFloat(formik.values.advance.replace(/,/g, '')) || 0)
     );
   }
 

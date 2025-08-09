@@ -70,7 +70,9 @@ function InputField({
     if (cleaned.includes('.')) {
       const [intPart, decPart] = cleaned.split('.');
       cleaned = intPart + '.' + decPart.slice(0, 2);
+
     }
+       cleaned = cleaned.replace(/\B(?=(\d{3})+(?!\d))/g, ',');
     return cleaned;
   };
 
@@ -145,7 +147,7 @@ function InputField({
           autoComplete="off"
           disabled={disabled}
           inputMode="decimal"
-          maxLength={12}
+          maxLength={16}
         />
       );
     }
