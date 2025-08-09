@@ -9,15 +9,6 @@ import InvoiceService from "./InvoiceService";
 import MessageBoxService from "../../services/MessageBoxService";
 import  "./Invoice.css";
 
-// Helper to cast date to yyyy-mm-dd format
-function castDate(date) {
-  if (!date) return "";
-  const d = new Date(date);
-  
-  if (isNaN(d)) return "";
-  return d.toISOString().split("T")[0];
-}
-
 function Invoice() {
   const { id } = useParams();
   const dataGridRef = useRef();
@@ -113,14 +104,14 @@ function Invoice() {
       type: "text",
       placeholder: "Prepared By",
       initialValue: "",
-      // validation: Yup.string(),
+      validation: Yup.string(),
     },
     receivedBy: {
       name: "receivedBy",
       type: "text",
       placeholder: "Received By",
       initialValue: "",
-      // validation: Yup.string(),
+      validation: Yup.string(),
     },
     amount: {
       name: "amount",
@@ -157,8 +148,9 @@ function Invoice() {
     return xx;
   };
 
-  const handleSubmit = async (values, { resetForm }) => {
+  const handleInquirySubmit = async (values, { resetForm } ) => {
     const param = { ...values, invoiceNo: parseInt(id ? id : 0), lineItems };
+    console.log("Submitting invoice with values:", param);
     const savedInvoice = await InvoiceService.createInvoice({ ...param });
 
     MessageBoxService.show({
@@ -171,7 +163,7 @@ function Invoice() {
     setLineItems([]);
   };
 
-  const formik = useFormikBuilder(fields, handleSubmit);
+  const formik = useFormikBuilder(fields, handleInquirySubmit);
 
   useEffect(() => {
     calculateTotal();
@@ -194,7 +186,7 @@ function Invoice() {
 
   return (
     <div className="container mt-4">
-      <form onSubmit={formik.handleSubmit} noValidate>
+      <form onSubmit={formik.handleSubmit} >
         <div className="row g-3">
           <InputField
             {...fields.invoiceNo}
