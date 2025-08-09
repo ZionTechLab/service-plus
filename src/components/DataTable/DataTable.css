@@ -19,7 +19,7 @@
 
 .table thead th {
     background-color: #fafafa;
-    border-bottom: 1px solid var(--divider-color);
+    /* border-bottom: 1px solid var(--divider-color); */
     padding: 16px;
     font-weight: 500;
     color: var(--text-secondary);
@@ -30,7 +30,7 @@
 
 .table tbody td {
     padding: 16px;
-    border-bottom: 1px solid var(--divider-color);
+    /* border-bottom: 1px solid var(--divider-color); */
     vertical-align: middle;
 }
 

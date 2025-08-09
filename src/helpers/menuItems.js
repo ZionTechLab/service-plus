@@ -18,6 +18,9 @@ const menuItems = [
 
   { route: '/vehicale-confirmation', displayName: 'Vehicle Confirmation', icon: 'bi bi-file-earmark-text', isMenuItem: true },
   { route: '/vehicale-confirmation/add', displayName: 'Add Vehicle Confirmation', icon: 'bi bi-file-earmark-text' },
+
+  { route: '/daily-report', displayName: 'Daily Report', icon: 'bi bi-journal-text', isMenuItem: true },
+  { route: '/daily-report/add', displayName: 'Add Daily Report', icon: 'bi bi-journal-plus' },
 ];
 
 export default menuItems;

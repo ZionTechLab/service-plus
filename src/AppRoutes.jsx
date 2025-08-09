@@ -12,6 +12,8 @@ import AddInquary from "./pages/Inquary/AddInquary";
 import InquiryView from "./pages/Inquary/InquiryView";
 import Invoice from "./pages/Invoice";
 import AddInvoice from "./pages/Invoice/Invoice";
+import DailyReportIndex from "./pages/DailyReport";
+import AddDailyReport from "./pages/DailyReport/AddReport";
 // import AddBusinessPartner from "./pages/BusinessPartners/AddBusinessPartner";
 
 
@@ -76,9 +78,12 @@ const AppRoutes = ({ isLoggedIn }) => (
       <Route path="profile" element={<Profile />} />
       <Route path="grn" element={<Grn />} />
 
-      <Route path="invoice" element={<Invoice />} />
-      <Route path="invoice/add" element={<AddInvoice />} />
-        <Route path="invoice/edit/:id" element={<AddInvoice />} />
+  <Route path="invoice" element={<Invoice />} />
+  <Route path="invoice/add" element={<AddInvoice />} />
+  <Route path="invoice/edit/:id" element={<AddInvoice />} />
+
+  <Route path="daily-report" element={<DailyReportIndex />} />
+  <Route path="daily-report/add" element={<AddDailyReport />} />
     </Route>
   </Routes>
 );
