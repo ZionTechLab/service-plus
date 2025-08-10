@@ -1,8 +1,14 @@
 import { useState, useEffect, useMemo } from "react";
 import "./DataTable.css";
 
-const Pagination = ({ total, currentPage, pageSize, onPageChange }) => {
-  const totalPages = Math.ceil(total / pageSize);
+const Pagination = ({ total = 0, currentPage = 1, pageSize = 10, onPageChange }) => {
+  const safeTotal = typeof total === 'number' && total >= 0 ? total : 0;
+  const totalPages = Math.ceil(safeTotal / pageSize);
+  
+  if (totalPages <= 1) {
+    return null; // Don't show pagination if only one page or no data
+  }
+  
   return (
     <nav>
       <ul className="pagination justify-content-end">
@@ -21,21 +27,24 @@ const Pagination = ({ total, currentPage, pageSize, onPageChange }) => {
   );
 };
 
-const ColumnVisibilityModal = ({ columns, visibleColumns, onToggle, isOpen, onClose }) => {
+const ColumnVisibilityModal = ({ columns = [], visibleColumns = [], onToggle, isOpen, onClose }) => {
   if (!isOpen) return null;
 
+  const safeColumns = Array.isArray(columns) ? columns : [];
+  const safeVisibleColumns = Array.isArray(visibleColumns) ? visibleColumns : [];
+
 const handleSelectAll = () => {
-  columns.filter(col => !col.isAction).forEach(col => {
-    if (!visibleColumns.includes(col.field)) {
+  safeColumns.filter(col => !col.isAction).forEach(col => {
+    if (!safeVisibleColumns.includes(col.field)) {
       onToggle(col.field);
     }
   });
 };
 
   const handleDeselectAll = () => {
-    const fieldsToHide = visibleColumns.slice(0, -1); // Keep at least one visible
+    const fieldsToHide = safeVisibleColumns.slice(0, -1); // Keep at least one visible
     fieldsToHide.forEach(field => {
-      if (visibleColumns.includes(field)) {
+      if (safeVisibleColumns.includes(field)) {
         onToggle(field);
       }
     });
@@ -84,7 +93,7 @@ const handleSelectAll = () => {
               </div>
               
               <div className="border rounded p-3" style={{ maxHeight: '300px', overflowY: 'auto' }}>
-                {columns
+                {safeColumns
                   .filter(col => !col.isAction)
                   .map((col) => (
                     <div key={col.field} className="form-check mb-2">
@@ -92,7 +101,7 @@ const handleSelectAll = () => {
                         className="form-check-input"
                         type="checkbox"
                         id={`col-${col.field}`}
-                        checked={visibleColumns.includes(col.field)}
+                        checked={safeVisibleColumns.includes(col.field)}
                         onChange={() => onToggle(col.field)}
                       />
                       <label className="form-check-label" htmlFor={`col-${col.field}`}>
@@ -135,7 +144,10 @@ const DataTable = ({ data = [], columns = [], name, children, onRowSelect }) => 
   const pageSize = 10;
 
   const filterableCols = useMemo(
-    () => columns.filter((c) => !c.isAction),
+    () => {
+      const safeColumns = Array.isArray(columns) ? columns : [];
+      return safeColumns.filter((c) => !c.isAction);
+    },
     [columns]
   );
 
@@ -150,7 +162,8 @@ const DataTable = ({ data = [], columns = [], name, children, onRowSelect }) => 
 
   // Get visible columns for display
   const displayColumns = useMemo(() => {
-    return columns.filter(col => 
+    const safeColumns = Array.isArray(columns) ? columns : [];
+    return safeColumns.filter(col => 
       col.isAction || visibleColumns.includes(col.field)
     );
   }, [columns, visibleColumns]);
@@ -187,8 +200,9 @@ const DataTable = ({ data = [], columns = [], name, children, onRowSelect }) => 
   };
 
   const sortedData = useMemo(() => {
-    if (!sortKey) return data;
-    return [...data].sort((a, b) => {
+    const safeData = Array.isArray(data) ? data : [];
+    if (!sortKey) return safeData;
+    return [...safeData].sort((a, b) => {
       const aValue = a[sortKey.field]?.toString().toLowerCase();
       const bValue = b[sortKey.field]?.toString().toLowerCase();
       return aValue > bValue ? 1 : -1;
@@ -196,9 +210,10 @@ const DataTable = ({ data = [], columns = [], name, children, onRowSelect }) => 
   }, [data, sortKey]);
 
   const filteredData = useMemo(() => {
-    if (!searchTerm || !searchKey) return sortedData;
-
-    return sortedData.filter((row) =>
+    const safeSortedData = Array.isArray(sortedData) ? sortedData : [];
+    if (!searchTerm || !searchKey) return safeSortedData;
+    
+    return safeSortedData.filter((row) =>
       row[searchKey]
         ?.toString()
         .toLowerCase()
@@ -207,8 +222,9 @@ const DataTable = ({ data = [], columns = [], name, children, onRowSelect }) => 
   }, [sortedData, searchTerm, searchKey]);
 
   const paginatedData = useMemo(() => {
+    const safeFilteredData = Array.isArray(filteredData) ? filteredData : [];
     const start = (page - 1) * pageSize;
-    return filteredData.slice(start, start + pageSize);
+    return safeFilteredData.slice(start, start + pageSize);
   }, [filteredData, page]);
 
   return (
@@ -344,7 +360,7 @@ const DataTable = ({ data = [], columns = [], name, children, onRowSelect }) => 
 
         {/* Pagination */}
         <Pagination
-          total={filteredData.length}
+          total={Array.isArray(filteredData) ? filteredData.length : 0}
           currentPage={page}
           pageSize={pageSize}
           onPageChange={setPage}
