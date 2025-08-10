@@ -6,8 +6,24 @@ import { useFormikBuilder } from "../../helpers/formikBuilder";
 import MessageBoxService from "../../services/MessageBoxService";
 import DataGrid from "../../components/DataGrid";
 import { useRef, useState } from "react";
+
 import DailyReportService from "./DailyReportService";
 import SelectedBusinessPartnerBox from "../BusinessPartners/select-bp";
+
+// Generic function to sanitize all amount fields in line items
+function sanitizeAmountFields(items, columns) {
+  // Find all fields with type: 'amount'
+  const amountFields = columns.filter(col => col.type === 'amount').map(col => col.field);
+  return items.map(item => {
+    const sanitized = { ...item };
+    amountFields.forEach(field => {
+      if (typeof sanitized[field] === 'string') {
+        sanitized[field] = sanitized[field].replace(/,/g, '');
+      }
+    });
+    return sanitized;
+  });
+}
 
 function AddDailyReport() {  
   const { id } = useParams();
@@ -99,9 +115,9 @@ function AddDailyReport() {
   };
 
   const handleSubmit = async (values, { resetForm }) => {
-
-    
-    const param = { ...values, txnNo: parseInt(id ? id : 0), lineItems };
+    // Use generic sanitizer for all amount fields
+    const sanitizedLineItems = sanitizeAmountFields(lineItems, lineItemColumns);
+    const param = { ...values, txnNo: parseInt(id ? id : 0), lineItems: sanitizedLineItems };
     const response = await DailyReportService.createReport({ ...param });
 
     if (response.success) {
