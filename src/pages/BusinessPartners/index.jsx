@@ -6,26 +6,19 @@ import MessageBoxService from '../../services/MessageBoxService';
 import { useLoadingSpinner } from '../../hooks/useLoadingSpinner';
 
 function BusinessPartners() {
-  const [uiData, setUiData] = useState({ error: '', data: [] });
+  const [uiData, setUiData] = useState({loading: false, success: false, error: '', data: [] });
   const navigate = useNavigate();
   const { showSpinner, hideSpinner } = useLoadingSpinner();
 
   useEffect(() => {
-
-
-    
-    const fetchInquiries = async () => {
+    const fetchInvoices = async () => {
+      setUiData(prev => ({ ...prev, loading: true, error: '', data: [] }));
       showSpinner();
-      try {
-        const storedInquiries = await PartnerService.getAllPartners();
-        setUiData({ error: '', data: storedInquiries });
-      } catch (error) {
-        setUiData({ error: 'Failed to fetch business partners. Please try again later.', data: [] });
-      } finally {
-        hideSpinner();
-      }
+      const data = await PartnerService.getAllPartners();
+      setUiData(prev => ({ ...prev, ...data , loading: false }));
+      hideSpinner();
     };
-    fetchInquiries();
+    fetchInvoices();
     // eslint-disable-next-line
   }, []);
 
@@ -80,8 +73,7 @@ function BusinessPartners() {
     { header: "Email", field: "email" },
     { header: "Address", field: "address" },
     { header: "Phone", field: "phone" },
-    {
-      header: "Customer",
+    { header: "Customer",
       isAction: true,
       actionTemplate: (row) => (
         <input type="checkbox" checked={row.isCustomer} readOnly />
@@ -117,11 +109,13 @@ function BusinessPartners() {
 
   return (
     <div>
-      <DataTable name="User Export" data={uiData.data} columns={columns} >
-        <Link to="/business-partner/add">
-          <button className=" btn btn-primary  ">New</button>
-        </Link>
-      </DataTable>
+      {!uiData.loading && !uiData.error && (
+        <DataTable name="Invoice Export" data={uiData.data} columns={columns}>
+          <Link to="/business-partner/add">
+            <button className="btn btn-primary">New</button>
+          </Link>
+        </DataTable>
+      )}
       {uiData.error && (
         <div className="alert alert-danger mt-3">{uiData.error}</div>
       )}

@@ -64,7 +64,7 @@ function InvoiceIndex() {
         </div>
       ),
     },  
-      { header: 'txnIndex', field: 'txnIndex',class:'text-nowrap d-none' },
+    { header: 'txnIndex', field: 'txnIndex',class:'text-nowrap d-none' },
     { header: 'Invoice No', field: 'invoiceNo',class:'text-nowrap' },
     { header: 'Date', field: 'date',class:'text-nowrap' },
     { header: 'Customer', field: 'partner',class:'text-nowrap' },

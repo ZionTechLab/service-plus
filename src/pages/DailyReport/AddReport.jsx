@@ -1,19 +1,22 @@
 import * as Yup from "yup";
-import React from "react";
+import { useParams } from "react-router-dom";
 import { useNavigate } from "react-router-dom";
 import InputField from "../../helpers/InputField";
 import { useFormikBuilder } from "../../helpers/formikBuilder";
 import MessageBoxService from "../../services/MessageBoxService";
 import DataGrid from "../../components/DataGrid";
 import { useRef, useState } from "react";
+import DailyReportService from "./DailyReportService";
+import SelectedBusinessPartnerBox from "../BusinessPartners/select-bp";
 
-function AddDailyReport() {
+function AddDailyReport() {  
+  const { id } = useParams();
   const navigate = useNavigate();
   const dataGridRef = useRef();
   const [lineItems, setLineItems] = useState([]);
 
   const fields = {
-        txnNo: {
+    txnNo: {
       name: "txnNo",
       type: "text",
       placeholder: "Transaction No",
@@ -27,12 +30,13 @@ function AddDailyReport() {
       placeholder: "Transaction Date",
       initialValue: new Date().toISOString().split("T")[0],
       validation: Yup.string().required("Transaction Date is required"),
-    },    partner: {
+    },    
+    partner: {
       name: "partner",
       type: "partner-select",
       placeholder: "Customer",
       initialValue: "",
-      // validation: Yup.string().required("Customer is required"),
+      validation: Yup.string().required("Customer is required"),
       isOpen: false,
     },
     vehicleNo: {
@@ -42,7 +46,6 @@ function AddDailyReport() {
       initialValue: "",
       validation: Yup.string().required("Vehicle No is required"),
     },
-
     typeOfMachine: {
       name: "typeOfMachine",
       type: "text",
@@ -95,45 +98,39 @@ function AddDailyReport() {
     },
   };
 
-  const handleSubmit = (values, { resetForm }) => {
-    // Save to localStorage
-    const reports = JSON.parse(localStorage.getItem('dailyReports') || '[]');
-    const newReport = { ...values, lineItems, id: Date.now() };
-    localStorage.setItem('dailyReports', JSON.stringify([...reports, newReport]));
+  const handleSubmit = async (values, { resetForm }) => {
+    const param = { ...values, txnNo: parseInt(id ? id : 0), lineItems };
+    console.log("Submitting daily report with values:", param);
+    await DailyReportService.createReport({ ...param });
+
     MessageBoxService.show({
-      message: 'Daily Report added successfully!',
-      type: 'success',
+      message: "Daily Report saved successfully!",
+      type: "success",
       onClose: () => navigate('/daily-report'),
     });
+    resetForm();
+    dataGridRef.current.reset();
+    setLineItems([]);
   };
 
   const formik = useFormikBuilder(fields, handleSubmit);
 
   const lineItemColumns = [
-    { header: "Work Commence Form", field: "workCommenceForm", type: "text", placeholder: "Work Commence Form" },
+    { header: "Work Commence Form", field: "workCommenceForm", type: "text", placeholder: "Work Item" },
     { header: "Amount", field: "amount", type: "amount", placeholder: "Amount" },
     { header: "Hours", field: "hours", type: "text", placeholder: "Hours" },
   ];
 
   return (
     <div className="container p-3">
-      {/* <h4>Add Daily Report</h4> */}
       <form onSubmit={formik.handleSubmit} className="row g-3">
-                <InputField {...fields.txnNo} formik={formik} className="col-md-6"/>
-         <InputField {...fields.txnDate} formik={formik} className="col-md-6"/>
-  <InputField {...fields.partner} formik={formik} className="col-md-12"/>
-
-          <InputField {...fields.vehicleNo} formik={formik} className="col-md-6"/>
-
-
-
-          <InputField {...fields.typeOfMachine} formik={formik} className="col-md-6"/>
-
-
-          <InputField {...fields.operator} formik={formik} className="col-md-6"/>
-
-          <InputField {...fields.helper} formik={formik} className="col-md-6"/>
-
+        <InputField {...fields.txnNo} formik={formik} className="col-md-6"/>
+        <InputField {...fields.txnDate} formik={formik} className="col-md-6"/>
+        <SelectedBusinessPartnerBox field={fields.partner} formik={formik} />
+        <InputField {...fields.vehicleNo} formik={formik} className="col-md-6"/>
+        <InputField {...fields.typeOfMachine} formik={formik} className="col-md-6"/>
+        <InputField {...fields.operator} formik={formik} className="col-md-6"/>
+        <InputField {...fields.helper} formik={formik} className="col-md-6"/>
         <div className="col-md-12">
           <DataGrid
             ref={dataGridRef}
@@ -142,24 +139,12 @@ function AddDailyReport() {
             onItemsChange={setLineItems}
           />
         </div>
-        <div className="col-md-12">
-          <InputField {...fields.remarks} formik={formik} />
-        </div>
-        <div className="col-md-3">
-          <InputField {...fields.km} formik={formik} />
-        </div>
-        <div className="col-md-3">
-          <InputField {...fields.time} formik={formik} />
-        </div>
-        <div className="col-md-3">
-          <InputField {...fields.diesel} formik={formik} />
-        </div>
-        <div className="col-md-3">
-          <InputField {...fields.certifiedHours} formik={formik} />
-        </div>
-        <div className="col-12">
-          <button type="submit" className="btn btn-primary">Save Report</button>
-        </div>
+        <InputField {...fields.remarks} formik={formik} className="col-md-12"/>
+        <InputField {...fields.km} formik={formik} className="col-md-3"/>
+        <InputField {...fields.time} formik={formik} className="col-md-3"/>
+        <InputField {...fields.diesel} formik={formik} className="col-md-3"/>
+        <InputField {...fields.certifiedHours} formik={formik} className="col-md-3"/>
+        <button type="submit" className="btn btn-primary">Save Report</button>
       </form>
     </div>
   );

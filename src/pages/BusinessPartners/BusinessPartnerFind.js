@@ -6,7 +6,7 @@ import { useLoadingSpinner } from "../../hooks/useLoadingSpinner";
 function BusinessPartnerFind({ onCustomerSelect, onNewCustomer, children }) {
   const { showSpinner, hideSpinner } = useLoadingSpinner();
   const [uiData, setUiData] = useState({ loading: false, error: "", data: [] });
-
+  // const [uiData, setUiData] = useState({loading: false, success: false, error: '', data: [] });
   useEffect(() => {
     const fetchInquiries = async () => {
       setUiData({ loading: true, error: "", data: [] });
@@ -68,6 +68,7 @@ function BusinessPartnerFind({ onCustomerSelect, onNewCustomer, children }) {
   return (
     <div>
       {!uiData.loading && !uiData.error && (
+        <div>
         <DataTable
           data={uiData.data}
           columns={customerColumns}
@@ -75,6 +76,7 @@ function BusinessPartnerFind({ onCustomerSelect, onNewCustomer, children }) {
         >
           {children}
         </DataTable>
+        </div>
       )}
 
       {uiData.error && (

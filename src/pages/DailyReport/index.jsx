@@ -11,6 +11,9 @@ function DailyReportIndex() {
 
   useEffect(() => {
     const fetchReports = async () => {
+
+
+      
       setUiData(prev => ({ ...prev, loading: true, error: '', data: [] }));
       showSpinner();
       // Replace with actual service call
@@ -55,23 +58,28 @@ function DailyReportIndex() {
         </div>
       ),
     },
-    { header: 'Date', field: 'date' },
+    { header: 'txnIndex', field: 'txnIndex',class:'text-nowrap d-none' },
+    { header: 'Txn No', field: 'txnNo',class:'text-nowrap d-none' },
+    { header: 'Date', field: 'txnDate' },
+    { header: 'Customer', field: 'partner' },
     { header: 'Vehicle No', field: 'vehicleNo' },
-    { header: 'Hirer', field: 'hirer' },
     { header: 'Type of Machine', field: 'typeOfMachine' },
     { header: 'Operator', field: 'operator' },
     { header: 'Helper', field: 'helper' },
   ];
 
   return (
-    <div className="container-fluid p-3">
-      <div className="d-flex justify-content-between align-items-center mb-3">
-        <h4>Daily Reports</h4>
-        <Link to="/daily-report/add" className="btn btn-success">
-          <i className="bi bi-plus-lg"></i> Add Daily Report
-        </Link>
-      </div>
-      <DataTable columns={columns} data={uiData.data} loading={uiData.loading} />
+    <div>
+      {!uiData.loading && !uiData.error && (
+        <DataTable name="Daily Report" data={uiData.data} columns={columns}>
+          <Link to="/daily-report/add">
+            <button className="btn btn-primary">New</button>
+          </Link>
+        </DataTable>
+      )}
+      {uiData.error && (
+        <div className="alert alert-danger mt-3">{uiData.error}</div>
+      )}
     </div>
   );
 }

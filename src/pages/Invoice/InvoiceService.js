@@ -11,9 +11,7 @@ class InvoiceService {
   }
 
   async getInvoiceById(id) {
-    console.log("Fetching invoice with ID:", id);
     const res = await axiosRequest(axios.get(`${this.apiBase}/${id}`));
-  console.log("Fetched invoice data:", res.data);
     return res.data;
   }
 

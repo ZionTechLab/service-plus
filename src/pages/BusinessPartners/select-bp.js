@@ -17,17 +17,20 @@ function SelectedBusinessPartnerBox({
   setCustomerOption = () => {},
   ...props
 }) {
+
   const [open, setOpen] = React.useState(formik.isOpen);
   const [localSelectedPartner, setLocalSelectedPartner] = React.useState(selectedPartner);
   const [activeTab, setActiveTab] = React.useState('search');
   const [tabsInitialized, setTabsInitialized] = React.useState(false);
   const { showSpinner, hideSpinner } = useLoadingSpinner();
-
+  console.log("SelectedBusinessPartnerBox rendered");
   React.useEffect(() => {
+    console.log("Selected partner updated:");
     setLocalSelectedPartner(selectedPartner);
   }, [selectedPartner]);
 
   React.useEffect(() => {
+    console.log("Formik values changed:");
     if (formik.values[field?.name]) {
       const fetchInquiries = async () => {
         showSpinner();
@@ -85,18 +88,18 @@ else{
       component: (
         <Tabs tabs={tabs} activeTab={tabId} onTabChange={handleTabChange}>
           {tabId === 'search' && (
+            <>
             <BusinessPartnerFind
               onCustomerSelect={handleCustomerSelect}
-              onNewCustomer={handleNewCustomerClick}
-            >
-            </BusinessPartnerFind>
+              onNewCustomer={handleNewCustomerClick}/>
+           </>
           )}
           {tabId === 'add-customer' && (
             <div className="mt-3">
-              <AddBusinessPartner 
+              {/* <AddBusinessPartner 
                 onCustomerCreated={handleCustomerCreated} 
                 noForm={true} 
-              />
+              /> */}
             </div>
           )}
         </Tabs>

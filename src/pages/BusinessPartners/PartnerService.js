@@ -7,17 +7,17 @@ class PartnerService {
 
   async createPartner(partnerData) {
     const res = await axiosRequest(axios.post(this.apiBase, partnerData));
-    return res.data;
+    return res;
   }
 
   async getPartnerById(id) {
     const res = await axiosRequest(axios.get(`${this.apiBase}/${id}`));
-    return res.data;
+    return res;
   }
 
   async getAllPartners() {
     const res = await axiosRequest(axios.get(this.apiBase));
-    return res.data;
+    return res;
   }
 }
 
