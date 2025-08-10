@@ -84,6 +84,7 @@ const AppRoutes = ({ isLoggedIn }) => (
 
   <Route path="daily-report" element={<DailyReportIndex />} />
   <Route path="daily-report/add" element={<AddDailyReport />} />
+    <Route path="daily-report/edit/:id" element={<AddDailyReport />} />
     </Route>
   </Routes>
 );

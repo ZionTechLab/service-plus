@@ -7,8 +7,8 @@ const DataGrid = forwardRef(({ columns,  initialItems, onItemsChange }, ref) => 
   const [items, setItems] = useState(initialItems && initialItems.length ? initialItems : [{ ...emptyLineItem }]);
 
   useImperativeHandle(ref, () => ({
-    reset: () => {
-      setItems([{ ...emptyLineItem }]);
+    reset: (items) => {
+      setItems(items ? items : [{ ...emptyLineItem }]);
     }
   }));
 

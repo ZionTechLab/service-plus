@@ -1,18 +1,14 @@
+import { useRef, useState,useEffect } from "react";
+import { useParams,useNavigate } from "react-router-dom";
 import * as Yup from "yup";
-import { useParams } from "react-router-dom";
-import { useNavigate } from "react-router-dom";
 import InputField from "../../helpers/InputField";
 import { useFormikBuilder } from "../../helpers/formikBuilder";
 import MessageBoxService from "../../services/MessageBoxService";
 import DataGrid from "../../components/DataGrid";
-import { useRef, useState } from "react";
-
 import DailyReportService from "./DailyReportService";
 import SelectedBusinessPartnerBox from "../BusinessPartners/select-bp";
 
-// Generic function to sanitize all amount fields in line items
 function sanitizeAmountFields(items, columns) {
-  // Find all fields with type: 'amount'
   const amountFields = columns.filter(col => col.type === 'amount').map(col => col.field);
   return items.map(item => {
     const sanitized = { ...item };
@@ -30,6 +26,27 @@ function AddDailyReport() {
   const navigate = useNavigate();
   const dataGridRef = useRef();
   const [lineItems, setLineItems] = useState([]);
+
+  useEffect(() => {
+    if (id) {
+      const fetchTxn = async () => {
+        const response = await DailyReportService.getReportById(id);
+        if (response.success) {
+          if (response.data) {
+            const { lineItems, ...formData } = response.data;
+            formik.setValues({
+              ...formData,
+              txnDate: formData.txnDate ? formData.txnDate.split("T")[0] : "",
+            });
+            setLineItems(lineItems);
+            dataGridRef.current.reset(lineItems);
+          }
+        }
+      };
+      fetchTxn();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
 
   const fields = {
     txnNo: {
@@ -115,7 +132,6 @@ function AddDailyReport() {
   };
 
   const handleSubmit = async (values, { resetForm }) => {
-    // Use generic sanitizer for all amount fields
     const sanitizedLineItems = sanitizeAmountFields(lineItems, lineItemColumns);
     const param = { ...values, txnNo: parseInt(id ? id : 0), lineItems: sanitizedLineItems };
     const response = await DailyReportService.createReport({ ...param });
