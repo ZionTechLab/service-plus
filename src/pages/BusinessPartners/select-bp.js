@@ -23,20 +23,25 @@ function SelectedBusinessPartnerBox({
   const [activeTab, setActiveTab] = React.useState('search');
   const [tabsInitialized, setTabsInitialized] = React.useState(false);
   const { showSpinner, hideSpinner } = useLoadingSpinner();
-  console.log("SelectedBusinessPartnerBox rendered");
+  // console.log("SelectedBusinessPartnerBox rendered");
+
   React.useEffect(() => {
-    console.log("Selected partner updated:");
+    // console.log("Selected partner updated:");
     setLocalSelectedPartner(selectedPartner);
   }, [selectedPartner]);
 
+  // React.useEffect(() => {
+  //   console.log("Selected partner updated:", localSelectedPartner);
+  // }, [localSelectedPartner]);
+
   React.useEffect(() => {
-    console.log("Formik values changed:");
+    // console.log("Formik values changed:");
     if (formik.values[field?.name]) {
       const fetchInquiries = async () => {
         showSpinner();
         try {
           const storedPartners = await PartnerService.getPartnerById(formik.values[field?.name]);
-          setLocalSelectedPartner(storedPartners);
+          setLocalSelectedPartner(storedPartners.data);
         } catch (error) {
           setLocalSelectedPartner(null);
         } finally {
@@ -55,7 +60,7 @@ else{
   const { openModal, closeModal } = useModalService();
 
   const handleCustomerSelect = (customer) => {
-    // console.log("handleCustomerSelect", customer);
+    //  console.log("handleCustomerSelect", customer);
     setLocalSelectedPartner(customer);
     closeModal();
     formik.setFieldValue(field?.name, customer.id || "");
@@ -96,10 +101,10 @@ else{
           )}
           {tabId === 'add-customer' && (
             <div className="mt-3">
-              {/* <AddBusinessPartner 
+              <AddBusinessPartner 
                 onCustomerCreated={handleCustomerCreated} 
                 noForm={true} 
-              /> */}
+              />
             </div>
           )}
         </Tabs>

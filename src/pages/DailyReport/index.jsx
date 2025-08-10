@@ -3,6 +3,7 @@ import DataTable from '../../components/DataTable';
 import { useEffect, useState } from 'react';
 import MessageBoxService from '../../services/MessageBoxService';
 import { useLoadingSpinner } from '../../hooks/useLoadingSpinner';
+import DailyReportService from "./DailyReportService";
 
 function DailyReportIndex() {
   const [uiData, setUiData] = useState({loading: false, success: false, error: '', data: [] });
@@ -11,15 +12,11 @@ function DailyReportIndex() {
 
   useEffect(() => {
     const fetchReports = async () => {
-
-
-      
       setUiData(prev => ({ ...prev, loading: true, error: '', data: [] }));
       showSpinner();
-      // Replace with actual service call
-      const data = JSON.parse(localStorage.getItem('dailyReports') || '[]');
-      setUiData(prev => ({ ...prev, data, loading: false }));
-      hideSpinner();
+        const data = await DailyReportService.getAllReports();
+        setUiData(prev => ({ ...prev, ...data , loading: false }));
+        hideSpinner();
     };
     fetchReports();
   }, []);

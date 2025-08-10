@@ -1,30 +1,22 @@
-import React, { useEffect, useState } from "react";
+import  { useEffect, useState } from "react";
 import DataTable from "../../components/DataTable";
 import PartnerService from "./PartnerService";
 import { useLoadingSpinner } from "../../hooks/useLoadingSpinner";
 
-function BusinessPartnerFind({ onCustomerSelect, onNewCustomer, children }) {
+function BusinessPartnerFind({ onCustomerSelect,  children }) {
   const { showSpinner, hideSpinner } = useLoadingSpinner();
-  const [uiData, setUiData] = useState({ loading: false, error: "", data: [] });
-  // const [uiData, setUiData] = useState({loading: false, success: false, error: '', data: [] });
+  const [uiData, setUiData] = useState({loading: false, success: false, error: '', data: [] });
+
   useEffect(() => {
-    const fetchInquiries = async () => {
-      setUiData({ loading: true, error: "", data: [] });
+    const fetchInvoices = async () => {
+      setUiData(prev => ({ ...prev, loading: true, error: '', data: [] }));
       showSpinner();
-      try {
-        const data = await PartnerService.getAllPartners();
-        setUiData((prev) => ({ ...prev, data }));
-      } catch (error) {
-        setUiData((prev) => ({
-          ...prev,
-          error: "Failed to fetch business partners. Please try again later.",
-        }));
-      } finally {
-        setUiData((prev) => ({ ...prev, loading: false }));
-        hideSpinner();
-      }
+      const data = await PartnerService.getAllPartners();
+      setUiData(prev => ({ ...prev, ...data , loading: false }));
+      hideSpinner();
     };
-    fetchInquiries();
+    fetchInvoices();
+    // eslint-disable-next-line
   }, []);
 
   const customerColumns = [

@@ -99,24 +99,27 @@ function AddDailyReport() {
   };
 
   const handleSubmit = async (values, { resetForm }) => {
-    const param = { ...values, txnNo: parseInt(id ? id : 0), lineItems };
-    console.log("Submitting daily report with values:", param);
-    await DailyReportService.createReport({ ...param });
 
-    MessageBoxService.show({
-      message: "Daily Report saved successfully!",
-      type: "success",
-      onClose: () => navigate('/daily-report'),
-    });
-    resetForm();
-    dataGridRef.current.reset();
-    setLineItems([]);
+    
+    const param = { ...values, txnNo: parseInt(id ? id : 0), lineItems };
+    const response = await DailyReportService.createReport({ ...param });
+
+    if (response.success) {
+      MessageBoxService.show({
+        message: "Daily Report saved successfully!",
+        type: "success",
+        onClose: () => navigate("/daily-report"),
+      });
+      resetForm();
+      dataGridRef.current.reset();
+      setLineItems([]);
+    }
   };
 
   const formik = useFormikBuilder(fields, handleSubmit);
 
   const lineItemColumns = [
-    { header: "Work Commence Form", field: "workCommenceForm", type: "text", placeholder: "Work Item" },
+    { header: "Work Commence Form", field: "desc", type: "text", placeholder: "Work Item" },
     { header: "Amount", field: "amount", type: "amount", placeholder: "Amount" },
     { header: "Hours", field: "hours", type: "text", placeholder: "Hours" },
   ];

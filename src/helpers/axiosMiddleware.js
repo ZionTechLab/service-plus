@@ -2,7 +2,6 @@ import axios from "axios";
 import MessageBoxService from "../services/MessageBoxService";
 
 export function handleAxiosError(error) {
-
   let message;
   if (error.response) {
     message = ` ${
@@ -26,7 +25,6 @@ export function handleAxiosError(error) {
 // Centralized axios request wrapper
 export async function axiosRequest(requestPromise) {
   try {
-    // console.log("Sending request...");
     const res = await requestPromise;
     return {
       data: res.data,
@@ -34,9 +32,7 @@ export async function axiosRequest(requestPromise) {
       success: true,
     };
   } catch (error) {
-    // console.log("Request failed:");
     const errorMessage = handleAxiosError(error);
-    // console.log("Request failed:", errorMessage);
     return {
       data: null,
       error: errorMessage,
