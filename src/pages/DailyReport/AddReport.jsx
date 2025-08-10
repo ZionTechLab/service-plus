@@ -133,7 +133,11 @@ function AddDailyReport() {
 
   const handleSubmit = async (values, { resetForm }) => {
     const sanitizedLineItems = sanitizeAmountFields(lineItems, lineItemColumns);
-    const param = { ...values, txnNo: parseInt(id ? id : 0), lineItems: sanitizedLineItems };
+    const param = { 
+      header: { ...values , txnNo: parseInt(id ? id : 0)}, 
+      lineItems: sanitizedLineItems,
+      isUpdate:id ? true : false
+  };
     const response = await DailyReportService.createReport({ ...param });
 
     if (response.success) {
@@ -151,7 +155,7 @@ function AddDailyReport() {
   const formik = useFormikBuilder(fields, handleSubmit);
 
   const lineItemColumns = [
-    { header: "Work Commence Form", field: "desc", type: "text", placeholder: "Work Item" },
+    { header: "Work Commence Form", field: "description", type: "text", placeholder: "Work Item" },
     { header: "Amount", field: "amount", type: "amount", placeholder: "Amount" },
     { header: "Hours", field: "hours", type: "text", placeholder: "Hours" },
   ];
