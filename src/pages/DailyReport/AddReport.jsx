@@ -7,19 +7,7 @@ import MessageBoxService from "../../services/MessageBoxService";
 import DataGrid from "../../components/DataGrid";
 import DailyReportService from "./DailyReportService";
 import SelectedBusinessPartnerBox from "../BusinessPartners/select-bp";
-
-function sanitizeAmountFields(items, columns) {
-  const amountFields = columns.filter(col => col.type === 'amount').map(col => col.field);
-  return items.map(item => {
-    const sanitized = { ...item };
-    amountFields.forEach(field => {
-      if (typeof sanitized[field] === 'string') {
-        sanitized[field] = sanitized[field].replace(/,/g, '');
-      }
-    });
-    return sanitized;
-  });
-}
+import sanitizeAmountFields from "../../helpers/sanitizeAmountFields";
 
 function AddDailyReport() {  
   const { id } = useParams();
@@ -131,13 +119,19 @@ function AddDailyReport() {
     },
   };
 
+  const lineItemColumns = [
+    { header: "Work Commence Form", field: "description", type: "text", placeholder: "Work Item" },
+    { header: "Amount", field: "amount", type: "amount", placeholder: "Amount" },
+    { header: "Hours", field: "hours", type: "text", placeholder: "Hours" },
+  ];
+
   const handleSubmit = async (values, { resetForm }) => {
     const sanitizedLineItems = sanitizeAmountFields(lineItems, lineItemColumns);
     const param = { 
       header: { ...values , txnNo: parseInt(id ? id : 0)}, 
       lineItems: sanitizedLineItems,
       isUpdate:id ? true : false
-  };
+    };
     const response = await DailyReportService.createReport({ ...param });
 
     if (response.success) {
@@ -153,12 +147,6 @@ function AddDailyReport() {
   };
 
   const formik = useFormikBuilder(fields, handleSubmit);
-
-  const lineItemColumns = [
-    { header: "Work Commence Form", field: "description", type: "text", placeholder: "Work Item" },
-    { header: "Amount", field: "amount", type: "amount", placeholder: "Amount" },
-    { header: "Hours", field: "hours", type: "text", placeholder: "Hours" },
-  ];
 
   return (
     <div className="container p-3">

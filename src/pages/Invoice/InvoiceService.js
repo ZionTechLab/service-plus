@@ -7,12 +7,12 @@ class InvoiceService {
 
   async createInvoice(invoiceData) {
     const res = await axiosRequest(axios.post(this.apiBase, invoiceData));
-    return res.data;
+    return res;
   }
 
   async getInvoiceById(id) {
     const res = await axiosRequest(axios.get(`${this.apiBase}/${id}`));
-    return res.data;
+    return res;
   }
 
   async getAllInvoices() {

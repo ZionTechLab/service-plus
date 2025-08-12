@@ -78,12 +78,12 @@ function InputField({
 
   // Custom onChange for amount
   const handleAmountChange = (e) => {
-    const raw = e.target.value;
-    const formatted = formatAmount(raw);
+    const raw = e.target.value.replace(/,/g, "");
+    // const formatted = formatAmount(raw);
     if (hasFormik) {
-      formik.setFieldValue(name, formatted);
+      formik.setFieldValue(name, raw);
     } else if (onChange) {
-      onChange({ target: { name, value: formatted } });
+      onChange({ target: { name, value: raw } });
     }
   };
 

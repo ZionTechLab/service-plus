@@ -1,71 +1,57 @@
+import { useRef, useState,useEffect } from "react";
+import { useParams,useNavigate } from "react-router-dom";
 import * as Yup from "yup";
-import { useState,useRef,useEffect } from "react";
-import { useParams } from "react-router-dom";
 import InputField from "../../helpers/InputField";
 import { useFormikBuilder } from "../../helpers/formikBuilder";
-import DataGrid from "../../components/DataGrid";
-import SelectedBusinessPartnerBox from "../BusinessPartners/select-bp";
-import InvoiceService from "./InvoiceService";
 import MessageBoxService from "../../services/MessageBoxService";
+import DataGrid from "../../components/DataGrid";
+import InvoiceService from "./InvoiceService";
+import SelectedBusinessPartnerBox from "../BusinessPartners/select-bp";
+import sanitizeAmountFields from "../../helpers/sanitizeAmountFields";
 import  "./Invoice.css";
 
 function Invoice() {
   const { id } = useParams();
+  const navigate = useNavigate();
   const dataGridRef = useRef();
   const [lineItems, setLineItems] = useState([]);
 
   useEffect(() => {
     if (id) {
-      const fetchInquiries = async () => {
-        console.log("Fetching inquiries with ID:", id);
-        const inquiries = await InvoiceService.getInvoiceById(id);
-        console.log("Fetched inquiries:", inquiries);
-        if (inquiries) {
-          console.log(inquiries.date );
-          formik.setValues({
-            ...inquiries,
-            preparedBy: 'dddd',
-            date: inquiries.date ? inquiries.date.split("T")[0] : "",
-          });
+      const fetchTxn = async () => {
+        const response = await InvoiceService.getInvoiceById(id);
+        if (response.success) {
+          if (response.data) {
+            const { lineItems, ...formData } = response.data;
+            formik.setValues({
+              ...formData,
+              txnDate: formData.txnDate ? formData.txnDate.split("T")[0] : "",
+            });
+            setLineItems(lineItems);
+            dataGridRef.current.reset(lineItems);
+          }
         }
       };
-      fetchInquiries();
+      fetchTxn();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
 
-
-  const lineItemColumns = [
-    {
-      header: "Description",
-      field: "description",
-      type: "text",
-      placeholder: "Description",
-    },
-    {
-      header: "Amount",
-      field: "amount",
-      type: "amount",
-      placeholder: "Amount",
-      width: "25%",
-    },
-  ];
-
   const fields = {
-    invoiceNo: {
-      name: "invoiceNo",
+    txnNo: {
+      name: "txnNo",
       type: "text",
-      placeholder: "Invoice No",
+      placeholder: "Transaction No",
       initialValue: "<Auto>",
-      // validation: Yup.string().required("Invoice No is required"),
+      // validation: Yup.string().required("Transaction No is required"),
       disabled: true,
     },
-    date: {
-      name: "date",
+    txnDate: {
+      name: "txnDate",
       type: "date",
-      placeholder: "Invoice Date",
+      placeholder: "Transaction Date",
       initialValue: new Date().toISOString().split("T")[0],
-      validation: Yup.string().required("Invoice Date is required"),
+      validation: Yup.string().required("Transaction Date is required"),
     },
     partner: {
       name: "partner",
@@ -75,9 +61,8 @@ function Invoice() {
       validation: Yup.string().required("Customer is required"),
       isOpen: false,
     },
-
-    typeOfVehicle: {
-      name: "typeOfVehicle",
+    ref1: {
+      name: "ref1",
       type: "select",
       placeholder: "Type of Vehicle",
       dataBinding: {
@@ -94,29 +79,14 @@ function Invoice() {
       initialValue: "car",
       validation: Yup.string().required("Type of Vehicle is required"),
     },
-
-    preparedBy: {
-      name: "preparedBy",
-      type: "text",
-      placeholder: "Prepared By",
-      initialValue: "",
-      validation: Yup.string(),
-    },
-    receivedBy: {
-      name: "receivedBy",
-      type: "text",
-      placeholder: "Received By",
-      initialValue: "",
-    //  validation: Yup.string().required("Received By is required"),
-    },
     amount: {
       name: "amount",
       type: "amount",
       placeholder: "Amount",
-      initialValue: "",
-      // validation: Yup.number()
-      // .typeError("Amount must be a number")
-      // .positive( "Amount must be greater than 0"),
+      initialValue: 0,
+      validation: Yup.number()
+        .typeError("Amount must be a number")
+        .positive("Amount must be greater than 0"),
       disabled: true,
       labelOnTop: false,
     },
@@ -125,99 +95,86 @@ function Invoice() {
       type: "amount",
       placeholder: "Advance",
       initialValue: 0,
-      // validation: Yup.number().typeError("Advance must be a number"),
+      validation: Yup.number().typeError("Advance must be a number"),
       labelOnTop: false,
     },
     totalAmount: {
       name: "totalAmount",
       type: "amount",
       placeholder: "Total Amount",
-      initialValue: "",
-      // validation: Yup.number()
-      // .typeError("Total Amount must be a number")
-      // .positive("Amount must be greater than 0"),
+      initialValue: 0,
+      validation: Yup.number()
+      .typeError("Total Amount must be a number")
+      .positive("Amount must be greater than 0"),
       disabled: true,
       labelOnTop: false,
     },
   };
 
-  const calcTotal = () => {
+  const lineItemColumns = [
+    { header: "Description", field: "description", type: "text", placeholder: "Description" },
+    { header: "Amount", field: "amount", type: "amount", placeholder: "Amount", width: "25%" },
+  ];
 
-    let xx = lineItems.reduce(
 
 
-
-      (sum, item) => sum + (parseFloat(item.amount.replace(/,/g, '')) || 0), 0
-    );
-
-    return xx;
+  const handleSubmit = async (values, { resetForm } ) => {
+    const sanitizedLineItems = sanitizeAmountFields(lineItems, lineItemColumns);
+    const param = { 
+      header: { ...values , txnNo: parseInt(id ? id : 0)}, 
+      lineItems: sanitizedLineItems,
+      isUpdate:id ? true : false
+    };
+    const response = await InvoiceService.createInvoice({ ...param });
+console.log(response);
+    if (response.success) {
+      MessageBoxService.show({
+        message: "Invoice saved successfully!",
+        type: "success",
+        onClose: () => navigate("/invoice"),
+      });
+      resetForm();
+      dataGridRef.current.reset();
+      setLineItems([]);
+    }
   };
 
-  const handleInquirySubmit = async (values, { resetForm } ) => {
-    const param = { ...values, invoiceNo: parseInt(id ? id : 0), lineItems };
-    console.log("Submitting invoice with values:", param);
-    // const savedInvoice = 
-    await InvoiceService.createInvoice({ ...param });
+  const formik = useFormikBuilder(fields, handleSubmit);
 
-    MessageBoxService.show({
-      message: "Invoice saved successfully!",
-      type: "success",
-      onClose: null,
-    });
-    resetForm();
-    dataGridRef.current.reset();
-    setLineItems([]);
-  };
 
-  const formik = useFormikBuilder(fields, handleInquirySubmit);
 
   useEffect(() => {
     calculateTotal();
     // eslint-disable-next-line
-  }, [lineItems]);
-
-  useEffect(() => {
-    calculateTotal();
-    // eslint-disable-next-line
-  }, [formik.values.advance]);
-  
+  }, [lineItems,formik.values.advance]);
+   
   function calculateTotal() {
-    let c = calcTotal();
-    formik.setFieldValue("amount", c);
+    const total = lineItems.reduce(
+      (sum, item) => sum + (parseFloat(item.amount)|| 0),
+      0
+    );
+    formik.setFieldValue("amount", total);
     formik.setFieldValue(
       "totalAmount",
-      c - (parseFloat(formik.values.advance.replace(/,/g, '')) || 0)
+      total - (parseFloat(formik.values.advance) || 0)
     );
   }
 
   return (
-    <div className="container mt-4">
-      <form onSubmit={formik.handleSubmit} >
+    <div className="container p-3">
+      <form onSubmit={formik.handleSubmit} className=" g-3">
         <div className="row g-3">
-          <InputField
-            {...fields.invoiceNo}
-            formik={formik}
-            className="col-md-6"
-          />
-          <InputField {...fields.date} formik={formik} className="col-md-6" />
+          <InputField {...fields.txnNo} formik={formik} className="col-md-6" />
+          <InputField {...fields.txnDate} formik={formik} className="col-md-6" />
           <SelectedBusinessPartnerBox field={fields.partner} formik={formik} />
-          <InputField
-            {...fields.typeOfVehicle}
-            formik={formik}
-            className="col-md-6"
-          />
-        </div>
-
-        <div className="row g-3 mt-2">
-          <div className="col-12">
+          <InputField {...fields.ref1} formik={formik} className="col-md-6" />
             <DataGrid
               ref={dataGridRef}
               initialItems={lineItems}
               columns={lineItemColumns}
               onItemsChange={setLineItems}
             />
-          </div>
-        </div>
+            </div>
         <div className="row  justify-content-end">
           <InputField
             {...fields.amount}
@@ -239,7 +196,7 @@ function Invoice() {
             className="col-md-6 text-end"
           />
         </div>
-        <div className="row g-3 mt-2">
+        {/* <div className="row g-3 mt-2">
           <InputField
             {...fields.preparedBy}
             formik={formik}
@@ -250,7 +207,7 @@ function Invoice() {
             formik={formik}
             className="col-md-6"
           />
-        </div>
+        </div> */}
 
         <button className="w-100 btn btn-primary mt-3" type="submit">
           Submit
