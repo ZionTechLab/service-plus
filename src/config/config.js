@@ -1,5 +1,5 @@
 const config = {
-  apiBaseUrl: 'http://5.189.136.234/api/', // Replace with your actual API endpoint
+  apiBaseUrl: 'https://sp-be.zionsl.com/api/', // Replace with your actual API endpoint
 };
 
 export default config;

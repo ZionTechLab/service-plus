@@ -34,7 +34,7 @@ function LoginPage() {
 
   const handleInquirySubmit = (values) => {
     const userData = { name: values.fullName, id: "123" };
-    if (userData.name === "voyaadmin" && values.password === "voya@admin")
+    if (userData.name === "admin" && values.password === "admin")
       dispatch(loginSuccess(userData));
     navigate("/main/travel-assistant", { replace: true });
   };

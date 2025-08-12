@@ -126,6 +126,15 @@ function AddDailyReport() {
   ];
 
   const handleSubmit = async (values, { resetForm }) => {
+    if(id)
+{
+   MessageBoxService.show({
+        message: "not available",
+        type: "success",
+        onClose: () => navigate("/invoice"),
+      });
+      return;
+}
     const sanitizedLineItems = sanitizeAmountFields(lineItems, lineItemColumns);
     const param = { 
       header: { ...values , txnNo: parseInt(id ? id : 0)}, 
