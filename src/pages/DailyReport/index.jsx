@@ -19,6 +19,7 @@ function DailyReportIndex() {
         hideSpinner();
     };
     fetchReports();
+    // eslint-disable-next-line
   }, []);
 
   const handleDelete = (id) => {

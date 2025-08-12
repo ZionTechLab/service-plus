@@ -64,13 +64,13 @@ function InvoiceIndex() {
         </div>
       ),
     },  
-    { header: 'txnIndex', field: 'txnIndex',class:'text-nowrap d-none' },
-    { header: 'Invoice No', field: 'invoiceNo',class:'text-nowrap' },
-    { header: 'Date', field: 'date',class:'text-nowrap' },
-    { header: 'Customer', field: 'partner',class:'text-nowrap' },
+    // { header: 'txnIndex', field: 'txnIndex',class:'text-nowrap d-none' },
+    { header: 'Invoice No', field: 'txnNo',class:'text-nowrap' },
+    { header: 'Date', field: 'txnDate',class:'text-nowrap' },
+    { header: 'Customer', field: 'partnerName',class:'text-nowrap' },
     { header: 'Total Amount', field: 'totalAmount',class:'text-nowrap text-end' },
-    { header: 'Prepared By', field: 'preparedBy',class:'text-nowrap' },
-    { header: 'Received By', field: 'receivedBy',class:'text-nowrap' },
+    // { header: 'Prepared By', field: 'preparedBy',class:'text-nowrap' },
+    // { header: 'Received By', field: 'receivedBy',class:'text-nowrap' },
   ];
 
   return (

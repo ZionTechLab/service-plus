@@ -22,6 +22,7 @@ function VehicaleConfirmation() {
       }
     };
     fetchConfirmations();
+    // eslint-disable-next-line
   }, []);
 
   const handleDelete = (id) => {

@@ -25,12 +25,16 @@ function usePopupMessage(initialOptions = {}) {
   const closePopup = useCallback(() => {
     setShow(false);
     if (options.onClose) options.onClose();
-  }, [options.onClose]);
+
+  }, 
+    // eslint-disable-next-line
+  [options.onClose]);
 
   const handleConfirm = useCallback(() => {
     setShow(false);
     if (options.onConfirm) options.onConfirm();
-  }, [options.onConfirm]);
+        // eslint-disable-next-line
+  },  [options.onConfirm]);
 
   const PopupMessage = show ? (
     <>

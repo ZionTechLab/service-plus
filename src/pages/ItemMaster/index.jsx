@@ -1,9 +1,9 @@
 import { useEffect, useState } from "react";
 import DataTable from "../../components/DataTable";
-import { Link, useNavigate } from 'react-router-dom';
+// import { Link, useNavigate } from 'react-router-dom';
 function ItemMasterSummary() {
   const [items, setItems] = useState([]);
-  const navigate = useNavigate();
+  // const navigate = useNavigate();
   useEffect(() => {
     const storedItems = JSON.parse(localStorage.getItem("items")) || [];
     setItems(storedItems);
@@ -27,11 +27,11 @@ function ItemMasterSummary() {
     <div>
       <h2 className="mb-3">Item Master Summary</h2>
       <DataTable name="Item Export" data={items} columns={columns}>
-       <Link to="/item-master/add">
+       {/* <Link to="/item-master/add">
    
           <button className=" btn btn-primary  ">New</button>
        
-      </Link>
+      </Link> */}
       </DataTable>
     </div>
   );
