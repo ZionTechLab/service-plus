@@ -1,8 +1,9 @@
 import axios, { axiosRequest } from '../../helpers/axiosMiddleware';
+import config from '../../config/config';
 
 class PartnerService {
   constructor() {
-    this.apiBase = 'http://localhost:3000/api/business-partners'; // Replace with your actual API endpoint
+    this.apiBase = config.apiBaseUrl+'business-partners';
   }
 
   async createPartner(partnerData) {

@@ -1,8 +1,9 @@
 import axios, { axiosRequest } from '../../helpers/axiosMiddleware';
+import config from '../../config/config';
 
 class DailyReportService {
 	constructor() {
-		this.apiBase = 'http://localhost:3000/api/activitylogs'; // Replace with your actual API endpoint
+		this.apiBase = config.apiBaseUrl+'activitylogs';
 	}
 
 	async createReport(reportData) {

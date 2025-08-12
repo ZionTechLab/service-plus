@@ -1,8 +1,8 @@
 import axios, { axiosRequest } from '../../helpers/axiosMiddleware';
-
+import config from '../../config/config';
 class InvoiceService {
   constructor() {
-    this.apiBase = 'http://localhost:3000/api/debtors'; // Replace with your actual API endpoint
+        this.apiBase = config.apiBaseUrl+'debtors';
   }
 
   async createInvoice(invoiceData) {
