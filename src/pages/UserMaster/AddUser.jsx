@@ -1,4 +1,4 @@
-import { useState } from 'react';
+
 import { useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { useFormikBuilder } from '../../helpers/formikBuilder';
@@ -6,62 +6,8 @@ import InputField from '../../helpers/InputField';
 import usePopupMessage from '../../components/PopupMessage';
 import UserService from './UserService';
 
-// Custom Image Input with Preview
-function ImageInputField({ name, formik, className }) {
-  const [preview, setPreview] = useState('');
-  const handleChange = (e) => {
-    const file = e.target.files[0];
-    formik.setFieldValue(name, file);
-    if (file) {
-      const reader = new FileReader();
-      reader.onload = (ev) => setPreview(ev.target.result);
-      reader.readAsDataURL(file);
-    } else {
-      setPreview('');
-    }
-  };
-  return (
-    <div className={className || 'mb-3'}>
-      <label className="form-label">Profile Image</label>
-      <input
-        type="file"
-        accept="image/*"
-        onChange={handleChange}
-        className="form-control"
-        style={{ display: 'none' }}
-        id="profile_image_input"
-      />
-      <div
-        className="image-preview mb-2"
-        style={{
-          width: 200,
-          height: 200,
-          border: '2px dashed #dee2e6',
-          display: 'flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          borderRadius: 8,
-          background: '#f8f9fa',
-          cursor: 'pointer',
-        }}
-        onClick={() => document.getElementById('profile_image_input').click()}
-      >
-        {preview ? (
-          <img src={preview} alt="Preview" style={{ maxWidth: '100%', maxHeight: '100%', borderRadius: 8 }} />
-        ) : (
-          <div className="image-preview-text text-center text-secondary">
-            <i className="bi bi-image" style={{ fontSize: '2rem' }}></i>
-            <div>Click to select image</div>
-            <small>Choose your profile picture</small>
-          </div>
-        )}
-      </div>
-      {formik.touched[name] && formik.errors[name] && (
-        <div className="text-danger small">{formik.errors[name]}</div>
-      )}
-    </div>
-  );
-}
+import ImageInputField from '../../components/ImageInputField';
+
 
 const fields = {
   username: {
