@@ -69,7 +69,7 @@ const AppRoutes = ({ isLoggedIn }) => (
       <Route path="user-master/edit/:id" element={<AddUser />} />
 
       <Route path="item-master" element={<ItemMaster />} />
-        <Route path="item-master/add" element={<AddItem />} />
+      <Route path="item-master/add" element={<AddItem />} />
       <Route path="item-category" element={<ItemCategory />} />
 
       <Route path="inquiry/:id" element={<InquiryView />} />
@@ -78,13 +78,13 @@ const AppRoutes = ({ isLoggedIn }) => (
       <Route path="profile" element={<Profile />} />
       <Route path="grn" element={<Grn />} />
 
-  <Route path="invoice" element={<Invoice />} />
-  <Route path="invoice/add" element={<AddInvoice />} />
-  <Route path="invoice/edit/:id" element={<AddInvoice />} />
+      <Route path="invoice" element={<Invoice />} />
+      <Route path="invoice/add" element={<AddInvoice />} />
+      <Route path="invoice/edit/:id" element={<AddInvoice />} />
 
-  <Route path="daily-report" element={<DailyReportIndex />} />
-  <Route path="daily-report/add" element={<AddDailyReport />} />
-    <Route path="daily-report/edit/:id" element={<AddDailyReport />} />
+      <Route path="daily-report" element={<DailyReportIndex />} />
+      <Route path="daily-report/add" element={<AddDailyReport />} />
+      <Route path="daily-report/edit/:id" element={<AddDailyReport />} />
     </Route>
   </Routes>
 );

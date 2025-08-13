@@ -23,10 +23,15 @@ function Navbar({ onToggleDrawer }) {
     }
   };
 
+
   const getPageTitle = () => {
     const path = location.pathname;
     if (path === "/") return "Dashboard";
-    const found = menuItems.find(item => item.route === path);
+    let found = menuItems.find((item) => item.route === path);
+    if (!found) {
+      const editMatch = path.match(/^(.*\/edit)\/\d+$/);
+      found = menuItems.find((item) => item.route === editMatch[1]);
+    }
     return found ? found.displayName : "Page";
   };
 
