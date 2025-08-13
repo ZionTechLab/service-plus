@@ -159,14 +159,15 @@ function AddDailyReport() {
 
   return (
     <div className="container p-3">
-      <form onSubmit={formik.handleSubmit} className="row g-3">
-        <InputField {...fields.txnNo} formik={formik} className="col-md-6"/>
-        <InputField {...fields.txnDate} formik={formik} className="col-md-6"/>
-        <SelectedBusinessPartnerBox field={fields.partner} formik={formik} />
-        <InputField {...fields.vehicleNo} formik={formik} className="col-md-6"/>
-        <InputField {...fields.typeOfMachine} formik={formik} className="col-md-6"/>
-        <InputField {...fields.operator} formik={formik} className="col-md-6"/>
-        <InputField {...fields.helper} formik={formik} className="col-md-6"/>
+      <form onSubmit={formik.handleSubmit} >
+        <div className="row g-2">
+        <InputField {...fields.txnNo} formik={formik} className="col-md-3 col-sm-6"/>
+        <InputField {...fields.txnDate} formik={formik} className="col-md-3 col-sm-6"/>
+        <SelectedBusinessPartnerBox field={fields.partner} formik={formik} className="col-sm-6"/>
+        <InputField {...fields.vehicleNo} formik={formik} className="col-md-3 col-sm-6"/>
+        <InputField {...fields.typeOfMachine} formik={formik} className="col-md-3 col-sm-6"/>
+        <InputField {...fields.operator} formik={formik} className="col-md-3 col-sm-6"/>
+        <InputField {...fields.helper} formik={formik} className="col-md-3 col-sm-6"/>
         <div className="col-md-12">
           <DataGrid
             ref={dataGridRef}
@@ -174,12 +175,16 @@ function AddDailyReport() {
             initialItems={[]}
             onItemsChange={setLineItems}
           />
-        </div>
-        <InputField {...fields.remarks} formik={formik} className="col-md-12"/>
-        <InputField {...fields.km} formik={formik} className="col-md-3"/>
-        <InputField {...fields.time} formik={formik} className="col-md-3"/>
-        <InputField {...fields.diesel} formik={formik} className="col-md-3"/>
-        <InputField {...fields.certifiedHours} formik={formik} className="col-md-3"/>
+        </div></div>
+         <div className="row g-2">
+        <InputField {...fields.remarks} formik={formik} className="col-sm-6"/>
+ <div className="col-sm-6 ">
+    <div className="row g-2">
+        <InputField {...fields.km} formik={formik} className="col-md-6"/>
+        <InputField {...fields.time} formik={formik} className="col-md-6"/>
+        <InputField {...fields.diesel} formik={formik} className="col-md-6"/>
+        <InputField {...fields.certifiedHours} formik={formik} className="col-md-6"/></div>
+        </div></div>
         <button type="submit" className="btn btn-primary">Save Report</button>
       </form>
     </div>

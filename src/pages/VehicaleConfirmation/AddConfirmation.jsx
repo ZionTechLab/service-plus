@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { useFormikBuilder } from "../../helpers/formikBuilder";
 import usePopupMessage from "../../components/PopupMessage";
 import Tabs from "../../components/Tabs";
+import SelectedBusinessPartnerBox from "../BusinessPartners/select-bp";
 
 const fields = {
   vehicleModel: {
@@ -49,19 +50,23 @@ const fields = {
     initialValue: "",
     validation: Yup.string().required("Chassis No is required"),
   },
+
+
   supplier: {
     name: "supplier",
-    type: "text",
+    type: "partner-select",
     placeholder: "Supplier",
     initialValue: "",
     validation: Yup.string().required("Supplier is required"),
+      isOpen: false,
   },
   customer: {
     name: "customer",
-    type: "text",
+    type: "partner-select",
     placeholder: "Customer",
     initialValue: "",
     validation: Yup.string().required("Customer is required"),
+      isOpen: false,
   },
   purchaseDate: {
     name: "purchaseDate",
@@ -272,52 +277,65 @@ const AddConfirmation = () => {
     <form onSubmit={formik.handleSubmit} className="p-3">
       <Tabs tabs={tabs} activeTab={activeTab} onTabChange={setActiveTab}>
         {activeTab === "vehicle" && (
-          <div className="row g-3">
-            <InputField className="col-sm-6" {...fields.vehicleModel} formik={formik} />
-            <InputField className="col-sm-6" {...fields.grade} formik={formik} />
-            <InputField className="col-sm-6" {...fields.colour} formik={formik} />
-            <InputField className="col-sm-3" {...fields.year} formik={formik} />
-            <InputField className="col-sm-3" {...fields.km} formik={formik} />
-            <InputField className="col-sm-6" {...fields.chassisNo} formik={formik} />
-            <InputField className="col-sm-12" {...fields.supplier} formik={formik} />
-            <InputField className="col-sm-12" {...fields.customer} formik={formik} />
+          <>
+          <div className="row">
+            <InputField className="col-md-3 col-sm-6" {...fields.vehicleModel} formik={formik} />
+            <InputField className="col-md-3 col-sm-6" {...fields.grade} formik={formik} />
+            <InputField className="col-md-3 col-sm-6" {...fields.colour} formik={formik} />
+            <InputField className="col-md-3 col-sm-6" {...fields.year} formik={formik} />
+            <InputField className="col-md-3 col-sm-6" {...fields.km} formik={formik} />
+            <InputField className="col-md-3 col-sm-6" {...fields.chassisNo} formik={formik} />
+            </div>
+             <div className="row">
+               <SelectedBusinessPartnerBox className="col-md-6 col-sm-12" field={fields.partner} formik={formik} />
+               <SelectedBusinessPartnerBox className="col-md-6 col-sm-12" field={fields.partner} formik={formik} />
+            <InputField className="col-md-6 col-sm-12" {...fields.supplier} formik={formik} />
+            <InputField className="col-md-6 col-sm-12" {...fields.customer} formik={formik} />
             <InputField className="col-sm-12" {...fields.description} formik={formik} />
-          </div>
+         </div></>
         )}
 
         {activeTab === "purchase" && (
-          <div className="row g-3">
-            <InputField className="col-sm-6" {...fields.purchaseDate} formik={formik} />
-            <InputField className="col-sm-6" {...fields.cifYen} formik={formik} />
-            <InputField className="col-sm-6" {...fields.auctionPrice} formik={formik} />
-            <InputField className="col-sm-3" {...fields.tax} formik={formik} />
-            <InputField className="col-sm-3" {...fields.frate} formik={formik} />
-            <InputField className="col-sm-6" {...fields.paymentAmount} formik={formik} />
-            <InputField className="col-sm-6" {...fields.paymentRate} formik={formik} />
-            <InputField className="col-sm-6" {...fields.paymentAmountYen} formik={formik} />
-            <InputField className="col-sm-6" {...fields.paymentDate} formik={formik} />
+          <>
+          <div className="row ">
+            <InputField className="col-md-3 col-sm-6" {...fields.purchaseDate} formik={formik} />
+            <InputField className="col-md-3 col-sm-6" {...fields.cifYen} formik={formik} />
+           </div>     <div className="row ">
+            <InputField className="col-md-3 col-sm-6" {...fields.auctionPrice} formik={formik} />
+            <InputField className="col-md-3 col-sm-6" {...fields.tax} formik={formik} />
+            <InputField className="col-md-3 col-sm-6" {...fields.frate} formik={formik} />
+       </div>     <div className="row ">
+            <InputField className="col-md-3 col-sm-6" {...fields.paymentAmount} formik={formik} />
+            <InputField className="col-md-3 col-sm-6" {...fields.paymentRate} formik={formik} />
+            <InputField className="col-md-3 col-sm-6" {...fields.paymentAmountYen} formik={formik} />
+            <InputField className="col-md-3 col-sm-6" {...fields.paymentDate} formik={formik} />
+            </div>     <div className="row ">
             <InputField className="col-sm-12" {...fields.paymentDetails} formik={formik} />
           </div>
+          </>
         )}
 
-        {activeTab === "lc" && (
-          <div className="row g-3">
-            <InputField className="col-sm-12" {...fields.lcOpenDetailsBank} formik={formik} />
-            <InputField className="col-sm-6" {...fields.JPY} formik={formik} />
-            <InputField className="col-sm-6" {...fields.lcOpenDetailsDate} formik={formik} />
-            <InputField className="col-sm-6" {...fields.lcMarginAmount} formik={formik} />
-            <InputField className="col-sm-6" {...fields.lcMarginDate} formik={formik} />
-            <InputField className="col-sm-4" {...fields.lcSettlementAmount} formik={formik} />
-            <InputField className="col-sm-4" {...fields.lcSettlementCharges} formik={formik} />
-            <InputField className="col-sm-4" {...fields.lcSettlementDate} formik={formik} />
-            <InputField className="col-sm-6" {...fields.dutyAmount} formik={formik} />
-            <InputField className="col-sm-6" {...fields.dutyDate} formik={formik} />
-            <InputField className="col-sm-6" {...fields.clearingChargers} formik={formik} />
-            <InputField className="col-sm-6" {...fields.clearingDate} formik={formik} />
-            <InputField className="col-sm-6" {...fields.salesTax} formik={formik} />
-            <InputField className="col-sm-6" {...fields.transportCost} formik={formik} />
-            <InputField className="col-sm-6" {...fields.totalCost} formik={formik} />
-          </div>
+        {activeTab === "lc" && (<>
+          <div className="row">
+            <InputField className="col-sm-6" {...fields.lcOpenDetailsBank} formik={formik} />
+            <InputField className="col-md-3 col-sm-6" {...fields.JPY} formik={formik} />
+            <InputField className="col-md-3 col-sm-6" {...fields.lcOpenDetailsDate} formik={formik} />
+            <InputField className="col-md-3 col-sm-6" {...fields.lcMarginAmount} formik={formik} />
+            <InputField className="col-md-3 col-sm-6" {...fields.lcMarginDate} formik={formik} />
+             </div> <div className="row">
+            <InputField className="col-md-3 col-sm-6" {...fields.lcSettlementAmount} formik={formik} />
+            <InputField className="col-md-3 col-sm-6" {...fields.lcSettlementCharges} formik={formik} />
+            <InputField className="col-md-3 col-sm-6" {...fields.lcSettlementDate} formik={formik} />
+             </div> <div className="row">
+            <InputField className="col-md-3 col-sm-6" {...fields.dutyAmount} formik={formik} />
+            <InputField className="col-md-3 col-sm-6" {...fields.dutyDate} formik={formik} />
+            <InputField className="col-md-3 col-sm-6" {...fields.clearingChargers} formik={formik} />
+            <InputField className="col-md-3 col-sm-6" {...fields.clearingDate} formik={formik} />
+            <InputField className="col-md-3 col-sm-6" {...fields.salesTax} formik={formik} />
+            <InputField className="col-md-3 col-sm-6" {...fields.transportCost} formik={formik} />
+            <InputField className="col-md-3 col-sm-6" {...fields.totalCost} formik={formik} />
+        </div>
+          </>
         )}
       </Tabs>
 

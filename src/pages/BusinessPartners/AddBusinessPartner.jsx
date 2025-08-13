@@ -156,15 +156,17 @@ function AddBusinessPartner({ onCustomerCreated }) {
       <div className="row g-5">
         <div className="col-md-12 col-lg-12">
           <form onSubmit={formik.handleSubmit} >
-            <div className="row g-3">
-              <InputField className="col-sm-12" {...fields.ID} formik={formik} />
-              <InputField className="col-sm-12" {...fields.partnerCode} formik={formik} />
+            <div className="row g-2">
+              <InputField className="col-md-3 col-sm-6" {...fields.ID} formik={formik} />
+              <InputField className="col-md-3 col-sm-6" {...fields.partnerCode} formik={formik} />
               <InputField className="col-sm-6" {...fields.partnerName} formik={formik} />
               <InputField className="col-sm-6" {...fields.contactPerson} formik={formik} />
-              <InputField className="col-sm-12" {...fields.email} formik={formik} />
-              <InputField className="col-sm-12" {...fields.address} formik={formik} />
-              <InputField className="col-sm-3" {...fields.phone1} formik={formik} />
+              </div> <div className="row g-2">
+              <InputField className="col-md-6 col-sm-12" {...fields.email} formik={formik} />
+                 <InputField className="col-sm-3" {...fields.phone1} formik={formik} />
               <InputField className="col-sm-3" {...fields.phone2} formik={formik} />
+              <InputField className="col-sm-12" {...fields.address} formik={formik} />
+           
               <div className="col-sm-6 row g-2">
                 <InputField className="col-4" {...fields.isCustomer} formik={formik} />
                 <InputField className="col-4" {...fields.isSupplier} formik={formik} />

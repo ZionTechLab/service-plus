@@ -172,11 +172,12 @@ console.log(response);
   return (
     <div className="container p-3">
       <form onSubmit={formik.handleSubmit} className=" g-3">
-        <div className="row g-3">
-          <InputField {...fields.txnNo} formik={formik} className="col-md-6" />
-          <InputField {...fields.txnDate} formik={formik} className="col-md-6" />
+        <div className="row g-2">
+          <InputField {...fields.txnNo} formik={formik} className="col-md-3 col-sm-6" />
+          <InputField {...fields.txnDate} formik={formik} className="col-md-3 col-sm-6" />
+        <InputField {...fields.ref1} formik={formik} className="col-sm-6" /> 
           <SelectedBusinessPartnerBox field={fields.partner} formik={formik} />
-          <InputField {...fields.ref1} formik={formik} className="col-md-6" />
+         
             <DataGrid
               ref={dataGridRef}
               initialItems={lineItems}
