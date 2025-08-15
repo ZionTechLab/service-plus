@@ -38,16 +38,10 @@ const fields = {
       placeholder: "Make",
       dataBinding: {
         data:uiData.data.Make,
-        // data: [
-        //   { key: "car", value: "Car" },
-        //   { key: "van", value: "Van" },
-        //   { key: "truck", value: "Truck" },
-        //   { key: "bus", value: "Bus" },
-        //   { key: "other", value: "Other" },
-        // ],
         keyField: "id",
         valueField: "value",
       },
+      
       initialValue: "car",
       validation: Yup.string().required("Type of Vehicle is required"),
     },
@@ -56,19 +50,13 @@ const fields = {
       type: "select",
       placeholder: "Model",
       dataBinding: {
-        data:uiData.data.Model,
-        // data: [
-        //   { key: "car", value: "Car" },
-        //   { key: "van", value: "Van" },
-        //   { key: "truck", value: "Truck" },
-        //   { key: "bus", value: "Bus" },
-        //   { key: "other", value: "Other" },
-        // ],
+        data:[],
+    
         keyField: "id",
         valueField: "value",
       },
       initialValue: "car",
-      validation: Yup.string().required("Type of Vehicle is required"),
+      // validation: Yup.string().required("Type of Vehicle is required"),
     },
 
 
@@ -421,7 +409,26 @@ const fields = {
     }
   };
 
+  const handleChange = (event) => {
+    console.log('Selected:', event.target.value);
+  };
+
   const formik = useFormikBuilder(fields, handleSubmit);
+
+  useEffect(() => {
+
+  const filteredModels = (uiData.data.Model || []).filter(
+    m => m.parentId == formik.values.vehicleMake
+  );
+ 
+  formik.setValues({
+    ...formik.values,
+    vehicleModel: filteredModels,
+  });
+}, [formik.values.vehicleMake]);
+
+
+
 
   return (
     <form onSubmit={formik.handleSubmit} className="p-3">

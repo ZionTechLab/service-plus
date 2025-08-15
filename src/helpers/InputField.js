@@ -90,7 +90,7 @@ function InputField({
   const renderInput = () => {
     if (type === 'select') {
       return (
-        <select className="form-select" id={name} {...inputProps}>
+        <select className="form-select" id={name} {...inputProps} >
           {dataBinding?.data?.map((opt) => (
             <option key={opt[dataBinding.keyField]} value={opt[dataBinding.keyField]}>
               {opt[dataBinding.keyField]} | {opt[dataBinding.valueField]}
