@@ -51,14 +51,14 @@ function VehicaleConfirmation() {
         </button>
       </div>
     ) },
-      { header: 'id', field: 'id' },
-        { header: ' Make', field: 'make' },
-    { header: ' Model', field: 'model' },
-    { header: 'Grade', field: 'grade' },
-    { header: 'Colour', field: 'colour' },
-    { header: 'Year', field: 'year' },
-    { header: 'KM', field: 'km' },
-    { header: 'Purchase Date', field: 'purchaseDate' },
+      // { header: 'id', field: 'id' },
+        { header: ' Make', field: 'make', class: "text-nowrap" },
+    { header: ' Model', field: 'model' , class: "text-nowrap"},
+    { header: 'Grade', field: 'grade' , class: "text-nowrap"},
+    { header: 'Colour', field: 'colour', class: "text-nowrap" },
+    { header: 'Year', field: 'year' , class: "text-nowrap"},
+    // { header: 'KM', field: 'km', class: "text-nowrap"},
+    { header: 'Purchase Date', field: 'purchaseDate', class: "text-nowrap",type: 'date' },
   ];
 
   return (

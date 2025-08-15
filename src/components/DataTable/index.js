@@ -331,11 +331,16 @@ const DataTable = ({ data = [], columns = [], name, children, onRowSelect }) => 
                     >
                       {displayColumns.map((col, j) => (
                         <td key={j} className={` ${col.class || ""}`}>
+                         {col.type === 'date' ? (
+                           <>{new Date(row[col.field]).toLocaleDateString()}</>
+                         ) : (
+                          
+                      <>
                           {!col.isAction
-                            ? row[col.field]
+                            ?(<>{row[col.field]}</>)
                             : col.actionTemplate
                             ? col.actionTemplate(row)
-                            : null}
+                            : null}  </> )}
                         </td>
                       ))}
                     </tr>

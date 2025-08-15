@@ -4,29 +4,16 @@ import * as Yup from "yup";
 import InputField from "../../helpers/InputField";
 import { useFormikBuilder } from "../../helpers/formikBuilder";
 import MessageBoxService from "../../services/MessageBoxService";
-// import DataGrid from "../../components/DataGrid";
 import ApiService from "./ConfirmationService";
 import SelectedBusinessPartnerBox from "../BusinessPartners/select-bp";
-// import sanitizeAmountFields from "../../helpers/sanitizeAmountFields";
-// import Tabs from "../../components/Tabs";
 import { useLoadingSpinner } from '../../hooks/useLoadingSpinner';
-
 import ImageInputField from '../../components/ImageInputField';
-
 
 const AddConfirmation = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  // const [activeTab, setActiveTab] = useState("vehicle");
-    const [uiData, setUiData] = useState({loading: false, success: false, error: '', data: {} });
-const [uiDataFiltered, setuiDataFiltered] = useState( {
-        Make:  [],
-        Model:  [],
-        Grade:  [],
-        Year:  [],
-        Colour:  [],
-        Millage: [],
-      } );
+  const [uiData, setUiData] = useState({loading: false, success: false, error: '', data: {} });
+  const [uiDataFiltered, setuiDataFiltered] = useState( {Make:  [],Model:  [],Grade:  [],Colour:  []} );
   const { showSpinner, hideSpinner } = useLoadingSpinner();
 
 const fields = {
@@ -81,27 +68,27 @@ const fields = {
       },
        validation: Yup.number().required("Colour of Vehicle is required"),
     },
-  year: {
-    name: "year",
-    type: "number",
-    placeholder: "Year",
-    initialValue: 2024,
-     validation: Yup.number().required("Year is required"),
-  },
-  millage: {
-    name: "millage",
-    type: "number",
-    placeholder: "Millage",
-    initialValue: 0,
-    validation: Yup.number().required("Millage is required"),
-  },
-  engineCapacity: {
-    name: "engineCapacity",
-    type: "number",
-    placeholder: "Engine Capacity",
-    initialValue: 0,
-    // validation: Yup.number().required("Engine Capacity is required"),
-  },
+    year: {
+      name: "year",
+      type: "number",
+      placeholder: "Year",
+      initialValue: 2024,
+      validation: Yup.number().required("Year is required"),
+    },
+    millage: {
+      name: "millage",
+      type: "number",
+      placeholder: "Millage",
+      initialValue: 0,
+      validation: Yup.number().required("Millage is required"),
+    },
+    engineCapacity: {
+      name: "engineCapacity",
+      type: "number",
+      placeholder: "Engine Capacity",
+      initialValue: 0,
+      // validation: Yup.number().required("Engine Capacity is required"),
+    },
     fuelType: {
       name: "fuelType",
       type: "select",
@@ -124,21 +111,21 @@ const fields = {
       },
        validation: Yup.number().required("Transmission of Vehicle is required"),
     },
-  chassisNo: {
-    name: "chassisNo",
-    type: "text",
-    placeholder: "Chassis No",
-    initialValue: "",
-    // validation: Yup.string().required("Chassis No is required"),
-  },
-  supplier: {
-    name: "supplier",
-    type: "partner-select",
-    placeholder: "Supplier",
-    initialValue: 0,
-     validation: Yup.number().required("Supplier is required"),
-      isOpen: false,
-  },
+    chassisNo: {
+      name: "chassisNo",
+      type: "text",
+      placeholder: "Chassis No",
+      initialValue: "",
+      // validation: Yup.string().required("Chassis No is required"),
+    },
+    supplier: {
+      name: "supplier",
+      type: "partner-select",
+      placeholder: "Supplier",
+      initialValue: 0,
+      validation: Yup.number().required("Supplier is required"),
+        isOpen: false,
+    },
   // customer: {
   //   name: "customer",
   //   type: "partner-select",
@@ -147,188 +134,188 @@ const fields = {
   //   // validation: Yup.string().required("Customer is required"),
   //     isOpen: false,
   // },
-  purchaseDate: {
-    name: "purchaseDate",
-    type: "date",
-    placeholder: "Purchase Date",
-    initialValue: new Date().toISOString().split("T")[0],
-    // validation: Yup.string().required("Purchase Date is required"),
-  },
-  cifYen: {
-    name: "cifYen",
-    type: "number",
-    placeholder: "CIF YEN",
-    initialValue: 0,
-    // validation: Yup.number().required("CIF YEN is required"),
-  },
-  auctionPrice: {
-    name: "auctionPrice",
-    type: "number",
-    placeholder: "Auction Price",
-    initialValue: 0,
-    // validation: Yup.number().required("Auction Price is required"),
-  },
-  tax: {
-    name: "tax",
-    type: "number",
-    placeholder: "TAX",
-    initialValue: 0,
-    // validation: Yup.number().required("TAX is required"),
-  },
-  freight: {
-    name: "freight",
-    type: "number",
-    placeholder: "Freight",
-    initialValue: 0,
-    // validation: Yup.number().required("Freight is required"),
-  },
-  paymentDate: {
-    name: "paymentDate",
-    type: "date",
-    placeholder: "Payment Date",
-    initialValue: new Date().toISOString().split("T")[0],
-    // validation: Yup.string().required("Payment Date is required"),
-  },
-  paymentAmount: {
-    name: "paymentAmount",
-    type: "number",
-    placeholder: "Payment Amount",
-    initialValue: 0,
-    // validation: Yup.number().required("Payment Amount is required"),
-  },
-  paymentRate: {
-    name: "paymentRate",
-    type: "number",
-    placeholder: "Payment Rate",
-    initialValue: 0,
-    // validation: Yup.number().required("Payment Rate is required"),
-  },
-  paymentAmountYen: {
-    name: "paymentAmountYen",
-    type: "number",
-    placeholder: "Payment Amount (YEN)",
-    initialValue: 0,
-    // validation: Yup.number().required("Payment Amount (YEN) is required"),
-  },
-  paymentDetails: {
-    name: "paymentDetails",
-    type: "text",
-    placeholder: "Payment Details",
-    initialValue: "",
-    // validation: Yup.string().required("Payment Details is required"),
-  },
-  lcOpenDetailsBank: {
-    name: "lcOpenDetailsBank",
-    type: "text",
-    placeholder: "L.C Open Details (Bank)",
-    initialValue: 0,
-    // validation: Yup.string().required("L.C Open Details (Bank) is required"),
-  },
-  JPY: {
-    name: "JPY",
-    type: "number",
-    placeholder: "JPY",
-    initialValue: 0,
-    // validation: Yup.number().required("JPY is required"),
-  },
-  lcOpenDetailsDate: {
-    name: "lcOpenDetailsDate",
-    type: "date",
-    placeholder: "L.C Open Date",
-    initialValue: new Date().toISOString().split("T")[0],
-    // validation: Yup.date().required("L.C Open Date is required"),
-  },
-  lcMarginAmount: {
-    name: "lcMarginAmount",
-    type: "number",
-    placeholder: "L.C Margin Amount",
-    initialValue: 0,
-    // validation: Yup.number().required("L.C Margin Amount is required"),
-  },
-  lcMarginDate: {
-    name: "lcMarginDate",
-    type: "date",
-    placeholder: "L.C Margin Date",
-    initialValue: new Date().toISOString().split("T")[0],
-    // validation: Yup.date().required("L.C Margin Date is required"),
-  },
-  lcSettlementAmount: {
-    name: "lcSettlementAmount",
-    type: "number",
-    placeholder: "L.C Settlement Amount",
-    initialValue: 0,
-    validation: Yup.number().required("L.C Settlement Amount is required"),
-  },
-  lcSettlementCharges: {
-    name: "lcSettlementCharges",
-    type: "number",
-    placeholder: "L.C Settlement Charges",
-    initialValue: 0,
-    validation: Yup.number().required("L.C Settlement Charges is required"),
-  },
-  lcSettlementDate: {
-    name: "lcSettlementDate",
-    type: "date",
-    placeholder: "L.C Settlement Date",
-    initialValue: new Date().toISOString().split("T")[0],
-    // validation: Yup.date().required("L.C Settlement Date is required"),
-  },
-  dutyAmount: {
-    name: "dutyAmount",
-    type: "number",
-    placeholder: "Duty Amount",
-    initialValue: 0,
-    validation: Yup.number().required("Duty Amount is required"),
-  },
-  dutyDate: {
-    name: "dutyDate",
-    type: "date",
-    placeholder: "Duty Date",
-    initialValue: new Date().toISOString().split("T")[0],
-    // validation: Yup.date().required("Duty Date is required"),
-  },
-  clearingCharges: {
-    name: "clearingCharges",
-    type: "number",
-    placeholder: "Clearing Charges",
-    initialValue: 0,
-    validation: Yup.number().required("Clearing Charges is required"),
-  },
-  clearingDate: {
-    name: "clearingDate",
-    type: "date",
-    placeholder: "Clearing Date",
-    initialValue: new Date().toISOString().split("T")[0],
-    // validation: Yup.date().required("Clearing Date is required"),
-  },
-  salesTax: {
-    name: "salesTax",
-    type: "number",
-    placeholder: "Sales Tax",
-    initialValue: 0,
-    validation: Yup.number().required("Sales Tax is required"),
-  },
-  transportCost: {
-    name: "transportCost",
-    type: "number",
-    placeholder: "Transport Cost",
-    initialValue: 0,
-    validation: Yup.number().required("Transport Cost is required"),
-  },
-  totalCost: {
-    name: "totalCost",
-    type: "number",
-    placeholder: "Total Cost",
-    initialValue: 0,
-    validation: Yup.number().required("Total Cost is required"),
-  },
-  description: {
-    name: "description",
-    type: "textarea",
-    placeholder: "Description",
-    initialValue: "",
-    // validation: Yup.string().required("Description is required"),
-  },  
+    purchaseDate: {
+      name: "purchaseDate",
+      type: "date",
+      placeholder: "Purchase Date",
+      initialValue: new Date().toISOString().split("T")[0],
+      // validation: Yup.string().required("Purchase Date is required"),
+    },
+    cifYen: {
+      name: "cifYen",
+      type: "number",
+      placeholder: "CIF YEN",
+      initialValue: 0,
+      // validation: Yup.number().required("CIF YEN is required"),
+    },
+    auctionPrice: {
+      name: "auctionPrice",
+      type: "number",
+      placeholder: "Auction Price",
+      initialValue: 0,
+      // validation: Yup.number().required("Auction Price is required"),
+    },
+    tax: {
+      name: "tax",
+      type: "number",
+      placeholder: "TAX",
+      initialValue: 0,
+      // validation: Yup.number().required("TAX is required"),
+    },
+    freight: {
+      name: "freight",
+      type: "number",
+      placeholder: "Freight",
+      initialValue: 0,
+      // validation: Yup.number().required("Freight is required"),
+    },
+    paymentDate: {
+      name: "paymentDate",
+      type: "date",
+      placeholder: "Payment Date",
+      initialValue: new Date().toISOString().split("T")[0],
+      // validation: Yup.string().required("Payment Date is required"),
+    },
+    paymentAmount: {
+      name: "paymentAmount",
+      type: "number",
+      placeholder: "Payment Amount",
+      initialValue: 0,
+      // validation: Yup.number().required("Payment Amount is required"),
+    },
+    paymentRate: {
+      name: "paymentRate",
+      type: "number",
+      placeholder: "Payment Rate",
+      initialValue: 0,
+      // validation: Yup.number().required("Payment Rate is required"),
+    },
+    paymentAmountYen: {
+      name: "paymentAmountYen",
+      type: "number",
+      placeholder: "Payment Amount (YEN)",
+      initialValue: 0,
+      // validation: Yup.number().required("Payment Amount (YEN) is required"),
+    },
+    paymentDetails: {
+      name: "paymentDetails",
+      type: "text",
+      placeholder: "Payment Details",
+      initialValue: "",
+      // validation: Yup.string().required("Payment Details is required"),
+    },
+    lcOpenDetailsBank: {
+      name: "lcOpenDetailsBank",
+      type: "text",
+      placeholder: "L.C Open Details (Bank)",
+      initialValue: 0,
+      // validation: Yup.string().required("L.C Open Details (Bank) is required"),
+    },
+    JPY: {
+      name: "JPY",
+      type: "number",
+      placeholder: "JPY",
+      initialValue: 0,
+      // validation: Yup.number().required("JPY is required"),
+    },
+    lcOpenDetailsDate: {
+      name: "lcOpenDetailsDate",
+      type: "date",
+      placeholder: "L.C Open Date",
+      initialValue: new Date().toISOString().split("T")[0],
+      // validation: Yup.date().required("L.C Open Date is required"),
+    },
+    lcMarginAmount: {
+      name: "lcMarginAmount",
+      type: "number",
+      placeholder: "L.C Margin Amount",
+      initialValue: 0,
+      // validation: Yup.number().required("L.C Margin Amount is required"),
+    },
+    lcMarginDate: {
+      name: "lcMarginDate",
+      type: "date",
+      placeholder: "L.C Margin Date",
+      initialValue: new Date().toISOString().split("T")[0],
+      // validation: Yup.date().required("L.C Margin Date is required"),
+    },
+    lcSettlementAmount: {
+      name: "lcSettlementAmount",
+      type: "number",
+      placeholder: "L.C Settlement Amount",
+      initialValue: 0,
+      validation: Yup.number().required("L.C Settlement Amount is required"),
+    },
+    lcSettlementCharges: {
+      name: "lcSettlementCharges",
+      type: "number",
+      placeholder: "L.C Settlement Charges",
+      initialValue: 0,
+      validation: Yup.number().required("L.C Settlement Charges is required"),
+    },
+    lcSettlementDate: {
+      name: "lcSettlementDate",
+      type: "date",
+      placeholder: "L.C Settlement Date",
+      initialValue: new Date().toISOString().split("T")[0],
+      // validation: Yup.date().required("L.C Settlement Date is required"),
+    },
+    dutyAmount: {
+      name: "dutyAmount",
+      type: "number",
+      placeholder: "Duty Amount",
+      initialValue: 0,
+      validation: Yup.number().required("Duty Amount is required"),
+    },
+    dutyDate: {
+      name: "dutyDate",
+      type: "date",
+      placeholder: "Duty Date",
+      initialValue: new Date().toISOString().split("T")[0],
+      // validation: Yup.date().required("Duty Date is required"),
+    },
+    clearingCharges: {
+      name: "clearingCharges",
+      type: "number",
+      placeholder: "Clearing Charges",
+      initialValue: 0,
+      validation: Yup.number().required("Clearing Charges is required"),
+    },
+    clearingDate: {
+      name: "clearingDate",
+      type: "date",
+      placeholder: "Clearing Date",
+      initialValue: new Date().toISOString().split("T")[0],
+      // validation: Yup.date().required("Clearing Date is required"),
+    },
+    salesTax: {
+      name: "salesTax",
+      type: "number",
+      placeholder: "Sales Tax",
+      initialValue: 0,
+      validation: Yup.number().required("Sales Tax is required"),
+    },
+    transportCost: {
+      name: "transportCost",
+      type: "number",
+      placeholder: "Transport Cost",
+      initialValue: 0,
+      validation: Yup.number().required("Transport Cost is required"),
+    },
+    totalCost: {
+      name: "totalCost",
+      type: "number",
+      placeholder: "Total Cost",
+      initialValue: 0,
+      validation: Yup.number().required("Total Cost is required"),
+    },
+    description: {
+      name: "description",
+      type: "textarea",
+      placeholder: "Description",
+      initialValue: "",
+      // validation: Yup.string().required("Description is required"),
+    },  
     image: {
       name: "image",
       type: "file",
@@ -338,15 +325,6 @@ const fields = {
       // className: "col-md-12"
     },
 };
-
-// useEffect(() => {
-
-// // console.log(uiDataFiltered)
-// }, [uiDataFiltered]);
-
-
-
-
 
   useEffect(() => {
    const fetchUi = async () => {
@@ -360,10 +338,6 @@ const fields = {
       hideSpinner();
     };
     fetchUi();
-
-
-
-
     if (id) {
       const fetchTxn = async () => {
         const response = await ApiService.get(id);
@@ -383,12 +357,6 @@ const fields = {
      // eslint-disable-next-line
   }, [id]);
 
-  // const tabs = [
-  //   { id: "vehicle", label: "Vehicle & Parties" },
-  //   { id: "purchase", label: "Purchase & Payments" },
-  //   { id: "lc", label: "LC, Import & Costs" },
-  // ];
-
   const handleSubmit = async (values, { resetForm }) => {
     console.log("Form Values:", values);
     if(id)
@@ -400,10 +368,8 @@ const fields = {
       });
       return;
 }
-    // const sanitizedLineItems = sanitizeAmountFields(lineItems, lineItemColumns);
     const param = { 
       header: { ...values , id: parseInt(id ? id : 0)}, 
-      // lineItems: sanitizedLineItems,
       isUpdate:id ? true : false
     };
     const response = await ApiService.create({ ...param });
@@ -415,8 +381,6 @@ const fields = {
         onClose: () => navigate("/vehicale-confirmation"),
       });
       resetForm();
-      // dataGridRef.current.reset();
-      // setLineItems([]);
     }
   };
 
@@ -444,39 +408,31 @@ const fields = {
 
 const filterGrade = () => {
 
-
-
 }
 
   return (
     <form onSubmit={formik.handleSubmit} className="p-3">
-      {/* <Tabs tabs={tabs} activeTab={activeTab} onTabChange={setActiveTab}> */}
-        {/* {activeTab === "vehicle" && ( */}
-          <>
-           <span className="tab-label">Vehicle Details</span>
-                   <div className="row   g-0"> <hr /></div>
-
-          <div className="row">
-<div className="col-sm-9">  <div className="row">
-  <InputField className="col-md-4 col-sm-6" {...fields.make} formik={formik} />
+      <span className="tab-label">Vehicle Details</span>
+      <div className="row   g-0"> <hr /></div>
+        <div className="row">
+          <div className="col-sm-9">  <div className="row">
+            <InputField className="col-md-4 col-sm-6" {...fields.make} formik={formik} />
             <InputField className="col-md-4 col-sm-6" {...fields.model} formik={formik} />
             <InputField className="col-md-4 col-sm-6" {...fields.grade} formik={formik} />
             <InputField className="col-md-4 col-sm-6" {...fields.year} formik={formik} />
             <InputField className="col-md-4 col-sm-6" {...fields.colour} formik={formik} />
-           
             <InputField className="col-md-4 col-sm-6" {...fields.millage} formik={formik} />
-             <InputField className="col-md-4 col-sm-6" {...fields.engineCapacity} formik={formik} />
-                 <InputField className="col-md-4 col-sm-6" {...fields.fuelType} formik={formik} />
-                  <InputField className="col-md-4 col-sm-6" {...fields.transmission} formik={formik} />
-                    <InputField className="col-md-4 col-sm-6" {...fields.chassisNo} formik={formik} />
-            </div>
-            </div>
-<div className="col-sm-3"> <ImageInputField {...fields.image} formik={formik} /></div>
-                  
-            
-            
-               
-          
+            <InputField className="col-md-4 col-sm-6" {...fields.engineCapacity} formik={formik} />
+            <InputField className="col-md-4 col-sm-6" {...fields.fuelType} formik={formik} />
+            <InputField className="col-md-4 col-sm-6" {...fields.transmission} formik={formik} />
+            <InputField className="col-md-4 col-sm-6" {...fields.chassisNo} formik={formik} />
+          </div>
+        </div>
+        <div className="col-sm-3"> 
+          <ImageInputField {...fields.image} formik={formik} />
+        </div>
+
+
             </div>
              <div className="row">
                {/* <SelectedBusinessPartnerBox className="col-md-6 col-sm-12" field={fields.customer} formik={formik} />
@@ -535,20 +491,7 @@ const filterGrade = () => {
             <InputField className="col-md-3 col-sm-6" {...fields.transportCost} formik={formik} />
             <InputField className="col-md-3 col-sm-6" {...fields.totalCost} formik={formik} />
         </div>
-         </>
-        {/* )} */}
 
-        {/* {activeTab === "purchase" && ( */}
-          {/* <>
-         
-          </>
-        )} */}
-
-        {/* {activeTab === "lc" && (<>
-     
-          </>
-        )} */}
-      {/* </Tabs> */}
 
       <button type="submit" className="btn btn-primary mt-3">Save</button>
     </form>

@@ -71,7 +71,7 @@ function BusinessPartners() {
     { header: "Partner Name", field: "partnerName", class: "text-nowrap" },
     { header: "Contact Person", field: "contactPerson", class: "text-nowrap" },
     { header: "Email", field: "email" },
-    { header: "Address", field: "address" },
+    { header: "Address", field: "address",class: "text-nowrap"  },
     { header: "Phone", field: "phone" },
     { header: "Customer",
       isAction: true,
