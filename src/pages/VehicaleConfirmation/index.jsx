@@ -1,27 +1,24 @@
+import { useEffect, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import DataTable from '../../components/DataTable';
-import { useEffect, useState } from 'react';
+import ApiService from "./ConfirmationService";
 import MessageBoxService from '../../services/MessageBoxService';
 import { useLoadingSpinner } from '../../hooks/useLoadingSpinner';
 
 function VehicaleConfirmation() {
-  const [uiData, setUiData] = useState({ error: '', data: [] });
+  const [uiData, setUiData] = useState({loading: false, success: false, error: '', data: [] });
   const navigate = useNavigate();
   const { showSpinner, hideSpinner } = useLoadingSpinner();
 
   useEffect(() => {
-    const fetchConfirmations = async () => {
+    const fetchTxn = async () => {
+      setUiData(prev => ({ ...prev, loading: true, error: '', data: [] }));
       showSpinner();
-      try {
-        // TODO: Replace with actual service call
-        setUiData({ error: '', data: [] });
-      } catch (error) {
-        setUiData({ error: 'Failed to fetch vehicle confirmations. Please try again later.', data: [] });
-      } finally {
-        hideSpinner();
-      }
+      const data = await ApiService.getAll();
+      setUiData(prev => ({ ...prev, ...data , loading: false }));
+      hideSpinner();
     };
-    fetchConfirmations();
+    fetchTxn();
     // eslint-disable-next-line
   }, []);
 
@@ -54,36 +51,24 @@ function VehicaleConfirmation() {
         </button>
       </div>
     ) },
+      { header: 'id', field: 'id' },
     { header: 'Vehicle Model', field: 'vehicleModel' },
     { header: 'Grade', field: 'grade' },
     { header: 'Colour', field: 'colour' },
     { header: 'Year', field: 'year' },
     { header: 'KM', field: 'km' },
-    { header: 'Chassis No', field: 'chassisNo' },
-    { header: 'Supplier/Customer', field: 'supplierCustomer' },
     { header: 'Purchase Date', field: 'purchaseDate' },
-    { header: 'CIF YEN', field: 'cifYen' },
-    { header: 'Auction Price', field: 'auctionPrice' },
-    { header: 'TAX', field: 'tax' },
-    { header: 'Frate', field: 'frate' },
-    { header: 'Payment Details', field: 'paymentDetails' },
-    { header: 'L.C Open Details', field: 'lcOpenDetails' },
-    { header: 'L.C Margin Amount', field: 'lcMarginAmount' },
-    { header: 'L.C Settlement Amount', field: 'lcSettlementAmount' },
-    { header: 'Duty Amount', field: 'dutyAmount' },
-    { header: 'Clearing Date & Chargers', field: 'clearingDateChargers' },
-    { header: 'Sale tax & transport cost', field: 'saleTaxTransportCost' },
-    { header: 'Total Cost', field: 'totalCost' },
-    { header: 'Discription', field: 'discription' },
   ];
 
   return (
-    <div>
-      <DataTable name="Vehicle Confirmation" data={uiData.data} columns={columns} >
-        <Link to="/vehicale-confirmation/add">
-          <button className="btn btn-primary">New</button>
-        </Link>
-      </DataTable>
+<div>
+      {!uiData.loading && !uiData.error && (
+        <DataTable name="Vehicle Confirmation" data={uiData.data} columns={columns}>
+          <Link to="/vehicale-confirmation/add">
+            <button className="btn btn-primary">New</button>
+          </Link>
+        </DataTable>
+      )}
       {uiData.error && (
         <div className="alert alert-danger mt-3">{uiData.error}</div>
       )}
