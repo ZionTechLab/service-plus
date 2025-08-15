@@ -430,6 +430,7 @@ const filterGrade = () => {
         </div>
         <div className="col-sm-3"> 
           <ImageInputField {...fields.image} formik={formik} />
+    {formik.values.image &&      <img src={URL.createObjectURL(formik.values.image)} alt="Preview" width="200" />}
         </div>
 
 
