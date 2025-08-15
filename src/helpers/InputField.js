@@ -91,9 +91,12 @@ function InputField({
     if (type === 'select') {
       return (
         <select className="form-select" id={name} {...inputProps} >
+          {/* default blank option */}
+          <option value="">{placeholder || '-- Select --'}</option>
           {dataBinding?.data?.map((opt) => (
             <option key={opt[dataBinding.keyField]} value={opt[dataBinding.keyField]}>
-              {opt[dataBinding.keyField]} | {opt[dataBinding.valueField]}
+              {/* {opt[dataBinding.keyField]} | */}
+               {opt[dataBinding.valueField]}
             </option>
           ))}
         </select>

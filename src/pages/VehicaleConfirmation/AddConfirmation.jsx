@@ -1,5 +1,5 @@
-import { useRef, useState,useEffect } from "react";
-import { useParams,useNavigate, data } from "react-router-dom";
+import {  useState,useEffect } from "react";
+import { useParams,useNavigate } from "react-router-dom";
 import * as Yup from "yup";
 import InputField from "../../helpers/InputField";
 import { useFormikBuilder } from "../../helpers/formikBuilder";
@@ -8,7 +8,7 @@ import MessageBoxService from "../../services/MessageBoxService";
 import ApiService from "./ConfirmationService";
 import SelectedBusinessPartnerBox from "../BusinessPartners/select-bp";
 // import sanitizeAmountFields from "../../helpers/sanitizeAmountFields";
-import Tabs from "../../components/Tabs";
+// import Tabs from "../../components/Tabs";
 import { useLoadingSpinner } from '../../hooks/useLoadingSpinner';
 
 import ImageInputField from '../../components/ImageInputField';
@@ -17,9 +17,16 @@ import ImageInputField from '../../components/ImageInputField';
 const AddConfirmation = () => {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [activeTab, setActiveTab] = useState("vehicle");
+  // const [activeTab, setActiveTab] = useState("vehicle");
     const [uiData, setUiData] = useState({loading: false, success: false, error: '', data: {} });
-
+const [uiDataFiltered, setuiDataFiltered] = useState( {
+        Make:  [],
+        Model:  [],
+        Grade:  [],
+        Year:  [],
+        Colour:  [],
+        Millage: [],
+      } );
   const { showSpinner, hideSpinner } = useLoadingSpinner();
 
 const fields = {
@@ -29,94 +36,94 @@ const fields = {
       placeholder: "ID",
       initialValue: "<Auto>",
       disabled: true,
-      // visible: false
-      // validation: Yup.string().required("ID is required"),
     },
-    vehicleMake: {
-      name: "vehicleMake",
+    make: {
+      name: "make",
       type: "select",
       placeholder: "Make",
       dataBinding: {
-        data:uiData.data.Make,
+        data:uiDataFiltered.Make,
         keyField: "id",
         valueField: "value",
       },
-      
-      initialValue: "car",
-      validation: Yup.string().required("Type of Vehicle is required"),
+      validation: Yup.number().required("Type of Vehicle is required"),
     },
-    vehicleModel: {
-      name: "vehicleModel",
+    model: {
+      name: "model",
       type: "select",
       placeholder: "Model",
       dataBinding: {
-        data:[],
-    
+        data:uiDataFiltered.Model,
         keyField: "id",
         valueField: "value",
       },
-      initialValue: "car",
-      // validation: Yup.string().required("Type of Vehicle is required"),
+       validation: Yup.number().required("Type of Vehicle is required"),
     },
-
-
-
-  // vehicleModel: {
-  //   name: "vehicleModel",
-  //   type: "text",
-  //   placeholder: "Model",
-  //   initialValue: "",
-  //   // validation: Yup.string().required("Vehicle Model is required"),
-  // },
-  grade: {
-    name: "grade",
-    type: "text",
-    placeholder: "Grade",
-    initialValue: "",
-    // validation: Yup.string().required("Grade is required"),
-  },
-  colour: {
-    name: "colour",
-    type: "text",
-    placeholder: "Colour",
-    initialValue: "",
-    // validation: Yup.string().required("Colour is required"),
-  },
+    grade: {
+      name: "grade",
+      type: "select",
+      placeholder: "Grade",
+      dataBinding: {
+        data:uiDataFiltered.Grade,
+        keyField: "id",
+        valueField: "value",
+      },
+       validation: Yup.number().required("Grade of Vehicle is required"),
+    },
+    colour: {
+      name: "colour",
+      type: "select",
+      placeholder: "Colour",
+      dataBinding: {
+        data:uiDataFiltered.Colour,
+        keyField: "id",
+        valueField: "value",
+      },
+       validation: Yup.number().required("Colour of Vehicle is required"),
+    },
   year: {
     name: "year",
     type: "number",
     placeholder: "Year",
-    initialValue: "",
-    // validation: Yup.number().required("Year is required"),
+    initialValue: 2024,
+     validation: Yup.number().required("Year is required"),
   },
   millage: {
     name: "millage",
     type: "number",
     placeholder: "Millage",
-    initialValue: "",
-    // validation: Yup.number().required("Millage is required"),
+    initialValue: 0,
+    validation: Yup.number().required("Millage is required"),
   },
   engineCapacity: {
     name: "engineCapacity",
     type: "number",
     placeholder: "Engine Capacity",
-    initialValue: "",
+    initialValue: 0,
     // validation: Yup.number().required("Engine Capacity is required"),
   },
-   fuelType: {
-    name: "fuelType",
-    type: "text",
-    placeholder: "Fuel Type",
-    initialValue: "",
-    // validation: Yup.string().required("Fuel Type is required"),
-  },
-     transmission: {
-    name: "transmission",
-    type: "text",
-    placeholder: "Transmission",
-    initialValue: "",
-    // validation: Yup.string().required("Transmission is required"),
-  },
+    fuelType: {
+      name: "fuelType",
+      type: "select",
+      placeholder: "Fuel Type",
+      dataBinding: {
+        data:uiDataFiltered.FuelType,
+        keyField: "id",
+        valueField: "value",
+      },
+       validation: Yup.number().required("Fuel Type of Vehicle is required"),
+    },
+    transmission: {
+      name: "transmission",
+      type: "select",
+      placeholder: "Transmission",
+      dataBinding: {
+        data:uiDataFiltered.Transmission,
+        keyField: "id",
+        valueField: "value",
+      },
+       validation: Yup.number().required("Transmission of Vehicle is required"),
+    },
   chassisNo: {
     name: "chassisNo",
     type: "text",
@@ -124,85 +131,83 @@ const fields = {
     initialValue: "",
     // validation: Yup.string().required("Chassis No is required"),
   },
-
-
   supplier: {
     name: "supplier",
     type: "partner-select",
     placeholder: "Supplier",
-    initialValue: "",
-    // validation: Yup.string().required("Supplier is required"),
+    initialValue: 0,
+     validation: Yup.number().required("Supplier is required"),
       isOpen: false,
   },
-  customer: {
-    name: "customer",
-    type: "partner-select",
-    placeholder: "Customer",
-    initialValue: "",
-    // validation: Yup.string().required("Customer is required"),
-      isOpen: false,
-  },
+  // customer: {
+  //   name: "customer",
+  //   type: "partner-select",
+  //   placeholder: "Customer",
+  //   initialValue: "",
+  //   // validation: Yup.string().required("Customer is required"),
+  //     isOpen: false,
+  // },
   purchaseDate: {
     name: "purchaseDate",
     type: "date",
     placeholder: "Purchase Date",
-    initialValue: "",
+    initialValue: new Date().toISOString().split("T")[0],
     // validation: Yup.string().required("Purchase Date is required"),
   },
   cifYen: {
     name: "cifYen",
     type: "number",
     placeholder: "CIF YEN",
-    initialValue: "",
+    initialValue: 0,
     // validation: Yup.number().required("CIF YEN is required"),
   },
   auctionPrice: {
     name: "auctionPrice",
     type: "number",
     placeholder: "Auction Price",
-    initialValue: "",
+    initialValue: 0,
     // validation: Yup.number().required("Auction Price is required"),
   },
   tax: {
     name: "tax",
     type: "number",
     placeholder: "TAX",
-    initialValue: "",
+    initialValue: 0,
     // validation: Yup.number().required("TAX is required"),
   },
   freight: {
     name: "freight",
     type: "number",
     placeholder: "Freight",
-    initialValue: "",
+    initialValue: 0,
     // validation: Yup.number().required("Freight is required"),
   },
   paymentDate: {
     name: "paymentDate",
     type: "date",
     placeholder: "Payment Date",
-    initialValue: "",
+    initialValue: new Date().toISOString().split("T")[0],
     // validation: Yup.string().required("Payment Date is required"),
   },
   paymentAmount: {
     name: "paymentAmount",
     type: "number",
     placeholder: "Payment Amount",
-    initialValue: "",
+    initialValue: 0,
     // validation: Yup.number().required("Payment Amount is required"),
   },
   paymentRate: {
     name: "paymentRate",
     type: "number",
     placeholder: "Payment Rate",
-    initialValue: "",
+    initialValue: 0,
     // validation: Yup.number().required("Payment Rate is required"),
   },
   paymentAmountYen: {
     name: "paymentAmountYen",
     type: "number",
     placeholder: "Payment Amount (YEN)",
-    initialValue: "",
+    initialValue: 0,
     // validation: Yup.number().required("Payment Amount (YEN) is required"),
   },
   paymentDetails: {
@@ -216,105 +221,105 @@ const fields = {
     name: "lcOpenDetailsBank",
     type: "text",
     placeholder: "L.C Open Details (Bank)",
-    initialValue: "",
+    initialValue: 0,
     // validation: Yup.string().required("L.C Open Details (Bank) is required"),
   },
   JPY: {
     name: "JPY",
     type: "number",
     placeholder: "JPY",
-    initialValue: "",
+    initialValue: 0,
     // validation: Yup.number().required("JPY is required"),
   },
   lcOpenDetailsDate: {
     name: "lcOpenDetailsDate",
     type: "date",
     placeholder: "L.C Open Date",
-    initialValue: "",
+    initialValue: new Date().toISOString().split("T")[0],
     // validation: Yup.date().required("L.C Open Date is required"),
   },
   lcMarginAmount: {
     name: "lcMarginAmount",
     type: "number",
     placeholder: "L.C Margin Amount",
-    initialValue: "",
+    initialValue: 0,
     // validation: Yup.number().required("L.C Margin Amount is required"),
   },
   lcMarginDate: {
     name: "lcMarginDate",
     type: "date",
     placeholder: "L.C Margin Date",
-    initialValue: "",
+    initialValue: new Date().toISOString().split("T")[0],
     // validation: Yup.date().required("L.C Margin Date is required"),
   },
   lcSettlementAmount: {
     name: "lcSettlementAmount",
     type: "number",
     placeholder: "L.C Settlement Amount",
-    initialValue: "",
+    initialValue: 0,
     validation: Yup.number().required("L.C Settlement Amount is required"),
   },
   lcSettlementCharges: {
     name: "lcSettlementCharges",
     type: "number",
     placeholder: "L.C Settlement Charges",
-    initialValue: "",
+    initialValue: 0,
     validation: Yup.number().required("L.C Settlement Charges is required"),
   },
   lcSettlementDate: {
     name: "lcSettlementDate",
     type: "date",
     placeholder: "L.C Settlement Date",
-    initialValue: "",
-    validation: Yup.date().required("L.C Settlement Date is required"),
+    initialValue: new Date().toISOString().split("T")[0],
+    // validation: Yup.date().required("L.C Settlement Date is required"),
   },
   dutyAmount: {
     name: "dutyAmount",
     type: "number",
     placeholder: "Duty Amount",
-    initialValue: "",
+    initialValue: 0,
     validation: Yup.number().required("Duty Amount is required"),
   },
   dutyDate: {
     name: "dutyDate",
     type: "date",
     placeholder: "Duty Date",
-    initialValue: "",
-    validation: Yup.date().required("Duty Date is required"),
+    initialValue: new Date().toISOString().split("T")[0],
+    // validation: Yup.date().required("Duty Date is required"),
   },
   clearingCharges: {
     name: "clearingCharges",
     type: "number",
     placeholder: "Clearing Charges",
-    initialValue: "",
+    initialValue: 0,
     validation: Yup.number().required("Clearing Charges is required"),
   },
   clearingDate: {
     name: "clearingDate",
     type: "date",
     placeholder: "Clearing Date",
-    initialValue: "",
-    validation: Yup.date().required("Clearing Date is required"),
+    initialValue: new Date().toISOString().split("T")[0],
+    // validation: Yup.date().required("Clearing Date is required"),
   },
   salesTax: {
     name: "salesTax",
     type: "number",
     placeholder: "Sales Tax",
-    initialValue: "",
+    initialValue: 0,
     validation: Yup.number().required("Sales Tax is required"),
   },
   transportCost: {
     name: "transportCost",
     type: "number",
     placeholder: "Transport Cost",
-    initialValue: "",
+    initialValue: 0,
     validation: Yup.number().required("Transport Cost is required"),
   },
   totalCost: {
     name: "totalCost",
     type: "number",
     placeholder: "Total Cost",
-    initialValue: "",
+    initialValue: 0,
     validation: Yup.number().required("Total Cost is required"),
   },
   description: {
@@ -322,7 +327,7 @@ const fields = {
     type: "textarea",
     placeholder: "Description",
     initialValue: "",
-    validation: Yup.string().required("Description is required"),
+    // validation: Yup.string().required("Description is required"),
   },  
     image: {
       name: "image",
@@ -334,7 +339,10 @@ const fields = {
     },
 };
 
+// useEffect(() => {
 
+// // console.log(uiDataFiltered)
+// }, [uiDataFiltered]);
 
 
 
@@ -347,6 +355,8 @@ const fields = {
       const data = await ApiService.getUi();
       console.log("Fetched UI Data:", data);
       setUiData(prev => ({ ...prev, ...data , loading: false }));
+      setuiDataFiltered(prev => ({ ...prev,  Make: data.data.Make || [],Colour: data.data.Colour || [], FuelType: data.data.FuelType || [], Transmission: data.data.Transmission || [] }));
+
       hideSpinner();
     };
     fetchUi();
@@ -370,13 +380,14 @@ const fields = {
       };
       fetchTxn();
     }
+     // eslint-disable-next-line
   }, [id]);
 
-  const tabs = [
-    { id: "vehicle", label: "Vehicle & Parties" },
-    { id: "purchase", label: "Purchase & Payments" },
-    { id: "lc", label: "LC, Import & Costs" },
-  ];
+  // const tabs = [
+  //   { id: "vehicle", label: "Vehicle & Parties" },
+  //   { id: "purchase", label: "Purchase & Payments" },
+  //   { id: "lc", label: "LC, Import & Costs" },
+  // ];
 
   const handleSubmit = async (values, { resetForm }) => {
     console.log("Form Values:", values);
@@ -409,26 +420,33 @@ const fields = {
     }
   };
 
-  const handleChange = (event) => {
-    console.log('Selected:', event.target.value);
-  };
 
   const formik = useFormikBuilder(fields, handleSubmit);
 
   useEffect(() => {
+    const filteredModels = (uiData.data.Model || []).filter(
+        // eslint-disable-next-line
+      m => m.parentId == formik.values.make
+    );
+    setuiDataFiltered(prev => ({ ...prev, Model: filteredModels ,Grade:[]}));
+      filterGrade();
+        // eslint-disable-next-line
+}, [formik.values.make]);
 
-  const filteredModels = (uiData.data.Model || []).filter(
-    m => m.parentId == formik.values.vehicleMake
-  );
- 
-  formik.setValues({
-    ...formik.values,
-    vehicleModel: filteredModels,
-  });
-}, [formik.values.vehicleMake]);
+  useEffect(() => {
+      const filteredData = (uiData.data.Grade || []).filter(
+          // eslint-disable-next-line
+      m => m.parentId == formik.values.model
+    );
+    setuiDataFiltered(prev => ({ ...prev, Grade: filteredData }));
+  // eslint-disable-next-line
+  }, [formik.values.model]);
+
+const filterGrade = () => {
 
 
 
+}
 
   return (
     <form onSubmit={formik.handleSubmit} className="p-3">
@@ -440,8 +458,8 @@ const fields = {
 
           <div className="row">
 <div className="col-sm-9">  <div className="row">
-  <InputField className="col-md-4 col-sm-6" {...fields.vehicleMake} formik={formik} />
-            <InputField className="col-md-4 col-sm-6" {...fields.vehicleModel} formik={formik} />
+  <InputField className="col-md-4 col-sm-6" {...fields.make} formik={formik} />
+            <InputField className="col-md-4 col-sm-6" {...fields.model} formik={formik} />
             <InputField className="col-md-4 col-sm-6" {...fields.grade} formik={formik} />
             <InputField className="col-md-4 col-sm-6" {...fields.year} formik={formik} />
             <InputField className="col-md-4 col-sm-6" {...fields.colour} formik={formik} />
@@ -520,16 +538,16 @@ const fields = {
          </>
         {/* )} */}
 
-        {activeTab === "purchase" && (
-          <>
+        {/* {activeTab === "purchase" && ( */}
+          {/* <>
          
           </>
-        )}
+        )} */}
 
-        {activeTab === "lc" && (<>
+        {/* {activeTab === "lc" && (<>
      
           </>
-        )}
+        )} */}
       {/* </Tabs> */}
 
       <button type="submit" className="btn btn-primary mt-3">Save</button>

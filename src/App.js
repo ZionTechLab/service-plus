@@ -3,7 +3,7 @@ import { MessageBoxProvider } from "./components/MessageBoxProvider";
 import AppRoutes from "./AppRoutes";
 import { useSelector } from "react-redux";
 import { selectIsLoggedIn } from "./features/auth/authSlice";
-import "./App.css";
+// import "./App.css";
 import { ModalProvider } from "./helpers/ModalService";
 import { LoadingSpinnerProvider } from "./hooks/useLoadingSpinner";
 import runAppMigrations from "./helpers/runAppMigrations";

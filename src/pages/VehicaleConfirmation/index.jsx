@@ -52,7 +52,8 @@ function VehicaleConfirmation() {
       </div>
     ) },
       { header: 'id', field: 'id' },
-    { header: 'Vehicle Model', field: 'vehicleModel' },
+        { header: ' Make', field: 'make' },
+    { header: ' Model', field: 'model' },
     { header: 'Grade', field: 'grade' },
     { header: 'Colour', field: 'colour' },
     { header: 'Year', field: 'year' },
