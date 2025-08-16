@@ -368,20 +368,33 @@ const fields = {
       });
       return;
 }
-    const param = { 
-      header: { ...values , id: parseInt(id ? id : 0)}, 
-      isUpdate:id ? true : false
-    };
-    const response = await ApiService.create({ ...param });
 
-    if (response.success) {
-      MessageBoxService.show({
-        message: "Vehicle Confirmation saved successfully!",
-        type: "success",
-        onClose: () => navigate("/vehicale-confirmation"),
-      });
-      resetForm();
-    }
+const v={ ...values , id: parseInt(id ? id : 0),isUpdate:id ? true : false }
+
+const formData = new FormData();
+
+ Object.keys(v).forEach((key) => {
+      const value = v[key];
+      if (key === 'image' && value) {
+        formData.append('image', value, value.name);
+      } else if (value === null || value === undefined) {
+        formData.append(key, '');
+      } else if (typeof value === 'object' && !(value instanceof File)) {
+        formData.append(key, JSON.stringify(value));
+      } else {
+        formData.append(key, value);
+      }
+    });
+    const response = await ApiService.create(formData);
+
+    // if (response.success) {
+    //   MessageBoxService.show({
+    //     message: "Vehicle Confirmation saved successfully!",
+    //     type: "success",
+    //     onClose: () => navigate("/vehicale-confirmation"),
+    //   });
+    //   resetForm();
+    // }
   };
 
 
@@ -430,7 +443,7 @@ const filterGrade = () => {
         </div>
         <div className="col-sm-3"> 
           <ImageInputField {...fields.image} formik={formik} />
-    {formik.values.image &&      <img src={URL.createObjectURL(formik.values.image)} alt="Preview" width="200" />}
+    {/* {formik.values.image &&      <img src={URL.createObjectURL(formik.values.image)} alt="Preview" width="200" />} */}
         </div>
 
 
