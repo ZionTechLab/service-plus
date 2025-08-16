@@ -136,7 +136,7 @@ else{
               onClick={() => setOpen((prev) => !prev)}
               style={{ flex: 1 }}
             >
-          {localSelectedPartner?.partnerName || localSelectedPartner?.partnerCode || "-"}
+              {localSelectedPartner?.partnerName || localSelectedPartner?.partnerCode || "-"}
             </button>
             <button
               className="btn btn-outline-secondary ms-2"
@@ -154,30 +154,21 @@ else{
           >
             <div className="accordion-body">
               <div className="row">
-                <div className="col-md-6">
-                  <strong>Partner Code:</strong> {localSelectedPartner?.partnerCode || "-"}
+                <div className="col-md-12">
+               
+                 <i className="bi bi-person-fill text-primary"></i>{" "} {localSelectedPartner?.contactPerson || "-"} ({localSelectedPartner?.partnerCode || "-"})
+                   {localSelectedPartner?.isSupplier ? <i className="bi  text-primary"> <strong>Supplier</strong></i> : null}{" "}
+                {localSelectedPartner?.isCustomer ? <i className="bi  text-primary"> <strong>Customer</strong></i> : null}{" "}
+                 {localSelectedPartner?.isEmployee ? <i className="bi  text-primary"> <strong>Employee</strong></i> : null}
                   <br />
-                  <strong>Partner Name:</strong> {localSelectedPartner?.partnerName || "-"}
+                  <i className="bi bi-envelope-fill text-primary"></i>{" "} {localSelectedPartner?.email || "-"}
                   <br />
-                  <strong>Contact Person:</strong> {localSelectedPartner?.contactPerson || "-"}
+                  <i className="bi bi-geo-alt-fill text-primary"></i>{" "} {localSelectedPartner?.address || "-"}
                   <br />
-                  <strong>Email:</strong> {localSelectedPartner?.email || "-"}
-                  <br />
-                  <strong>Address:</strong> {localSelectedPartner?.address || "-"}
-                  <br />
+                  <i className="bi bi-telephone-fill text-primary"></i>{" "}  {localSelectedPartner?.phone1 || "-"} | {localSelectedPartner?.phone2 || "-"}
+             
                 </div>
-                <div className="col-md-6">
-                  <strong>Phone 1:</strong> {localSelectedPartner?.phone1 || "-"}
-                  <br />
-                  <strong>Phone 2:</strong> {localSelectedPartner?.phone2 || "-"}
-                  <br />
-                  <strong>Customer:</strong> {localSelectedPartner?.isCustomer ? "Yes" : "No"}
-                  <br />
-                  <strong>Supplier:</strong> {localSelectedPartner?.isSupplier ? "Yes" : "No"}
-                  <br />
-                  <strong>Employee:</strong> {localSelectedPartner?.isEmployee ? "Yes" : "No"}
-                  <br />
-                </div>
+    
               </div>
             </div>
           </div>
