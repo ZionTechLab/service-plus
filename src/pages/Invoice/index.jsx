@@ -3,20 +3,16 @@ import DataTable from '../../components/DataTable';
 import InvoiceService from './InvoiceService';
 import { useEffect, useState } from 'react';
 import MessageBoxService from '../../services/MessageBoxService';
-import { useLoadingSpinner } from '../../hooks/useLoadingSpinner';
 
 function InvoiceIndex() {
   const [uiData, setUiData] = useState({loading: false, success: false, error: '', data: [] });
   const navigate = useNavigate();
-  const { showSpinner, hideSpinner } = useLoadingSpinner();
 
   useEffect(() => {
     const fetchInvoices = async () => {
       setUiData(prev => ({ ...prev, loading: true, error: '', data: [] }));
-      showSpinner();
         const data = await InvoiceService.getAll();
         setUiData(prev => ({ ...prev, ...data , loading: false }));
-        hideSpinner();
     };
     fetchInvoices();
     // eslint-disable-next-line

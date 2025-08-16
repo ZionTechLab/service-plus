@@ -9,7 +9,6 @@ import ApiService from "./InvoiceService";
 import SelectedBusinessPartnerBox from "../BusinessPartners/select-bp";
 import sanitizeAmountFields from "../../helpers/sanitizeAmountFields";
 import  "./Invoice.css";
-import { useLoadingSpinner } from '../../hooks/useLoadingSpinner';
 
 function Invoice() {
   const { id } = useParams();
@@ -17,18 +16,12 @@ function Invoice() {
   const dataGridRef = useRef();
   const [lineItems, setLineItems] = useState([]);
   const [uiData, setUiData] = useState({loading: false, success: false, error: '', data: {} });
-    const { showSpinner, hideSpinner } = useLoadingSpinner();
 
   useEffect(() => {
    const fetchUi = async () => {
       setUiData(prev => ({ ...prev, loading: true, error: '', data: {} }));
-      showSpinner();
       const data = await ApiService.getUi();
-      console.log("Fetched UI Data:", data);
       setUiData(prev => ({ ...prev, ...data , loading: false }));
-      // setuiDataFiltered(prev => ({ ...prev,  Make: data.data.Make || [],Colour: data.data.Colour || [], FuelType: data.data.FuelType || [], Transmission: data.data.Transmission || [] }));
-
-      hideSpinner();
     };
     fetchUi();
 
@@ -128,12 +121,12 @@ function Invoice() {
   const handleSubmit = async (values, { resetForm } ) => {
 if(id)
 {
-  //  MessageBoxService.show({
-  //       message: "not available",
-  //       type: "success",
-  //       onClose: () => navigate("/invoice"),
-  //     });
-  //     return;
+   MessageBoxService.show({
+        message: "not available",
+        type: "success",
+        onClose: () => navigate("/invoice"),
+      });
+      return;
 }
     const sanitizedLineItems = sanitizeAmountFields(lineItems, lineItemColumns);
     const param = { 
@@ -142,7 +135,7 @@ if(id)
       isUpdate:id ? true : false
     };
     const response = await ApiService.update({ ...param });
-console.log(response);
+
     if (response.success) {
       MessageBoxService.show({
         message: "Invoice saved successfully!",

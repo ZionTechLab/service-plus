@@ -1,6 +1,6 @@
 import axios from "axios";
 import MessageBoxService from "../services/MessageBoxService";
-import { useLoadingSpinner } from '../hooks/useLoadingSpinner';
+import LoadingSpinnerService from "../services/LoadingSpinnerService";
 
 export function handleAxiosError(error) {
    
@@ -25,12 +25,15 @@ export function handleAxiosError(error) {
 }
 
 // Centralized axios request wrapper
-export async function axiosRequest(requestPromise) {
+export async function axiosRequest(requestPromise, options = {}) {
+  // options: { showSpinner: boolean, message: string }
+  const { showSpinner = true, message = "Loading..." } = options;
 
   try {
-    
+    if (showSpinner) LoadingSpinnerService.show(message);
+
     const res = await requestPromise;
-  
+
     return {
       data: res.data,
       error: null,
@@ -43,6 +46,8 @@ export async function axiosRequest(requestPromise) {
       error: errorMessage,
       success: false,
     };
+  } finally {
+    if (showSpinner) LoadingSpinnerService.hide();
   }
 }
 

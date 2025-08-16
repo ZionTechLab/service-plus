@@ -1,4 +1,5 @@
-import React, { createContext, useContext, useState } from "react";
+import React, { createContext, useContext, useState, useEffect, useCallback } from "react";
+import LoadingSpinnerService from "../services/LoadingSpinnerService";
 
 const LoadingSpinnerContext = createContext();
 
@@ -17,9 +18,16 @@ export function LoadingSpinnerProvider({ children }) {
     spinnerClass = "spinner-border text-primary",
     role = "status";
 
-  const showSpinner = (message = "Loading...") =>
-    setSpinnerConfig({ show: true, message });
-  const hideSpinner = () => setSpinnerConfig({ show: false, message: "" });
+  const showSpinner = useCallback((message = "Loading...") =>
+    setSpinnerConfig({ show: true, message }),
+  []);
+  const hideSpinner = useCallback(() => setSpinnerConfig({ show: false, message: "" }), []);
+
+  useEffect(() => {
+    // register the provider's show/hide so non-React code can control the spinner
+    LoadingSpinnerService.register(showSpinner, hideSpinner);
+    return () => LoadingSpinnerService.unregister();
+  }, [showSpinner, hideSpinner]);
 
   return (
     <LoadingSpinnerContext.Provider value={{ showSpinner, hideSpinner }}>
@@ -45,5 +53,3 @@ export function LoadingSpinnerProvider({ children }) {
     </LoadingSpinnerContext.Provider>
   );
 }
-
-// ...removed legacy implementation...
