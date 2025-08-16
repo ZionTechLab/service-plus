@@ -8,7 +8,7 @@ import ApiService from "./ConfirmationService";
 import SelectedBusinessPartnerBox from "../BusinessPartners/select-bp";
 import { useLoadingSpinner } from '../../hooks/useLoadingSpinner';
 import ImageInputField from '../../components/ImageInputField';
-
+import config from '../../config/config';
 const AddConfirmation = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -347,9 +347,10 @@ const fields = {
             const data = { ...response.data };
             if (data.image && typeof data.image === "string") {
               try {
-                const imgRes = await fetch(data.image);
+                const img=config.apiBaseUrl.replace('/api','') +'uploads/'+data.image;
+                const imgRes = await fetch(img);
                 const blob = await imgRes.blob();
-                const filename = (data.image.split("/").pop() || "image").split("?")[0];
+                const filename = (img.split("/").pop() || "image").split("?")[0];
                 // convert URL->Blob->File so ImageInputField and FormData handling (which expects a File) work
                 data.image = new File([blob], filename, { type: blob.type || "image/jpeg" });
               } catch (err) {
