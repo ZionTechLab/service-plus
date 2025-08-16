@@ -1,9 +1,35 @@
-import { useState } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 // Custom Image Input with Preview
-function ImageInputField({ name, formik, className }) {
+function ImageInputField({ name, formik, className, placeholder }) {
   const [preview, setPreview] = useState('');
   const [showModal, setShowModal] = useState(false);
+  const inputRef = useRef(null);
+
+  // Keep local preview in sync when Formik value changes (supports File or string URL/dataURI)
+  useEffect(() => {
+    const val = formik?.values?.[name];
+    if (!val) {
+      setPreview('');
+      if (inputRef.current) inputRef.current.value = '';
+      return;
+    }
+    if (val instanceof File) {
+      const reader = new FileReader();
+      reader.onload = (ev) => setPreview(ev.target.result);
+      reader.readAsDataURL(val);
+      return () => {
+        try {
+          if (reader && reader.readyState === 1) reader.abort();
+        } catch (e) {
+          // ignore
+        }
+      };
+    }
+    if (typeof val === 'string') {
+      setPreview(val);
+    }
+  }, [formik, name]);
   const handleChange = (e) => {
     const file = e.target.files[0];
     formik.setFieldValue(name, file);
@@ -17,7 +43,7 @@ function ImageInputField({ name, formik, className }) {
   };
   return (
     <div className={className || 'mb-3'}>
-      <label className="form-label">Profile Image</label>
+      <label className="form-label">{placeholder}</label>
       <input
         type="file"
         accept="image/*"
@@ -25,6 +51,7 @@ function ImageInputField({ name, formik, className }) {
         className="form-control"
         style={{ display: 'none' }}
         id="profile_image_input"
+        ref={inputRef}
       />
       <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
         <div
@@ -43,8 +70,8 @@ function ImageInputField({ name, formik, className }) {
           onClick={() => {
             if (preview) {
               setShowModal(true);
-            } else {
-              document.getElementById('profile_image_input').click();
+            } else if (inputRef.current) {
+              inputRef.current.click();
             }
           }}
         >
@@ -54,7 +81,7 @@ function ImageInputField({ name, formik, className }) {
             <div className="image-preview-text text-center text-secondary">
               <i className="bi bi-image" style={{ fontSize: '2rem' }}></i>
               <div>Click to select image</div>
-              <small>Choose your profile picture</small>
+              {/* <small>Choose your profile picture</small> */}
             </div>
           )}
         </div>
@@ -62,7 +89,7 @@ function ImageInputField({ name, formik, className }) {
           type="button"
           className="btn btn-outline-secondary ms-2 d-flex align-items-center justify-content-center"
           style={{ height: 200, width: 48, padding: 0, fontSize: '1.5rem' }}
-          onClick={() => document.getElementById('profile_image_input').click()}
+          onClick={() => inputRef.current && inputRef.current.click()}
           aria-label="Select File"
         >
           <i className="bi bi-upload"></i>

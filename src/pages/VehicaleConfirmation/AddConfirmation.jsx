@@ -343,8 +343,23 @@ const fields = {
         const response = await ApiService.get(id);
         if (response.success) {
           if (response.data) {
+            // clone response data so we can transform the image field if it's a URL
+            const data = { ...response.data };
+            if (data.image && typeof data.image === "string") {
+              try {
+                const imgRes = await fetch(data.image);
+                const blob = await imgRes.blob();
+                const filename = (data.image.split("/").pop() || "image").split("?")[0];
+                // convert URL->Blob->File so ImageInputField and FormData handling (which expects a File) work
+                data.image = new File([blob], filename, { type: blob.type || "image/jpeg" });
+              } catch (err) {
+                console.error("Failed to fetch image URL:", err);
+                // keep original URL string if fetch fails; ImageInputField should handle URL preview separately if supported
+              }
+            }
+
             formik.setValues({
-              ...response.data,
+              ...data,
               // txnDate: formData.txnDate ? formData.txnDate.split("T")[0] : "",
             });
             // setLineItems(lineItems);
@@ -387,14 +402,21 @@ const formData = new FormData();
     });
     const response = await ApiService.create(formData);
 
-    // if (response.success) {
-    //   MessageBoxService.show({
-    //     message: "Vehicle Confirmation saved successfully!",
-    //     type: "success",
-    //     onClose: () => navigate("/vehicale-confirmation"),
-    //   });
-    //   resetForm();
-    // }
+    if (response && response.success) {
+      MessageBoxService.show({
+        message: "Vehicle Confirmation saved successfully!",
+        type: "success",
+        onClose: () => navigate("/vehicale-confirmation"),
+      });
+      resetForm();
+      return;
+    }
+
+    // show error if save failed
+    MessageBoxService.show({
+      message: response?.error || "Failed to save Vehicle Confirmation.",
+      type: "danger",
+    });
   };
 
 
