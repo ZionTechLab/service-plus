@@ -3,19 +3,21 @@
 let showFn = null;
 let hideFn = null;
 
-export default {
-  register(show, hide) {
-    showFn = show;
-    hideFn = hide;
-  },
-  unregister() {
-    showFn = null;
-    hideFn = null;
-  },
-  show(message) {
-    if (typeof showFn === "function") showFn(message);
-  },
-  hide() {
-    if (typeof hideFn === "function") hideFn();
-  },
+const LoadingSpinnerService = {
+    register(show, hide) {
+        showFn = show;
+        hideFn = hide;
+    },
+    unregister() {
+        showFn = null;
+        hideFn = null;
+    },
+    show(message) {
+        if (typeof showFn === "function") showFn(message);
+    },
+    hide() {
+        if (typeof hideFn === "function") hideFn();
+    },
 };
+
+export default LoadingSpinnerService;
