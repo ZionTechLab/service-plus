@@ -31,6 +31,7 @@ class ConfirmationService {
 		const res = await axiosRequest(axios.get(`${this.apiBase}/get-ui`));
 		return res;
 	}
+	
 	async get(id) {
 		const res = await axiosRequest(axios.get(`${this.apiBase}/get/${id}`));
 		return res;

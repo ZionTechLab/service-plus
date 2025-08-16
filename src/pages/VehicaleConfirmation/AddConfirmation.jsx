@@ -9,6 +9,7 @@ import SelectedBusinessPartnerBox from "../BusinessPartners/select-bp";
 import { useLoadingSpinner } from '../../hooks/useLoadingSpinner';
 import ImageInputField from '../../components/ImageInputField';
 import config from '../../config/config';
+
 const AddConfirmation = () => {
   const { id } = useParams();
   const navigate = useNavigate();

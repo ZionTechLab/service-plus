@@ -5,21 +5,36 @@ import InputField from "../../helpers/InputField";
 import { useFormikBuilder } from "../../helpers/formikBuilder";
 import MessageBoxService from "../../services/MessageBoxService";
 import DataGrid from "../../components/DataGrid";
-import InvoiceService from "./InvoiceService";
+import ApiService from "./InvoiceService";
 import SelectedBusinessPartnerBox from "../BusinessPartners/select-bp";
 import sanitizeAmountFields from "../../helpers/sanitizeAmountFields";
 import  "./Invoice.css";
+import { useLoadingSpinner } from '../../hooks/useLoadingSpinner';
 
 function Invoice() {
   const { id } = useParams();
   const navigate = useNavigate();
   const dataGridRef = useRef();
   const [lineItems, setLineItems] = useState([]);
+  const [uiData, setUiData] = useState({loading: false, success: false, error: '', data: {} });
+    const { showSpinner, hideSpinner } = useLoadingSpinner();
 
   useEffect(() => {
+   const fetchUi = async () => {
+      setUiData(prev => ({ ...prev, loading: true, error: '', data: {} }));
+      showSpinner();
+      const data = await ApiService.getUi();
+      console.log("Fetched UI Data:", data);
+      setUiData(prev => ({ ...prev, ...data , loading: false }));
+      // setuiDataFiltered(prev => ({ ...prev,  Make: data.data.Make || [],Colour: data.data.Colour || [], FuelType: data.data.FuelType || [], Transmission: data.data.Transmission || [] }));
+
+      hideSpinner();
+    };
+    fetchUi();
+
     if (id) {
       const fetchTxn = async () => {
-        const response = await InvoiceService.getInvoiceById(id);
+        const response = await ApiService.get(id);
         if (response.success) {
           if (response.data) {
             const { lineItems, ...formData } = response.data;
@@ -66,18 +81,12 @@ function Invoice() {
       type: "select",
       placeholder: "Type of Vehicle",
       dataBinding: {
-        data: [
-          { key: "car", value: "Car" },
-          { key: "van", value: "Van" },
-          { key: "truck", value: "Truck" },
-          { key: "bus", value: "Bus" },
-          { key: "other", value: "Other" },
-        ],
-        keyField: "key",
+        data: uiData.data.VehicleType,
+        keyField: "id",
         valueField: "value",
       },
-      initialValue: "car",
-      validation: Yup.string().required("Type of Vehicle is required"),
+
+      validation: Yup.number().required("Type of Vehicle is required"),
     },
     amount: {
       name: "amount",
@@ -116,17 +125,15 @@ function Invoice() {
     { header: "Amount", field: "amount", type: "amount", placeholder: "Amount", width: "25%" },
   ];
 
-
-
   const handleSubmit = async (values, { resetForm } ) => {
 if(id)
 {
-   MessageBoxService.show({
-        message: "not available",
-        type: "success",
-        onClose: () => navigate("/invoice"),
-      });
-      return;
+  //  MessageBoxService.show({
+  //       message: "not available",
+  //       type: "success",
+  //       onClose: () => navigate("/invoice"),
+  //     });
+  //     return;
 }
     const sanitizedLineItems = sanitizeAmountFields(lineItems, lineItemColumns);
     const param = { 
@@ -134,7 +141,7 @@ if(id)
       lineItems: sanitizedLineItems,
       isUpdate:id ? true : false
     };
-    const response = await InvoiceService.createInvoice({ ...param });
+    const response = await ApiService.update({ ...param });
 console.log(response);
     if (response.success) {
       MessageBoxService.show({
@@ -159,9 +166,12 @@ console.log(response);
    
   function calculateTotal() {
     const total = lineItems.reduce(
-      (sum, item) => sum + (parseFloat(item.amount)|| 0),
+      (sum, item) => sum + (parseFloat( String(item.amount).replace(/[^\d.]/g, '')   )|| 0),
       0
     );
+
+    
+    console.log(total);
     formik.setFieldValue("amount", total);
     formik.setFieldValue(
       "totalAmount",
@@ -175,7 +185,7 @@ console.log(response);
         <div className="row g-2">
           <InputField {...fields.txnNo} formik={formik} className="col-md-3 col-sm-6" />
           <InputField {...fields.txnDate} formik={formik} className="col-md-3 col-sm-6" />
-        <InputField {...fields.ref1} formik={formik} className="col-sm-6" /> 
+          <InputField {...fields.ref1} formik={formik} className="col-sm-6" /> 
           <SelectedBusinessPartnerBox field={fields.partner} formik={formik} />
          
             <DataGrid

@@ -14,7 +14,7 @@ function InvoiceIndex() {
     const fetchInvoices = async () => {
       setUiData(prev => ({ ...prev, loading: true, error: '', data: [] }));
       showSpinner();
-        const data = await InvoiceService.getAllInvoices();
+        const data = await InvoiceService.getAll();
         setUiData(prev => ({ ...prev, ...data , loading: false }));
         hideSpinner();
     };
@@ -64,13 +64,10 @@ function InvoiceIndex() {
         </div>
       ),
     },  
-    // { header: 'txnIndex', field: 'txnIndex',class:'text-nowrap d-none' },
     { header: 'Invoice No', field: 'txnNo',class:'text-nowrap' },
-    { header: 'Date', field: 'txnDate',class:'text-nowrap' },
+    { header: 'Date', field: 'txnDate',class:'text-nowrap' ,type: 'date'},
     { header: 'Customer', field: 'partnerName',class:'text-nowrap' },
     { header: 'Total Amount', field: 'totalAmount',class:'text-nowrap text-end' },
-    // { header: 'Prepared By', field: 'preparedBy',class:'text-nowrap' },
-    // { header: 'Received By', field: 'receivedBy',class:'text-nowrap' },
   ];
 
   return (
