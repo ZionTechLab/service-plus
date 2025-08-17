@@ -3,7 +3,7 @@ import { Link } from 'react-router-dom';
 import './Drawer.css';
 import menuItems from '../helpers/menuItems';
 
-const Drawer = forwardRef(({ isOpen, onClose }, ref) => {
+const Drawer = forwardRef(({ isOpen, onClose, isMinimized, isMobile }, ref) => {
   const [theme, setTheme] = useState('light');
   const drawerRef = useRef(null);
 
@@ -22,9 +22,9 @@ const Drawer = forwardRef(({ isOpen, onClose }, ref) => {
     document.documentElement.setAttribute('data-bs-theme', savedTheme);
   }, []);
 
-  // Keyboard accessibility: ESC to close
+  // Keyboard accessibility: ESC to close (only for mobile)
   useEffect(() => {
-    if (!isOpen) return;
+    if (!isMobile || !isOpen) return;
     const handleKeyDown = (e) => {
       if (e.key === 'Escape') {
         onClose();
@@ -32,52 +32,62 @@ const Drawer = forwardRef(({ isOpen, onClose }, ref) => {
     };
     document.addEventListener('keydown', handleKeyDown);
     return () => document.removeEventListener('keydown', handleKeyDown);
-  }, [isOpen, onClose]);
+  }, [isOpen, onClose, isMobile]);
 
-  // Focus management: focus drawer when opened
+  // Focus management: focus drawer when opened (only for mobile)
   useEffect(() => {
-    if (isOpen && drawerRef.current) {
+    if (isMobile && isOpen && drawerRef.current) {
       drawerRef.current.focus();
     }
-  }, [isOpen]);
+  }, [isOpen, isMobile]);
 
-  if (!isOpen) {
+  // For mobile, don't render if not open
+  if (isMobile && !isOpen) {
     return null;
   }
 
   return (
     <>
-      {/* Backdrop for modal effect */}
-      <div
-        className="drawer-backdrop"
-        onClick={onClose}
-        aria-label="Close menu"
-      />
+      {/* Backdrop for modal effect - only for mobile */}
+      {isMobile && (
+        <div
+          className="drawer-backdrop"
+          onClick={onClose}
+          aria-label="Close menu"
+        />
+      )}
       <aside
         ref={drawerRef}
-        className="drawer open"
-        tabIndex={-1}
-        role="dialog"
-        aria-modal="true"
+        className={`drawer ${isMobile ? (isOpen ? 'open' : '') : (isMinimized ? 'minimized' : 'expanded')}`}
+        tabIndex={isMobile ? -1 : undefined}
+        role={isMobile ? "dialog" : "navigation"}
+        aria-modal={isMobile ? "true" : undefined}
         aria-label="Main menu"
       >
         <div className="drawer-header">
-          <h3 className="drawer-title mb-0">Menu</h3>
-          <button
-            onClick={onClose}
-            className="drawer-close-btn btn btn-dark"
-            aria-label="Close menu"
-          >
-            <i className="bi bi-x-lg" aria-hidden="true"></i>
-          </button>
+          {!isMinimized && <h3 className="drawer-title mb-0">Menu</h3>}
+          {isMobile && (
+            <button
+              onClick={onClose}
+              className="drawer-close-btn btn btn-dark"
+              aria-label="Close menu"
+            >
+              <i className="bi bi-x-lg" aria-hidden="true"></i>
+            </button>
+          )}
         </div>
         <nav className="drawer-nav" aria-label="Main navigation">
           <ul className="list-group list-group-flush">
             {menuItems.filter(item => item.isMenuItem).map(item => (
               <li className="list-group-item" key={item.route}>
-                <Link to={item.route} onClick={onClose} className="nav-link">
-                  <i className={`${item.icon} me-2`} aria-hidden="true"></i>
-                  <span>{item.displayName}</span>
+                <Link 
+                  to={item.route} 
+                  onClick={isMobile ? onClose : undefined} 
+                  className="nav-link"
+                  title={isMinimized ? item.displayName : undefined}
+                >
+                  <i className={`${item.icon} ${!isMinimized ? 'me-2' : ''}`} aria-hidden="true"></i>
+                  {!isMinimized && <span>{item.displayName}</span>}
                 </Link>
               </li>
             ))}
@@ -95,7 +105,7 @@ const Drawer = forwardRef(({ isOpen, onClose }, ref) => {
               aria-checked={theme === 'dark'}
               aria-label="Toggle dark mode"
             />
-            <label className="form-check-label" htmlFor="themeSwitcher">Dark Mode</label>
+            {!isMinimized && <label className="form-check-label" htmlFor="themeSwitcher">Dark Mode</label>}
           </div>
         </div>
       </aside>

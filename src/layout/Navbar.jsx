@@ -38,8 +38,8 @@ function Navbar({ onToggleDrawer }) {
   return (
     <nav className="navbar navbar-expand-lg navbar-light navbar-custom sticky-top">
       <div className="container-fluid">
-        <button onClick={onToggleDrawer} className="btn btn-toggle">
-                <i class="bi bi-list"></i>
+        <button onClick={onToggleDrawer} className="btn btn-toggle drawer-toggle-btn">
+                <i className="bi bi-list"></i>
         </button>
         <div className='title'>{getPageTitle()}</div>
            <div class="flex-grow-1"></div>
