@@ -1,4 +1,5 @@
 import React from 'react';
+import ImageMultiInputField from '../components/ImageMultiInputField.jsx';
 import './InputField.css';
 // import InputMask from 'react-input-mask';
 
@@ -88,6 +89,17 @@ function InputField({
   };
 
   const renderInput = () => {
+    if (type === 'images') {
+      // Delegate to multi-image picker; handles its own label and errors
+      return (
+        <ImageMultiInputField
+          name={name}
+          placeholder={placeholder}
+          formik={formik}
+        />
+      );
+    }
+
     if (type === 'select') {
       return (
         <select className="form-select" id={name} {...inputProps} >
@@ -235,13 +247,13 @@ function InputField({
   // Default return for other types
   return (
     <div className={`form-group ${className}`}>
-    {labelOnTop &&(<label className="form-label">{placeholder}</label>)}  
+    {labelOnTop && type !== 'images' && (<label className="form-label">{placeholder}</label>)}  
       <div className="input-group">
-            {!labelOnTop &&(<label className="form-label ">{placeholder}</label>)} 
+            {!labelOnTop && type !== 'images' && (<label className="form-label ">{placeholder}</label>)} 
         {renderInput()}
         {children}
       </div>
-      {showError && (
+      {type !== 'images' && showError && (
         <small>
           <div className="error-message">
             {hasFormik ? formik.errors[name] : error}

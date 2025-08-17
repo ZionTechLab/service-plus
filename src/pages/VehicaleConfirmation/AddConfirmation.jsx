@@ -7,7 +7,7 @@ import MessageBoxService from "../../services/MessageBoxService";
 import ApiService from "./ConfirmationService";
 import SelectedBusinessPartnerBox from "../BusinessPartners/select-bp";
 import { useLoadingSpinner } from '../../hooks/useLoadingSpinner';
-import ImageInputField from '../../components/ImageInputField';
+// Multi-image selection is wired through InputField type "images"
 import config from '../../config/config';
 
 const AddConfirmation = () => {
@@ -317,13 +317,12 @@ const fields = {
       initialValue: "",
       // validation: Yup.string().required("Description is required"),
     },  
-    image: {
-      name: "image",
-      type: "file",
-      placeholder: "Image",
-      initialValue: null,
-      validation: Yup.mixed(),
-      // className: "col-md-12"
+    images: {
+      name: "images",
+      type: "images",
+      placeholder: "Vehicle Photos",
+      initialValue: [],
+      validation: Yup.array().of(Yup.mixed()),
     },
 };
 
@@ -342,31 +341,38 @@ const fields = {
     if (id) {
       const fetchTxn = async () => {
         const response = await ApiService.get(id);
-        if (response.success) {
-          if (response.data) {
-            // clone response data so we can transform the image field if it's a URL
-            const data = { ...response.data };
-            if (data.image && typeof data.image === "string") {
-              try {
-                const img=config.apiBaseUrl.replace('/api','') +'uploads/'+data.image;
-                const imgRes = await fetch(img);
-                const blob = await imgRes.blob();
-                const filename = (img.split("/").pop() || "image").split("?")[0];
-                // convert URL->Blob->File so ImageInputField and FormData handling (which expects a File) work
-                data.image = new File([blob], filename, { type: blob.type || "image/jpeg" });
-              } catch (err) {
-                console.error("Failed to fetch image URL:", err);
-                // keep original URL string if fetch fails; ImageInputField should handle URL preview separately if supported
-              }
-            }
+        if (response.success && response.data) {
+          const data = { ...response.data };
 
-            formik.setValues({
-              ...data,
-              // txnDate: formData.txnDate ? formData.txnDate.split("T")[0] : "",
-            });
-            // setLineItems(lineItems);
-            // dataGridRef.current.reset(lineItems);
+          // Normalize to an array of File objects for the UI
+          const toFile = async (imgNameOrUrl) => {
+            try {
+              const url = imgNameOrUrl.includes('http')
+                ? imgNameOrUrl
+                : config.apiBaseUrl.replace('/api','') + 'uploads/' + imgNameOrUrl;
+              const res = await fetch(url);
+              const blob = await res.blob();
+              const filename = (url.split('/').pop() || 'image').split('?')[0];
+              return new File([blob], filename, { type: blob.type || 'image/jpeg' });
+            } catch (e) {
+              console.error('image fetch failed', e);
+              return null;
+            }
+          };
+
+          let imageFiles = [];
+          if (Array.isArray(data.images)) {
+            const results = await Promise.all(data.images.map(toFile));
+            imageFiles = results.filter(Boolean);
+          } else if (typeof data.image === 'string' && data.image) {
+            const f = await toFile(data.image);
+            if (f) imageFiles = [f];
           }
+
+          formik.setValues({
+            ...data,
+            images: imageFiles,
+          });
         }
       };
       fetchTxn();
@@ -386,14 +392,20 @@ const fields = {
       return;
 }
 
-const v={ ...values , id: parseInt(id ? id : 0),isUpdate:id ? true : false }
+ const v={ ...values , id: parseInt(id ? id : 0),isUpdate:id ? true : false }
 
 const formData = new FormData();
 
  Object.keys(v).forEach((key) => {
       const value = v[key];
-      if (key === 'image' && value) {
-        formData.append('image', value, value.name);
+      if (key === 'images' && Array.isArray(value)) {
+        value.forEach((img) => {
+          if (img instanceof File) {
+            formData.append('images[]', img, img.name);
+          } else if (typeof img === 'string') {
+            formData.append('images[]', img);
+          }
+        });
       } else if (value === null || value === undefined) {
         formData.append(key, '');
       } else if (typeof value === 'object' && !(value instanceof File)) {
@@ -402,6 +414,12 @@ const formData = new FormData();
         formData.append(key, value);
       }
     });
+
+    // Backward compatibility: send first image also as single 'image'
+    if (Array.isArray(v.images) && v.images.length > 0) {
+      const first = v.images[0];
+      if (first instanceof File) formData.append('image', first, first.name);
+    }
     const response = await ApiService.create(formData);
 
     if (response && response.success) {
@@ -451,6 +469,11 @@ const filterGrade = () => {
     <form onSubmit={formik.handleSubmit} className="p-3">
       <span className="tab-label">Vehicle Details</span>
       <div className="row   g-0"> <hr /></div>
+      <div className="row">
+         <div className="col-sm-6"> 
+          <InputField className="col-12" {...fields.images} formik={formik} />
+        </div>
+      </div>
         <div className="row">
           <div className="col-sm-9">  <div className="row">
             <InputField className="col-md-4 col-sm-6" {...fields.make} formik={formik} />
@@ -465,10 +488,7 @@ const filterGrade = () => {
             <InputField className="col-md-4 col-sm-6" {...fields.chassisNo} formik={formik} />
           </div>
         </div>
-        <div className="col-sm-3"> 
-          <ImageInputField {...fields.image} formik={formik} />
-    {/* {formik.values.image &&      <img src={URL.createObjectURL(formik.values.image)} alt="Preview" width="200" />} */}
-        </div>
+       
 
 
             </div>
