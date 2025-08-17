@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from 'react';
+import './ImageInputField.css';
 
 // Custom Image Input with Preview
 function ImageInputField({ name, formik, className, placeholder }) {
@@ -48,25 +49,12 @@ function ImageInputField({ name, formik, className, placeholder }) {
         type="file"
         accept="image/*"
         onChange={handleChange}
-        className="form-control"
-        style={{ display: 'none' }}
+        className="form-control image-input-hidden"
         id="profile_image_input"
         ref={inputRef}
       />
-      <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
-        <div
-          className="image-preview mb-2"
-          style={{
-            width: 200,
-            height: 200,
-            border: '2px dashed #dee2e6',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            borderRadius: 8,
-            background: '#f8f9fa',
-            cursor: preview ? 'zoom-in' : 'pointer',
-          }}
+      <div className="image-input-row">
+        <div className={"image-preview mb-2" + (preview ? ' has-preview' : '')}
           onClick={() => {
             if (preview) {
               setShowModal(true);
@@ -76,10 +64,10 @@ function ImageInputField({ name, formik, className, placeholder }) {
           }}
         >
           {preview ? (
-            <img src={preview} alt="Preview" style={{ maxWidth: '100%', maxHeight: '100%', borderRadius: 8 }} />
+            <img src={preview} alt="Preview" className="" />
           ) : (
             <div className="image-preview-text text-center text-secondary">
-              <i className="bi bi-image" style={{ fontSize: '2rem' }}></i>
+              <i className="bi bi-image"></i>
               <div>Click to select image</div>
               {/* <small>Choose your profile picture</small> */}
             </div>
@@ -87,8 +75,7 @@ function ImageInputField({ name, formik, className, placeholder }) {
         </div>
         <button
           type="button"
-          className="btn btn-outline-secondary ms-2 d-flex align-items-center justify-content-center"
-          style={{ height: 200, width: 48, padding: 0, fontSize: '1.5rem' }}
+          className="btn btn-outline-secondary ms-2 d-flex align-items-center justify-content-center image-upload-btn"
           onClick={() => inputRef.current && inputRef.current.click()}
           aria-label="Select File"
         >
@@ -97,49 +84,9 @@ function ImageInputField({ name, formik, className, placeholder }) {
       </div>
       {/* Modal for large image preview */}
       {showModal && preview && (
-        <div
-          style={{
-            position: 'fixed',
-            top: 0,
-            left: 0,
-            width: '100vw',
-            height: '100vh',
-            background: 'rgba(0,0,0,0.7)',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center',
-            zIndex: 2000,
-          }}
-          onClick={() => setShowModal(false)}
-        >
-          <img
-            src={preview}
-            alt="Large Preview"
-            style={{
-              maxWidth: '90vw',
-              maxHeight: '90vh',
-              borderRadius: 12,
-              boxShadow: '0 4px 32px rgba(0,0,0,0.4)',
-              background: '#fff',
-            }}
-            onClick={e => e.stopPropagation()}
-          />
-          <button
-            type="button"
-            aria-label="Close"
-            style={{
-              position: 'fixed',
-              top: 24,
-              right: 32,
-              background: 'transparent',
-              border: 'none',
-              color: '#fff',
-              fontSize: 36,
-              cursor: 'pointer',
-              zIndex: 2100,
-            }}
-            onClick={() => setShowModal(false)}
-          >
+        <div className="image-modal-overlay" onClick={() => setShowModal(false)}>
+          <img src={preview} alt="Large Preview" className="image-modal-img" onClick={e => e.stopPropagation()} />
+          <button type="button" aria-label="Close" className="image-modal-close" onClick={() => setShowModal(false)}>
             &times;
           </button>
         </div>
