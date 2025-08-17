@@ -21,6 +21,18 @@ function App() {
         : "light");
     document.documentElement.setAttribute("data-bs-theme", savedTheme);
 
+  // UI theme (shape/elevation) setup
+    const savedUiTheme = localStorage.getItem("uiTheme") || "material";
+  document.documentElement.setAttribute("data-theme", savedUiTheme);
+
+    // Color palette setup
+    const savedColorTheme = localStorage.getItem("colorTheme") || "sky";
+    if (savedColorTheme === "default") {
+      document.documentElement.removeAttribute("data-color");
+    } else {
+      document.documentElement.setAttribute("data-color", savedColorTheme);
+    }
+
     // App migration/version logic
     runAppMigrations();
   }, []);

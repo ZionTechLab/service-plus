@@ -1,0 +1,394 @@
+/* Global theme tokens via CSS variables.
+   Switch by setting data-theme on <html> to one of: flat, material, round, paper, glass, soft. */
+
+:root,
+:root[data-theme="flat"],
+:root[data-theme="material"],
+:root[data-theme="round"],
+:root[data-theme="paper"],
+:root[data-theme="glass"],
+:root[data-theme="soft"] {
+  /* Base shape & elevation */
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --elevation-1: 0 1px 2px rgba(0,0,0,0.06);
+  --elevation-2: 0 2px 6px rgba(0,0,0,0.08);
+  --elevation-3: 0 4px 12px rgba(0,0,0,0.10);
+
+  /* Paper-style variables */
+  --paper-bg: #fff;
+  --paper-texture: none;
+
+  /* Accent */
+  --accent: var(--primary-color, #1976d2);
+  /* Bridge to Bootstrap primary */
+  --bs-primary: var(--primary-color, #1976d2);
+
+  /* Color palette defaults (inherited into palettes) */
+  --color-bg: var(--bs-body-bg);
+  --color-surface: var(--surface-color, #ffffff);
+  --color-surface-2: var(--bs-tertiary-bg, #f6f6f7);
+  --color-text: var(--text-primary, #212121);
+  --color-muted: var(--text-secondary, #757575);
+  --color-border: var(--divider-color, #e0e0e0);
+  --table-head-bg: #fafafa;
+  --table-row-hover: rgba(0,0,0,0.04);
+}
+
+/* Flat UI (default) */
+:root[data-theme="flat"] {
+  --radius-sm: 0px;
+  --radius-md: 0px;
+  --radius-lg: 0px;
+  --elevation-1: none;
+  --elevation-2: none;
+  --elevation-3: none;
+}
+
+/* Material */
+:root[data-theme="material"] {
+  --radius-sm: 4px;
+  --radius-md: 8px;
+  --radius-lg: 12px;
+  --elevation-1: 0 1px 3px rgba(0,0,0,0.12), 0 1px 2px rgba(0,0,0,0.24);
+  --elevation-2: 0 3px 6px rgba(0,0,0,0.16), 0 3px 6px rgba(0,0,0,0.23);
+  --elevation-3: 0 10px 20px rgba(0,0,0,0.19), 0 6px 6px rgba(0,0,0,0.23);
+}
+
+/* Round corners */
+:root[data-theme="round"] {
+  --radius-sm: 8px;
+  --radius-md: 14px;
+  --radius-lg: 22px;
+  --elevation-1: 0 2px 4px rgba(0,0,0,0.08);
+  --elevation-2: 0 4px 10px rgba(0,0,0,0.10);
+  --elevation-3: 0 10px 24px rgba(0,0,0,0.12);
+}
+
+/* Paper-like */
+:root[data-theme="paper"] {
+  --radius-sm: 2px;
+  --radius-md: 4px;
+  --radius-lg: 6px;
+  --elevation-1: 0 1px 0 rgba(0,0,0,0.06);
+  --elevation-2: 0 2px 0 rgba(0,0,0,0.06);
+  --elevation-3: 0 4px 0 rgba(0,0,0,0.06);
+  --paper-bg: #fafafa;
+  --paper-texture: repeating-linear-gradient(
+    -45deg,
+    rgba(0,0,0,0.012) 0,
+    rgba(0,0,0,0.012) 2px,
+    rgba(255,255,255,0.02) 2px,
+    rgba(255,255,255,0.02) 4px
+  );
+}
+
+/* Glass (frosted) */
+:root[data-theme="glass"] {
+  --radius-sm: 10px;
+  --radius-md: 14px;
+  --radius-lg: 18px;
+  --elevation-1: 0 4px 12px rgba(0,0,0,0.15);
+  --elevation-2: 0 8px 24px rgba(0,0,0,0.18);
+  --elevation-3: 0 12px 32px rgba(0,0,0,0.22);
+}
+
+/* Soft (neumorphism-ish) */
+:root[data-theme="soft"] {
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --elevation-1: 6px 6px 12px rgba(0,0,0,0.08), -6px -6px 12px rgba(255,255,255,0.7);
+  --elevation-2: 10px 10px 20px rgba(0,0,0,0.10), -10px -10px 20px rgba(255,255,255,0.6);
+  --elevation-3: 16px 16px 32px rgba(0,0,0,0.12), -16px -16px 32px rgba(255,255,255,0.5);
+}
+
+/* Utility: apply tokens to common elements */
+.card,
+.table,
+.modal-content,
+.form-control,
+.btn,
+.alert,
+.list-group-item,
+.dropdown-menu,
+.offcanvas,
+.drawer,
+.accordion-item,
+.accordion-button {
+  border-radius: var(--radius-md) !important;
+}
+
+.btn {
+  border-radius: var(--radius-sm) !important;
+}
+
+.modal-content,
+.card,
+.dropdown-menu,
+.offcanvas,
+.drawer {
+  box-shadow: var(--elevation-1);
+}
+
+/* Paper-like background treatment */
+:root[data-theme="paper"] body {
+  background: var(--paper-bg);
+  background-image: var(--paper-texture);
+}
+
+/* ================= Color palettes (data-color) ================= */
+/* Ocean: cool blues */
+:root[data-color="ocean"] {
+  --primary-color: #1e88e5;
+  --primary-dark: #1565c0;
+  --bs-primary: #1e88e5;
+  --bs-body-bg: #eef5ff;
+  --surface-color: #ffffff;
+  --divider-color: #d0def0;
+  --text-primary: #0f1b2d;
+  --text-secondary: #44607a;
+  --table-head-bg: #e3efff;
+  --table-row-hover: rgba(30,136,229,0.08);
+}
+
+/* Forest: greens */
+:root[data-color="forest"] {
+  --primary-color: #2e7d32;
+  --primary-dark: #1b5e20;
+  --bs-primary: #2e7d32;
+  --bs-body-bg: #f3f7f3;
+  --surface-color: #ffffff;
+  --divider-color: #d9e4d9;
+  --text-primary: #142016;
+  --text-secondary: #46614b;
+  --table-head-bg: #e8f1e8;
+  --table-row-hover: rgba(46,125,50,0.08);
+}
+
+/* Sunset: orange/pink accents */
+:root[data-color="sunset"] {
+  --primary-color: #ff7043;
+  --primary-dark: #f4511e;
+  --bs-primary: #ff7043;
+  --bs-body-bg: #fff4ef;
+  --surface-color: #ffffff;
+  --divider-color: #f1d3c8;
+  --text-primary: #3a1a14;
+  --text-secondary: #7c5a52;
+  --table-head-bg: #ffe9e1;
+  --table-row-hover: rgba(255,112,67,0.08);
+}
+
+/* Grape: purple accents */
+:root[data-color="grape"] {
+  --primary-color: #7e57c2;
+  --primary-dark: #5e35b1;
+  --bs-primary: #7e57c2;
+  --bs-body-bg: #f6f2ff;
+  --surface-color: #ffffff;
+  --divider-color: #ded4f2;
+  --text-primary: #1f1630;
+  --text-secondary: #5a4a79;
+  --table-head-bg: #efe8ff;
+  --table-row-hover: rgba(126,87,194,0.08);
+}
+
+/* Slate: neutral greys */
+:root[data-color="slate"] {
+  --primary-color: #607d8b;
+  --primary-dark: #455a64;
+  --bs-primary: #607d8b;
+  --bs-body-bg: #f6f7f8;
+  --surface-color: #ffffff;
+  --divider-color: #e1e4e8;
+  --text-primary: #1f2328;
+  --text-secondary: #636c76;
+  --table-head-bg: #eef1f4;
+  --table-row-hover: rgba(96,125,139,0.08);
+}
+
+/* Bright palettes */
+:root[data-color="candy"] {
+  --primary-color: #ff2d95; /* bright pink */
+  --primary-dark: #d61c73;
+  --bs-primary: #ff2d95;
+  --bs-body-bg: #fff0f7;
+  --surface-color: #ffffff;
+  --divider-color: #ffd2e6;
+  --text-primary: #311220;
+  --text-secondary: #7b4a62;
+  --table-head-bg: #ffe3f0;
+  --table-row-hover: rgba(255,45,149,0.08);
+}
+
+:root[data-color="aqua"] {
+  --primary-color: #00bcd4; /* bright aqua */
+  --primary-dark: #0097a7;
+  --bs-primary: #00bcd4;
+  --bs-body-bg: #e9fbfe;
+  --surface-color: #ffffff;
+  --divider-color: #cceef3;
+  --text-primary: #082b30;
+  --text-secondary: #3e6a71;
+  --table-head-bg: #dff7fb;
+  --table-row-hover: rgba(0,188,212,0.10);
+}
+
+:root[data-color="citrus"] {
+  --primary-color: #aeea00; /* bright lime */
+  --primary-dark: #7cb342;
+  --bs-primary: #aeea00;
+  --bs-body-bg: #fbffe5;
+  --surface-color: #ffffff;
+  --divider-color: #e4f2b0;
+  --text-primary: #1c2405;
+  --text-secondary: #556030;
+  --table-head-bg: #f2fadc;
+  --table-row-hover: rgba(174,234,0,0.12);
+}
+
+:root[data-color="flamingo"] {
+  --primary-color: #ff6f61; /* coral */
+  --primary-dark: #e64a19;
+  --bs-primary: #ff6f61;
+  --bs-body-bg: #fff2ef;
+  --surface-color: #ffffff;
+  --divider-color: #f7cfc7;
+  --text-primary: #3b1713;
+  --text-secondary: #7c524d;
+  --table-head-bg: #ffe7e2;
+  --table-row-hover: rgba(255,111,97,0.10);
+}
+
+:root[data-color="sky"] {
+  --primary-color: #00b0ff; /* bright sky */
+  --primary-dark: #0288d1;
+  --bs-primary: #00b0ff;
+  --bs-body-bg: #eaf7ff;
+  --surface-color: #ffffff;
+  --divider-color: #cfe8f7;
+  --text-primary: #0b1c2a;
+  --text-secondary: #405e78;
+  --table-head-bg: #e0f2ff;
+  --table-row-hover: rgba(0,176,255,0.10);
+}
+
+/* ================= Old-looking palettes ================= */
+:root[data-color="sepia"] {
+  --primary-color: #8d6e63; /* brown */
+  --primary-dark: #5d4037;
+  --bs-primary: #8d6e63;
+  --bs-body-bg: #f7f1e3; /* sepia paper */
+  --surface-color: #fffaf0;
+  --divider-color: #e0d6c2;
+  --text-primary: #4a3b31;
+  --text-secondary: #7a6a5f;
+  --table-head-bg: #efe6d7;
+  --table-row-hover: rgba(141,110,99,0.10);
+}
+
+:root[data-color="newspaper"] {
+  --primary-color: #444444; /* ink gray */
+  --primary-dark: #222222;
+  --bs-primary: #444444;
+  --bs-body-bg: #fbfbf8; /* off-white newsprint */
+  --surface-color: #ffffff;
+  --divider-color: #dddcd7;
+  --text-primary: #222222;
+  --text-secondary: #5c5c5c;
+  --table-head-bg: #f2f2ee;
+  --table-row-hover: rgba(0,0,0,0.04);
+}
+
+:root[data-color="terminal"] {
+  --primary-color: #00ff6a; /* bright green */
+  --primary-dark: #00cc55;
+  --bs-primary: #00ff6a;
+  --bs-body-bg: #0b0f0c; /* near black */
+  --surface-color: #0b0f0c; /* navbar text will use surface-color; keep white below */
+  --divider-color: #16331f;
+  --text-primary: #aaffc3;
+  --text-secondary: #7ddaa0;
+  --table-head-bg: #0f1a14;
+  --table-row-hover: rgba(0,255,106,0.08);
+}
+
+:root[data-color="vintage"] {
+  --primary-color: #b28b5c; /* muted gold */
+  --primary-dark: #8d6a3c;
+  --bs-primary: #b28b5c;
+  --bs-body-bg: #faf6ee;
+  --surface-color: #fffdf7;
+  --divider-color: #e8dcc4;
+  --text-primary: #3e3323;
+  --text-secondary: #746854;
+  --table-head-bg: #f3ead8;
+  --table-row-hover: rgba(178,139,92,0.10);
+}
+
+/* ================= Fancy palettes ================= */
+:root[data-color="neon"] {
+  --primary-color: #39ff14; /* neon green */
+  --primary-dark: #00e676;
+  --bs-primary: #39ff14;
+  --bs-body-bg: #0a0a0f;
+  --surface-color: #ffffff;
+  --divider-color: #1c1f2e;
+  --text-primary: #eafff0;
+  --text-secondary: #9feab6;
+  --table-head-bg: #111421;
+  --table-row-hover: rgba(57,255,20,0.10);
+}
+
+:root[data-color="aurora"] {
+  --primary-color: #7de2fc; /* pastel cyan */
+  --primary-dark: #1fb6ff;
+  --bs-primary: #7de2fc;
+  --bs-body-bg: #0b1220;
+  --surface-color: #ffffff;
+  --divider-color: #1a243b;
+  --text-primary: #e8f6ff;
+  --text-secondary: #9fb8d1;
+  --table-head-bg: #121a2d;
+  --table-row-hover: rgba(125,226,252,0.10);
+}
+
+:root[data-color="aurora"] body {
+  background-image: radial-gradient(800px 300px at 10% 10%, rgba(125,226,252,0.25), rgba(0,0,0,0) 60%),
+                    radial-gradient(600px 240px at 80% 20%, rgba(31,182,255,0.20), rgba(0,0,0,0) 60%),
+                    radial-gradient(1000px 400px at 40% 80%, rgba(174,234,0,0.15), rgba(0,0,0,0) 60%);
+}
+
+:root[data-color="luxe"] {
+  --primary-color: #f7b500; /* gold */
+  --primary-dark: #c99700;
+  --bs-primary: #f7b500;
+  --bs-body-bg: #0b0d14; /* deep navy */
+  --surface-color: #ffffff;
+  --divider-color: #1b2230;
+  --text-primary: #f5f6fa;
+  --text-secondary: #b5becf;
+  --table-head-bg: #121726;
+  --table-row-hover: rgba(247,181,0,0.10);
+}
+
+:root[data-color="luxe"] body {
+  background-image: linear-gradient(120deg, rgba(11,13,20,1) 0%, rgba(14,18,28,1) 50%, rgba(15,20,33,1) 100%);
+}
+
+/* Apply palette to common UI */
+body {
+  background-color: var(--bs-body-bg);
+  color: var(--text-primary);
+}
+
+.table thead th {
+  background-color: var(--table-head-bg);
+  color: var(--text-secondary);
+}
+
+.table tbody tr:hover {
+  background-color: var(--table-row-hover);
+}

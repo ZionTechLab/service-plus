@@ -1,6 +1,7 @@
 /* Settings button sticky top right for mobile */
 .settings-btn {
-
+  /* placeholder to satisfy linter */
+  display: inline-block;
 }
 
 /* @media (max-width: 576px) { */
@@ -18,14 +19,14 @@
 
 
 .table thead th {
-    background-color: #fafafa;
-    /* border-bottom: 1px solid var(--divider-color); */
-    padding: 16px;
-    font-weight: 500;
-    color: var(--text-secondary);
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    font-size: 0.75rem;
+  background-color: var(--table-head-bg, #fafafa);
+  /* border-bottom: 1px solid var(--divider-color); */
+  padding: 16px;
+  font-weight: 500;
+  color: var(--text-secondary);
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+  font-size: 0.75rem;
 }
 
 .table tbody td {
@@ -43,4 +44,9 @@
 ;
     align-items: center;
     justify-content: center;
+}
+
+/* Hover for table rows to respect color theme */
+.table-hover tbody tr:hover {
+  background-color: var(--table-row-hover, rgba(0,0,0,0.04));
 }
