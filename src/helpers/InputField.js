@@ -247,7 +247,7 @@ function InputField({
   // Default return for other types
   return (
     <div className={`form-group ${className}`}>
-    {labelOnTop && type !== 'images' && (<label className="form-label">{placeholder}</label>)}  
+    {labelOnTop && type !== 'images' && (<label className="form-label text-nowrap ">{placeholder}</label>)}  
       <div className="input-group">
             {!labelOnTop && type !== 'images' && (<label className="form-label ">{placeholder}</label>)} 
         {renderInput()}
