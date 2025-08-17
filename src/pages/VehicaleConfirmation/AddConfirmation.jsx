@@ -470,24 +470,27 @@ const filterGrade = () => {
       <span className="tab-label">Vehicle Details</span>
       <div className="row   g-0"> <hr /></div>
       <div className="row">
-         <div className="col-sm-6"> 
+         <div className="col-sm-4"> 
           <InputField className="col-12" {...fields.images} formik={formik} />
         </div>
-      </div>
-        <div className="row">
-          <div className="col-sm-9">  <div className="row">
-            <InputField className="col-md-4 col-sm-6" {...fields.make} formik={formik} />
-            <InputField className="col-md-4 col-sm-6" {...fields.model} formik={formik} />
-            <InputField className="col-md-4 col-sm-6" {...fields.grade} formik={formik} />
-            <InputField className="col-md-4 col-sm-6" {...fields.year} formik={formik} />
-            <InputField className="col-md-4 col-sm-6" {...fields.colour} formik={formik} />
-            <InputField className="col-md-4 col-sm-6" {...fields.millage} formik={formik} />
-            <InputField className="col-md-4 col-sm-6" {...fields.engineCapacity} formik={formik} />
-            <InputField className="col-md-4 col-sm-6" {...fields.fuelType} formik={formik} />
-            <InputField className="col-md-4 col-sm-6" {...fields.transmission} formik={formik} />
-            <InputField className="col-md-4 col-sm-6" {...fields.chassisNo} formik={formik} />
+    <div className="col-sm-8"> 
+             <div className="row">
+            <InputField className="col-lg-3 col-md-4 col-sm-6 col-6" {...fields.make} formik={formik} />
+            <InputField className="col-lg-3 col-md-4 col-sm-6 col-6" {...fields.model} formik={formik} />
+            <InputField className="col-lg-3 col-md-4 col-sm-6 col-6" {...fields.grade} formik={formik} />
+            <InputField className="col-lg-3 col-md-4 col-sm-6 col-6" {...fields.year} formik={formik} />
+            <InputField className="col-lg-3 col-md-4 col-sm-6 col-6" {...fields.colour} formik={formik} />
+            <InputField className="col-lg-3 col-md-4 col-sm-6 col-6" {...fields.millage} formik={formik} />
+            <InputField className="col-lg-3 col-md-4 col-sm-6 col-6" {...fields.engineCapacity} formik={formik} />
+            <InputField className="col-lg-3 col-md-4 col-sm-6 col-6" {...fields.fuelType} formik={formik} />
+            <InputField className="col-lg-3 col-md-4 col-sm-6" {...fields.transmission} formik={formik} />
+            <InputField className=" col-lg-9 col-md-4 col-sm-6" {...fields.chassisNo} formik={formik} />
           </div>
         </div>
+
+      </div>
+        <div className="row">
+      
        
 
 
