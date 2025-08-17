@@ -1,4 +1,5 @@
 const menuItems = [
+  { route: '/', displayName: 'Dashboard', icon: 'bi bi-speedometer2', isMenuItem: true },
   { route: '/business-partner', displayName: 'Business Partners', icon: 'bi bi-people-fill',isMenuItem: true },
   { route: '/business-partner/add', displayName: 'New Business Partner', icon: 'bi bi-person-plus-fill' },
   { route: '/business-partner/edit', displayName: 'Edit Business Partner', icon: 'bi bi-pencil-fill' },

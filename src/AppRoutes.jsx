@@ -14,6 +14,7 @@ import Invoice from "./pages/Invoice";
 import AddInvoice from "./pages/Invoice/Invoice";
 import DailyReportIndex from "./pages/DailyReport";
 import AddDailyReport from "./pages/DailyReport/AddReport";
+import Dashboard from "./pages/Dashboard";
 // import AddBusinessPartner from "./pages/BusinessPartners/AddBusinessPartner";
 
 
@@ -54,6 +55,7 @@ const AppRoutes = ({ isLoggedIn }) => (
         </ProtectedRoute>
       }
     > <Route path="business-partner" element={<BusinessPartner />} />
+  <Route index element={<Dashboard />} />
       <Route path="business-partner/add" element={<AddBusinessPartner />} />
       <Route path="business-partner/edit/:id" element={<AddBusinessPartner />} />   
 

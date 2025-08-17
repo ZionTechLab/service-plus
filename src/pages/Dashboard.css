@@ -1,0 +1,20 @@
+.pastel{border-radius:0;}
+
+/* Palette provided by user */
+/* Buccaneer, Contessa, Amulet, Steel Blue */
+.pastel-invoices{background:#D37B24;} /* Buccaneer */
+.pastel-partners{background:#CE746B;} /* Contessa */
+.pastel-items{background:#7CA179;} /* Amulet */
+.pastel-grn{background:#427FA8;} /* Steel Blue */
+
+/* Use white text on these colors for readability */
+.pastel .card-body{color:#ffffff}
+
+/* Ensure text remains readable */
+.pastel .card-title{font-weight:600}
+.pastel .display-6{font-weight:700}
+
+/* Small responsive tweaks */
+@media (max-width:576px){
+  .pastel .display-6{font-size:1.5rem}
+}
