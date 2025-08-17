@@ -1,5 +1,5 @@
 import { useRef, useState,useEffect } from "react";
-import { useParams,useNavigate } from "react-router-dom";
+import { useParams,useNavigate ,useLocation} from "react-router-dom";
 import * as Yup from "yup";
 import InputField from "../../helpers/InputField";
 import { useFormikBuilder } from "../../helpers/formikBuilder";
@@ -16,8 +16,16 @@ function Invoice() {
   const dataGridRef = useRef();
   const [lineItems, setLineItems] = useState([]);
   const [uiData, setUiData] = useState({loading: false, success: false, error: '', data: {} });
+  const location = useLocation(); 
+  const [isTaxInvoice, setIsTaxInvoice] = useState(0);
 
   useEffect(() => {
+   let isTaxInvoice_ = 0;
+    if(location.pathname.includes('tax-invoice')) {
+      isTaxInvoice_=1
+      setIsTaxInvoice(1)
+    }
+
    const fetchUi = async () => {
       setUiData(prev => ({ ...prev, loading: true, error: '', data: {} }));
       const data = await ApiService.getUi();
@@ -27,7 +35,7 @@ function Invoice() {
 
     if (id) {
       const fetchTxn = async () => {
-        const response = await ApiService.get(id);
+        const response = await ApiService.get(id,isTaxInvoice_);
         if (response.success) {
           if (response.data) {
             const { lineItems, ...formData } = response.data;
@@ -79,7 +87,7 @@ function Invoice() {
         valueField: "value",
       },
 
-      validation: Yup.number().required("Type of Vehicle is required"),
+      validation: isTaxInvoice ? undefined : Yup.number().required("Type of Vehicle is required")
     },
     amount: {
       name: "amount",
@@ -92,8 +100,8 @@ function Invoice() {
       disabled: true,
       labelOnTop: false,
     },
-    tax: {
-      name: "tax",
+    taxAmount: {
+      name: "taxAmount",
       type: "amount",
       placeholder: "Vat (18 %)",
       initialValue: 0,
@@ -135,7 +143,7 @@ if(id)
    MessageBoxService.show({
         message: "not available",
         type: "success",
-        onClose: () => navigate("/invoice"),
+        onClose: () => navigate(isTaxInvoice ? "/tax-invoice" : "/invoice"),
       });
       return;
 }
@@ -144,6 +152,7 @@ if(id)
       header: { ...values , txnNo: parseInt(id ? id : 0)}, 
       lineItems: sanitizedLineItems,
       isUpdate:id ? true : false
+      , isTaxInvoice
     };
     const response = await ApiService.update({ ...param });
 
@@ -151,7 +160,7 @@ if(id)
       MessageBoxService.show({
         message: "Invoice saved successfully!",
         type: "success",
-        onClose: () => navigate("/invoice"),
+        onClose: () => navigate(isTaxInvoice ? "/tax-invoice" : "/invoice"),
       });
       resetForm();
       dataGridRef.current.reset();
@@ -177,21 +186,24 @@ if(id)
     
     console.log(total);
     formik.setFieldValue("amount", total);
-    const tax = total * 0.18;
-    formik.setFieldValue("tax", tax);
+    const taxAmount = isTaxInvoice ? total * 0.18 : 0;
+    formik.setFieldValue("taxAmount", taxAmount);
     formik.setFieldValue(
       "totalAmount",
-      total + tax - (parseFloat(formik.values.advance) || 0)
+      total + taxAmount - (parseFloat(formik.values.advance) || 0)
     );
   }
 
   return (
-    <div className="container p-3">
+    <div className="container p-3">   
+     {/* <div className="mb-3">
+      <small className="text-muted">Current route: {location.pathname}</small>
+    </div> */}
       <form onSubmit={formik.handleSubmit} className=" g-3">
         <div className="row g-2">
-          <InputField {...fields.txnNo} formik={formik} className="col-md-3 col-sm-6" />
-          <InputField {...fields.txnDate} formik={formik} className="col-md-3 col-sm-6" />
-          <InputField {...fields.ref1} formik={formik} className="col-sm-6" /> 
+          <InputField {...fields.txnNo} formik={formik} className={isTaxInvoice ? "col-md-6 col-sm-6" : "col-md-3 col-sm-6"} />
+          <InputField {...fields.txnDate} formik={formik} className={isTaxInvoice ? "col-md-6 col-sm-6" : "col-md-3 col-sm-6"}/>
+        {isTaxInvoice?null:(  <InputField {...fields.ref1} formik={formik} className="col-sm-6" /> )}
           <SelectedBusinessPartnerBox field={fields.partner} formik={formik} />
          
             <DataGrid
@@ -208,20 +220,22 @@ if(id)
             className="col-md-6 text-end "
           />
         </div>
-          <div className="row  justify-content-end">
+{isTaxInvoice?(   <div className="row  justify-content-end">
           <InputField
-            {...fields.tax}
+            {...fields.taxAmount}
             formik={formik}
             className="col-md-6 text-end"
           />
-        </div>
+        </div>):null}
+
+       {isTaxInvoice?null:(
         <div className="row  justify-content-end">
           <InputField
             {...fields.advance}
             formik={formik}
             className="col-md-6 text-end"
           />
-        </div>
+        </div>)}
         <div className="row  justify-content-end">
           <InputField
             {...fields.totalAmount}

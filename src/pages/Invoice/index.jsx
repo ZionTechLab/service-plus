@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import DataTable from '../../components/DataTable';
 import InvoiceService from './InvoiceService';
 import { useEffect, useState } from 'react';
@@ -7,16 +7,17 @@ import MessageBoxService from '../../services/MessageBoxService';
 function InvoiceIndex() {
   const [uiData, setUiData] = useState({loading: false, success: false, error: '', data: [] });
   const navigate = useNavigate();
+  const location = useLocation(); // Use React Router's useLocation hook
 
   useEffect(() => {
     const fetchInvoices = async () => {
-      setUiData(prev => ({ ...prev, loading: true, error: '', data: [] }));
-        const data = await InvoiceService.getAll();
-        setUiData(prev => ({ ...prev, ...data , loading: false }));
+      setUiData((prev) => ({ ...prev, loading: true, error: '', data: [] }));
+      const data = await InvoiceService.getAll(location.pathname === '/tax-invoice'?1:0);
+      setUiData((prev) => ({ ...prev, ...data, loading: false }));
     };
     fetchInvoices();
     // eslint-disable-next-line
-  }, []);
+  }, [location.pathname]);
 
   const handleDelete = (id) => {
     MessageBoxService.show({
@@ -34,7 +35,7 @@ function InvoiceIndex() {
   };
 
   const handleEdit = (id) => {
-    navigate(`/invoice/edit/${id}`);
+    navigate(`${location.pathname}/edit/${id}`);
   };
 
   const columns = [
@@ -60,7 +61,7 @@ function InvoiceIndex() {
         </div>
       ),
     },  
-    { header: 'Invoice No', field: 'txnNo',class:'text-nowrap' },
+    { header: 'Invoice No', field: 'txnNoDisplay',class:'text-nowrap' },
     { header: 'Date', field: 'txnDate',class:'text-nowrap' ,type: 'date'},
     { header: 'Customer', field: 'partnerName',class:'text-nowrap' },
     { header: 'Total Amount', field: 'totalAmount',class:'text-nowrap text-end' },
@@ -68,9 +69,13 @@ function InvoiceIndex() {
 
   return (
     <div>
+    {/* <div className="mb-3">
+      <small className="text-muted">Current route: {location.pathname}</small>
+    </div> */}
+
       {!uiData.loading && !uiData.error && (
         <DataTable name="Invoice Export" data={uiData.data} columns={columns}>
-          <Link to="/invoice/add">
+          <Link to={location.pathname === '/tax-invoice' ? '/tax-invoice/add' : '/invoice/add'}>
             <button className="btn btn-primary">New</button>
           </Link>
         </DataTable>

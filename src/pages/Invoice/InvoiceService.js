@@ -16,13 +16,14 @@ class InvoiceService {
     return res;
   }
 
-  async get(id) {
-    const res = await axiosRequest(axios.get(`${this.apiBase}/get/${id}`));
+  async get(id,isTaxInvoice) {
+    // const res = await axiosRequest(axios.get(`${this.apiBase}/get/${id}`));
+      const res = await axiosRequest(axios.get(`${this.apiBase}/get`, { params: { id,isTaxInvoice } }));
     return res;
   }
 
-  async getAll() {
-    const res = await axiosRequest(axios.get(`${this.apiBase}/get-all`));
+  async getAll(isTaxInvoice) {
+    const res = await axiosRequest(axios.get(`${this.apiBase}/get-all`, { params: { isTaxInvoice } }));
     return res;
   }
 }

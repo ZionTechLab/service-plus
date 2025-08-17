@@ -23,13 +23,13 @@ const menuItems = [
   { route: '/invoice/add', displayName: 'Add Invoice', icon: 'bi bi-file-earmark-text' },
   { route: '/invoice/edit', displayName: 'Edit Invoice', icon: 'bi bi-file-earmark-text' },
 
-    { route: '/invoice', displayName: 'Invoice', icon: 'bi bi-file-earmark-text', isMenuItem: true },
-  { route: '/invoice/add', displayName: 'Add Invoice', icon: 'bi bi-file-earmark-text' },
-  { route: '/invoice/edit', displayName: 'Edit Invoice', icon: 'bi bi-file-earmark-text' },
-
   { route: '/tax-invoice', displayName: 'Tax Invoice', icon: 'bi bi-file-earmark-text', isMenuItem: true },
   { route: '/tax-invoice/add', displayName: 'Add Tax Invoice', icon: 'bi bi-file-earmark-text' },
   { route: '/tax-invoice/edit', displayName: 'Edit Tax Invoice', icon: 'bi bi-file-earmark-text' },
+  
+  { route: '/vehicale-confirmation', displayName: 'Vehicle Confirmation', icon: 'bi bi-file-earmark-text', isMenuItem: true },
+  { route: '/vehicale-confirmation/add', displayName: 'Add Vehicle Confirmation', icon: 'bi bi-file-earmark-text' },
+  { route: '/vehicale-confirmation/edit', displayName: 'Edit Vehicle Confirmation', icon: 'bi bi-file-earmark-text' },
 
   { route: '/daily-report', displayName: 'Daily Report', icon: 'bi bi-journal-text', isMenuItem: true },
   { route: '/daily-report/add', displayName: 'Add Daily Report', icon: 'bi bi-journal-plus' },
