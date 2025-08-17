@@ -82,6 +82,10 @@ const AppRoutes = ({ isLoggedIn }) => (
       <Route path="invoice/add" element={<AddInvoice />} />
       <Route path="invoice/edit/:id" element={<AddInvoice />} />
 
+      <Route path="tax-invoice" element={<Invoice />} />
+      <Route path="tax-invoice/add" element={<AddInvoice />} />
+      <Route path="tax-invoice/edit/:id" element={<AddInvoice />} />
+
       <Route path="daily-report" element={<DailyReportIndex />} />
       <Route path="daily-report/add" element={<AddDailyReport />} />
       <Route path="daily-report/edit/:id" element={<AddDailyReport />} />

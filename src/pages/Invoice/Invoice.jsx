@@ -92,6 +92,17 @@ function Invoice() {
       disabled: true,
       labelOnTop: false,
     },
+    tax: {
+      name: "tax",
+      type: "amount",
+      placeholder: "Vat (18 %)",
+      initialValue: 0,
+      validation: Yup.number()
+        .typeError("Vat must be a number"),
+        // .positive("Vat must be greater than 0"),
+      disabled: true,
+      labelOnTop: false,
+    },
     advance: {
       name: "advance",
       type: "amount",
@@ -166,9 +177,11 @@ if(id)
     
     console.log(total);
     formik.setFieldValue("amount", total);
+    const tax = total * 0.18;
+    formik.setFieldValue("tax", tax);
     formik.setFieldValue(
       "totalAmount",
-      total - (parseFloat(formik.values.advance) || 0)
+      total + tax - (parseFloat(formik.values.advance) || 0)
     );
   }
 
@@ -193,6 +206,13 @@ if(id)
             {...fields.amount}
             formik={formik}
             className="col-md-6 text-end "
+          />
+        </div>
+          <div className="row  justify-content-end">
+          <InputField
+            {...fields.tax}
+            formik={formik}
+            className="col-md-6 text-end"
           />
         </div>
         <div className="row  justify-content-end">
