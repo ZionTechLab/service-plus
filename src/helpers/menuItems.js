@@ -8,7 +8,7 @@ const menuItems = [
   { route: '/inquiry/add', displayName: 'New Faulty Acknowledgment', icon: 'bi bi-headset'},
   { route: '/inquiry/edit', displayName: 'Edit Faulty Acknowledgment', icon: 'bi bi-headset'},
 
-  { route: '/user-master', displayName: 'User Master', icon: 'bi bi-person-badge', isMenuItem: false },
+  { route: '/user-master', displayName: 'User Master', icon: 'bi bi-person-badge', isMenuItem: true },
   { route: '/user-master/add', displayName: 'Add User', icon: 'bi bi-person-plus' },
   { route: '/user-master/edit', displayName: 'Edit User', icon: 'bi bi-pencil' },
 

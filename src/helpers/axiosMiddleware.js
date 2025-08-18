@@ -7,7 +7,7 @@ export function handleAxiosError(error) {
   let message;
   if (error.response) {
     message = ` ${
-      error.response.data?.message ||
+      error.response.data?.error ||
       error.response.statusText ||
       "API error occurred."
     }`;
@@ -24,9 +24,7 @@ export function handleAxiosError(error) {
   return message;
 }
 
-// Centralized axios request wrapper
 export async function axiosRequest(requestPromise, options = {}) {
-  // options: { showSpinner: boolean, message: string }
   const { showSpinner = true, message = "Loading..." } = options;
 
   try {

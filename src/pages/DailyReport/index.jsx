@@ -47,17 +47,17 @@ function DailyReportIndex() {
       isAction: true,
       actionTemplate: (row) => (
         <div className="d-flex gap-2 justify-content-center">
-          <button className="btn btn-sm btn-primary" onClick={() => handleEdit(row.txnNo)}>
+          <button className="btn btn-sm btn-primary" onClick={() => handleEdit(row.id)}>
             <i className="bi bi-pencil"></i>
           </button>
-          <button className="btn btn-sm btn-danger" onClick={() => handleDelete(row.txnNo)}>
+          <button className="btn btn-sm btn-danger" onClick={() => handleDelete(row.id)}>
             <i className="bi bi-trash"></i>
           </button>
         </div>
       ),
     },
     // { header: 'txnIndex', field: 'txnIndex',class:'text-nowrap ' },
-    { header: 'Txn No', field: 'txnNo',class:'text-nowrap ' },
+    { header: 'Txn No', field: 'id',class:'text-nowrap ' },
     { header: 'Date', field: 'txnDate' },
     { header: 'Customer', field: 'partnerName' },
     { header: 'Vehicle No', field: 'vehicleNo' },

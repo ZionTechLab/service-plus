@@ -47,14 +47,14 @@ function InvoiceIndex() {
           <button
             className="btn btn-outline-primary btn-icon btn-sm"
             title="Edit"
-            onClick={() => handleEdit(row.txnNo)}
+            onClick={() => handleEdit(row.id)}
           >
             <i className="bi bi-pencil"></i>
           </button>
           <button
             className="btn btn-outline-danger btn-icon btn-sm"
             title="Delete"
-            onClick={() => handleDelete(row.txnNo)}
+            onClick={() => handleDelete(row.id)}
           >
             <i className="bi bi-trash"></i>
           </button>

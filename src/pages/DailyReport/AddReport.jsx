@@ -37,8 +37,8 @@ function AddDailyReport() {
   }, []);
 
   const fields = {
-    txnNo: {
-      name: "txnNo",
+    id: {
+      name: "id",
       type: "text",
       placeholder: "Transaction No",
       initialValue: "<Auto>",
@@ -137,7 +137,7 @@ function AddDailyReport() {
 }
     const sanitizedLineItems = sanitizeAmountFields(lineItems, lineItemColumns);
     const param = { 
-      header: { ...values , txnNo: parseInt(id ? id : 0)}, 
+      header: { ...values , id: parseInt(id ? id : 0)}, 
       lineItems: sanitizedLineItems,
       isUpdate:id ? true : false
     };
@@ -161,7 +161,7 @@ function AddDailyReport() {
     <div className="container p-3">
       <form onSubmit={formik.handleSubmit} >
         <div className="row g-2">
-        <InputField {...fields.txnNo} formik={formik} className="col-md-3 col-sm-6"/>
+        <InputField {...fields.id} formik={formik} className="col-md-3 col-sm-6"/>
         <InputField {...fields.txnDate} formik={formik} className="col-md-3 col-sm-6"/>
         <SelectedBusinessPartnerBox field={fields.partner} formik={formik} className="col-sm-6"/>
         <InputField {...fields.vehicleNo} formik={formik} className="col-md-3 col-sm-6"/>

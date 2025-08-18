@@ -10,8 +10,8 @@ import ImageInputField from '../../components/ImageInputField';
 
 
 const fields = {
-  username: {
-    name: "username",
+  userName: {
+    name: "userName",
     type: "text",
     placeholder: "Username",
     initialValue: "",
@@ -34,8 +34,8 @@ const fields = {
     validation: Yup.string().email("Invalid email").required("Email is required"),
     className: "col-md-12"
   },
-  full_name: {
-    name: "full_name",
+  fullName: {
+    name: "fullName",
     type: "text",
     placeholder: "Full Name",
     initialValue: "",

@@ -54,8 +54,8 @@ function Invoice() {
   }, []);
 
   const fields = {
-    txnNo: {
-      name: "txnNo",
+    id: {
+      name: "id",
       type: "text",
       placeholder: "Transaction No",
       initialValue: "<Auto>",
@@ -149,7 +149,7 @@ if(id)
 }
     const sanitizedLineItems = sanitizeAmountFields(lineItems, lineItemColumns);
     const param = { 
-      header: { ...values , txnNo: parseInt(id ? id : 0)}, 
+      header: { ...values , id: parseInt(id ? id : 0)}, 
       lineItems: sanitizedLineItems,
       isUpdate:id ? true : false
       , isTaxInvoice
@@ -201,7 +201,7 @@ if(id)
     </div> */}
       <form onSubmit={formik.handleSubmit} className=" g-3">
         <div className="row g-2">
-          <InputField {...fields.txnNo} formik={formik} className={isTaxInvoice ? "col-md-6 col-sm-6" : "col-md-3 col-sm-6"} />
+          <InputField {...fields.id} formik={formik} className={isTaxInvoice ? "col-md-6 col-sm-6" : "col-md-3 col-sm-6"} />
           <InputField {...fields.txnDate} formik={formik} className={isTaxInvoice ? "col-md-6 col-sm-6" : "col-md-3 col-sm-6"}/>
         {isTaxInvoice?null:(  <InputField {...fields.ref1} formik={formik} className="col-sm-6" /> )}
           <SelectedBusinessPartnerBox field={fields.partner} formik={formik} />
