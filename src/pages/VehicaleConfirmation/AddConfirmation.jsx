@@ -6,7 +6,6 @@ import { useFormikBuilder } from "../../helpers/formikBuilder";
 import MessageBoxService from "../../services/MessageBoxService";
 import ApiService from "./ConfirmationService";
 import SelectedBusinessPartnerBox from "../BusinessPartners/select-bp";
-import { useLoadingSpinner } from '../../hooks/useLoadingSpinner';
 // Multi-image selection is wired through InputField type "images"
 import config from '../../config/config';
 
@@ -15,7 +14,7 @@ const AddConfirmation = () => {
   const navigate = useNavigate();
   const [uiData, setUiData] = useState({loading: false, success: false, error: '', data: {} });
   const [uiDataFiltered, setuiDataFiltered] = useState( {Make:  [],Model:  [],Grade:  [],Colour:  []} );
-  const { showSpinner, hideSpinner } = useLoadingSpinner();
+  const [isUpdate, setIsUpdate] = useState(false);
 
 const fields = {
     id: {
@@ -322,23 +321,22 @@ const fields = {
       type: "images",
       placeholder: "",
       initialValue: [],
-      validation: Yup.array().of(Yup.mixed()),
+      // validation: Yup.array().of(Yup.mixed()),
     },
 };
 
   useEffect(() => {
-   const fetchUi = async () => {
+    const fetchUi = async () => {
       setUiData(prev => ({ ...prev, loading: true, error: '', data: {} }));
-      showSpinner();
       const data = await ApiService.getUi();
       console.log("Fetched UI Data:", data);
       setUiData(prev => ({ ...prev, ...data , loading: false }));
       setuiDataFiltered(prev => ({ ...prev,  Make: data.data.Make || [],Colour: data.data.Colour || [], FuelType: data.data.FuelType || [], Transmission: data.data.Transmission || [] }));
-
-      hideSpinner();
     };
     fetchUi();
+
     if (id) {
+      setIsUpdate(true);
       const fetchTxn = async () => {
         const response = await ApiService.get(id);
         if (response.success && response.data) {
@@ -381,62 +379,49 @@ const fields = {
   }, [id]);
 
   const handleSubmit = async (values, { resetForm }) => {
-    console.log("Form Values:", values);
-    if(id)
-{
-   MessageBoxService.show({
-        message: "not available",
-        type: "success",
-        onClose: () => navigate("/vehicale-confirmation"),
-      });
-      return;
-}
+    // console.log("Form Values:", values);
+    const param = { 
+      header: { ...values , id: parseInt(id ? id : 0)}, 
+      isUpdate:id ? true : false
+    };
+    const response = await ApiService.update({ ...param });
+console.log("Update Confirmation response:", response);
+//     if(id)
+// {
+//    MessageBoxService.show({
+//         message: "not available",
+//         type: "success",
+//         onClose: () => navigate("/vehicale-confirmation"),
+//       });
+//       return;
+// }
 
  const v={ ...values , id: parseInt(id ? id : 0),isUpdate:id ? true : false }
+// console.log(v)
 
-const formData = new FormData();
-
- Object.keys(v).forEach((key) => {
-      const value = v[key];
-      if (key === 'images' && Array.isArray(value)) {
-        value.forEach((img) => {
-          if (img instanceof File) {
-            formData.append('images[]', img, img.name);
-          } else if (typeof img === 'string') {
-            formData.append('images[]', img);
-          }
-        });
-      } else if (value === null || value === undefined) {
-        formData.append(key, '');
-      } else if (typeof value === 'object' && !(value instanceof File)) {
-        formData.append(key, JSON.stringify(value));
-      } else {
-        formData.append(key, value);
-      }
-    });
-
+// console.log("Form Data:", formData);
     // Backward compatibility: send first image also as single 'image'
     if (Array.isArray(v.images) && v.images.length > 0) {
       const first = v.images[0];
       if (first instanceof File) formData.append('image', first, first.name);
     }
-    const response = await ApiService.create(formData);
+    // const response = await ApiService.create(formData);
 
-    if (response && response.success) {
-      MessageBoxService.show({
-        message: "Vehicle Confirmation saved successfully!",
-        type: "success",
-        onClose: () => navigate("/vehicale-confirmation"),
-      });
-      resetForm();
-      return;
-    }
+    // if (response && response.success) {
+    //   MessageBoxService.show({
+    //     message: "Vehicle Confirmation saved successfully!",
+    //     type: "success",
+    //     onClose: () => navigate("/vehicale-confirmation"),
+    //   });
+    //   resetForm();
+    //   return;
+    // }
 
     // show error if save failed
-    MessageBoxService.show({
-      message: response?.error || "Failed to save Vehicle Confirmation.",
-      type: "danger",
-    });
+    // MessageBoxService.show({
+    //   message: response?.error || "Failed to save Vehicle Confirmation.",
+    //   type: "danger",
+    // });
   };
 
 
@@ -468,6 +453,7 @@ const filterGrade = () => {
   return (
     <form onSubmit={formik.handleSubmit} className="p-3">
       <div className="row">
+        {isUpdate?(
         <div className="col-sm-6">
           <div className="card mb-3">
             <div className="card-header">Vehicle Photos</div>
@@ -477,7 +463,7 @@ const filterGrade = () => {
               </div>
             </div>
           </div>
-        </div>
+        </div>):null}
 
         <div className="col-sm-6">
           <div className="card mb-3">
