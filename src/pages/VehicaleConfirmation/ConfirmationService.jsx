@@ -46,11 +46,13 @@ class ConfirmationService {
       if (images && images.length > 0) {
         const formData = new FormData();
         images.forEach((img, idx) => {
-          console.log("Image:", img);
-          try {
-            formData.append("image", img, img.name || `image_${idx}`);
-          } catch (err) {
-            formData.append("image", img);
+          if (img.status === 'new') {
+            console.log("Image:", img);
+            try {
+              formData.append("image", img.file, img.file.name || `image_${idx}`);
+            } catch (err) {
+              formData.append("image", img.file);
+            }
           }
         });
         formData.append("id", res.data);
@@ -81,7 +83,7 @@ class ConfirmationService {
         console.log("Image upload response:", res2);
         return res2;
       } else {
-        console.log("No images to upload");
+       return res;
       }
     } else {
       console.error("Update failed:", res);
