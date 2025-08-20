@@ -10,6 +10,8 @@ import SelectedBusinessPartnerBox from "../BusinessPartners/select-bp";
 import sanitizeAmountFields from "../../helpers/sanitizeAmountFields";
 import transformDateFields from "../../helpers/transformDateFields";
 import  "./Invoice.css";
+import Modal from "../../components/Modal";
+import InvoicePrintView from "./InvoicePrintView";
 
 function Invoice() {
   const { id } = useParams();
@@ -19,6 +21,7 @@ function Invoice() {
   const [uiData, setUiData] = useState({loading: false, success: false, error: '', data: {} });
   const location = useLocation(); 
   const [isTaxInvoice, setIsTaxInvoice] = useState(0);
+  const [showPreview, setShowPreview] = useState(false);
 
   useEffect(() => {
    let isTaxInvoice_ = 0;
@@ -256,7 +259,34 @@ if(id)
         <button className="w-100 btn btn-primary mt-3" type="submit">
           Submit
         </button>
+        <div className="d-flex gap-2 mt-2">
+      
+      
+     {true?null:    (<> <button
+            type="button"
+            className="btn btn-outline-secondary"
+            onClick={() => setShowPreview((s) => !s)}
+          >
+            {showPreview ? "Hide Preview" : "Print Preview"}
+          </button>
+          <button
+            type="button"
+            className="btn btn-success"
+            onClick={() => window.print()}
+          >
+            Print
+          </button></>)}
+        </div>
       </form>
+
+  {/* Modal-based preview */}
+      <Modal show={showPreview} onClose={() => setShowPreview(false)} title="Invoice Preview">
+        <InvoicePrintView formikValues={formik.values} lineItems={lineItems} isTaxInvoice={isTaxInvoice} />
+        <div className="mt-3 d-flex justify-content-end">
+          <button className="btn btn-secondary me-2" onClick={() => setShowPreview(false)}>Close</button>
+          <button className="btn btn-primary" onClick={() => window.print()}>Print</button>
+        </div>
+      </Modal>
     </div>
   );
 }
