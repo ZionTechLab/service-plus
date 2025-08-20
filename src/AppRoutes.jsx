@@ -36,6 +36,10 @@ const ProtectedRoute = ({ isLoggedIn, children }) => {
 const PublicRoute = ({ isLoggedIn, children }) => {
   return isLoggedIn ? <Navigate to="/" replace /> : children;
 };
+const dynamicRoutes = [
+  { path: "test", element: <div>Test Page</div> },
+  { path: "example-page-2", element: <DailyReportIndex /> },
+];
 
 const AppRoutes = ({ isLoggedIn }) => (
   <Routes>
@@ -55,7 +59,7 @@ const AppRoutes = ({ isLoggedIn }) => (
         </ProtectedRoute>
       }
     > <Route path="business-partner" element={<BusinessPartner />} />
-  <Route index element={<Dashboard />} />
+      <Route index element={<Dashboard />} />
       <Route path="business-partner/add" element={<AddBusinessPartner />} />
       <Route path="business-partner/edit/:id" element={<AddBusinessPartner />} />   
 
@@ -91,6 +95,9 @@ const AppRoutes = ({ isLoggedIn }) => (
       <Route path="daily-report" element={<DailyReportIndex />} />
       <Route path="daily-report/add" element={<AddDailyReport />} />
       <Route path="daily-report/edit/:id" element={<AddDailyReport />} />
+       {dynamicRoutes.map((route, index) => (
+        <Route key={index} path={route.path} element={route.element} />
+      ))}
     </Route>
   </Routes>
 );
