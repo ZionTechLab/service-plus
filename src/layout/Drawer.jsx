@@ -90,6 +90,7 @@ const Drawer = forwardRef(({ isOpen, onClose, isMinimized, isMobile }, ref) => {
           aria-label="Close menu"
         />
       )}
+      
       <aside
         ref={drawerRef}
         className={`drawer ${isMobile ? (isOpen ? 'open' : '') : (isMinimized ? 'minimized' : 'expanded')}`}
@@ -98,6 +99,7 @@ const Drawer = forwardRef(({ isOpen, onClose, isMinimized, isMobile }, ref) => {
         aria-modal={isMobile ? "true" : undefined}
         aria-label="Main menu"
       >
+        <div className="drawer-content">
         <div className="drawer-header">
           {!isMinimized && <h3 className="drawer-title mb-0">Menu</h3>}
           {isMobile && (
@@ -204,7 +206,7 @@ const Drawer = forwardRef(({ isOpen, onClose, isMinimized, isMobile }, ref) => {
               </div>
             )}
           </div>
-        </div>
+        </div></div>
 {/* )} */}
       </aside>
     </>

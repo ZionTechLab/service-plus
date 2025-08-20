@@ -111,12 +111,13 @@
 .form-control,
 .btn,
 .alert,
-.list-group-item,
+/* .list-group-item, */
 .dropdown-menu,
 .offcanvas,
-.drawer,
+/* .drawer, */
 .accordion-item,
-.accordion-button {
+.accordion-button,
+select {
   border-radius: var(--radius-md) !important;
 }
 
@@ -265,6 +266,7 @@
 :root[data-color="sky"] {
   --primary-color: #00b0ff; /* bright sky */
   --primary-dark: #0288d1;
+  --secondary-color: #607d8b;
   --bs-primary: #00b0ff;
   --bs-body-bg: #eaf7ff;
   --surface-color: #ffffff;

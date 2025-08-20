@@ -26,7 +26,9 @@ code {
   border-top-right-radius: inherit !important;
 
 }
-
+/* .list-group{
+ background-color: var(--secondary-color)!important;
+} */
 
 :root {
   --theme-header-height: 60px; /* Adjust as needed */
@@ -47,6 +49,7 @@ code {
   --text-primary: #212121;
   --text-secondary: #757575;
   --divider-color: #e0e0e0;
+
 }
 
 [data-bs-theme="dark"] {
