@@ -127,7 +127,7 @@ const Drawer = forwardRef(({ isOpen, onClose, isMinimized, isMobile }, ref) => {
             ))}
           </ul>
         </nav>
-{true?null:(
+{/* {true?null:( */}
         <div className="drawer-footer mt-auto p-3">
           <div className="d-flex flex-column gap-2">
             <div className="form-check form-switch m-0">
@@ -205,7 +205,7 @@ const Drawer = forwardRef(({ isOpen, onClose, isMinimized, isMobile }, ref) => {
             )}
           </div>
         </div>
-)}
+{/* )} */}
       </aside>
     </>
   );

@@ -376,8 +376,10 @@ export default function runAppMigrations() {
   const localVersion = localStorage.getItem("appVersion");
   if (localVersion !== appConfig.version) {
     localStorage.setItem("appVersion", appConfig.version);
-    localStorage.setItem("partners", JSON.stringify(defaultPartners));
-    localStorage.setItem("inquiries", JSON.stringify(defaultInquiries));
-        localStorage.setItem("users", JSON.stringify(defaultUsers));
+
+        localStorage.setItem('theme', 'light');
+    // localStorage.setItem("partners", JSON.stringify(defaultPartners));
+    // localStorage.setItem("inquiries", JSON.stringify(defaultInquiries));
+    //     localStorage.setItem("users", JSON.stringify(defaultUsers));
   }
 }

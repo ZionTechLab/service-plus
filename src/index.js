@@ -7,6 +7,7 @@ import './themes.css';
 import App from './App';
 import reportWebVitals from './reportWebVitals';
 import { HashRouter } from "react-router-dom";
+import { register as registerServiceWorker } from './serviceWorkerRegistration';
 const root = ReactDOM.createRoot(document.getElementById('root'));
 root.render(
  <HashRouter> <React.StrictMode>
@@ -17,3 +18,5 @@ root.render(
 );
 
 reportWebVitals();
+// Register Service Worker for PWA capabilities
+registerServiceWorker();
