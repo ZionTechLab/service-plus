@@ -30,7 +30,9 @@ function Navbar({ onToggleDrawer }) {
     let found = menuItems.find((item) => item.route === path);
     if (!found) {
       const editMatch = path.match(/^(.*\/edit)\/\d+$/);
-      found = menuItems.find((item) => item.route === editMatch[1]);
+      if (editMatch && editMatch[1]) {
+        found = menuItems.find((item) => item.route === editMatch[1]);
+      }
     }
     return found ? found.displayName : "Page";
   };
