@@ -50,3 +50,17 @@
 .table-hover tbody tr:hover {
   background-color: var(--table-row-hover, rgba(0,0,0,0.04));
 }
+.filterby span {
+  margin-top: 7px;
+  padding-right: 5px;
+}
+.filterby select{
+  border-top-right-radius: 0% !important;
+   border-bottom-right-radius: 0% !important;
+   background-color:rgba(0, 0, 0, 0.123)
+}
+
+.filterby input{
+  border-top-left-radius: 0% !important;
+   border-bottom-left-radius: 0% !important;
+}

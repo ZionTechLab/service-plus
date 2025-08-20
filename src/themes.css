@@ -273,7 +273,8 @@ select {
   --divider-color: #cfe8f7;
   --text-primary: #0b1c2a;
   --text-secondary: #405e78;
-  --table-head-bg: #e0f2ff;
+  --table-head-bg: var(--secondary-color);
+ --bs-table-head-color: #ffffff;
   --table-row-hover: rgba(0,176,255,0.10);
 }
 

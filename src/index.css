@@ -90,7 +90,9 @@ code {
   border: none;
   border-radius: var(--radius-md, 0px);
 }
-
+.table thead th {
+  color: #fff !important;
+}
 .LoginPage {
   min-height: 100vh;
   display: flex;
@@ -150,7 +152,3 @@ code {
   margin-bottom:2px;
   font-size: 14px;
 }
-/* .form-control{
-  padding: 5px 10px;
-background: #7c7c7c1a;
-} */

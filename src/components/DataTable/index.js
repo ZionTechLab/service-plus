@@ -241,8 +241,8 @@ const DataTable = ({ data = [], columns = [], name, children, onRowSelect }) => 
             <div className="d-block d-sm-none mb-1">
               <span className="fw-semibold">Filter by :</span>
             </div>
-            <div className="input-group">
-              <span className="input-group-text d-none d-sm-inline">Filter by :</span>
+            <div className="input-group filterby">
+              <span className="d-none d-sm-inline">Filter by :</span>
               <select
                 className="form-select"
                 value={searchKey || ""}
