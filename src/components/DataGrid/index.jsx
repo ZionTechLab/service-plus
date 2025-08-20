@@ -66,9 +66,9 @@ const DataGrid = forwardRef(({ columns,  initialItems, onItemsChange }, ref) => 
               <th style={{ width: "40px" }}></th>
             </tr>
           </thead>
-          <tbody>
+          <tbody >
             {items.map((item, idx) => (
-              <tr key={idx} className={styles.tr}>
+              <tr key={idx} className={styles.tr}  >
                 <td >{idx + 1}</td>
                 {columns.map((col, cidx) => (
                   <td key={col.field || cidx} className={styles.td}>
@@ -93,7 +93,7 @@ const DataGrid = forwardRef(({ columns,  initialItems, onItemsChange }, ref) => 
                           // }
                         }}
                         placeholder={col.placeholder || col.header}
-                        maxLength={15}
+                        maxLength={15} 
                       />
                     ) : (
                       <input
@@ -118,15 +118,15 @@ const DataGrid = forwardRef(({ columns,  initialItems, onItemsChange }, ref) => 
                 </td>
               </tr>
             ))}
-            <tr className={styles.tr}>
+            {/* <tr className={styles.tr}>
               <td></td>
               {columns.map((col, i) => (
                 <td key={col.field || i} style={col.width ? { width: col.width } : {}}>
-                  {/* {col.header} */}
+             
                 </td>
               ))}
               <td style={{ width: "40px" }}></td>
-            </tr>
+            </tr> */}
           </tbody>
         </table>
       </div>

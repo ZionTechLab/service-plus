@@ -58,8 +58,8 @@ function Navbar({ onToggleDrawer }) {
         <span className="d-none d-md-inline">{user.name}</span>
       </button>
       <ul class="dropdown-menu dropdown-menu-end">
-        <li><button class="dropdown-item" type="button" onClick={() => navigate('/profile')}>Profile</button></li>
-        <li><button class="dropdown-item" type="button" onClick={handleLogout}>Logout</button></li>
+        <li><div class="dropdown-item" type="button" onClick={() => navigate('/profile')}>Profile</div></li>
+        <li><div class="dropdown-item" type="button" onClick={handleLogout}>Logout</div></li>
       </ul>
     </div>
         {/* <div className="collapse navbar-collapse">

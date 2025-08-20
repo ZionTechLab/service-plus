@@ -4,8 +4,9 @@ border: none;
 }
 
 .tr {
-padding: 0px;
-margin: 0px;
+padding: 0px !important;
+margin: 10px !important;
+/* background-color: blue; */
 }
 
 .td {
@@ -16,3 +17,7 @@ margin: 0px;
 padding: 0px!important;
 margin: 0px;
 } */
+
+table{
+    background-color:transparent;
+}

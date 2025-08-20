@@ -8,10 +8,6 @@ const menuItems = [
   { route: '/inquiry/add', displayName: 'New Faulty Acknowledgment', icon: 'bi bi-headset'},
   { route: '/inquiry/edit', displayName: 'Edit Faulty Acknowledgment', icon: 'bi bi-headset'},
 
-  { route: '/user-master', displayName: 'User Master', icon: 'bi bi-person-badge', isMenuItem: true },
-  { route: '/user-master/add', displayName: 'Add User', icon: 'bi bi-person-plus' },
-  { route: '/user-master/edit', displayName: 'Edit User', icon: 'bi bi-pencil' },
-
   { route: '/item-master', displayName: 'Item Master', icon: 'bi bi-box-seam-fill',isMenuItem: false },
   { route: '/item-master/add', displayName: 'New Item Master', icon: 'bi bi-box-seam-fill',isMenuItem: false },
   { route: '/item-master/edit', displayName: 'Edit Item Master', icon: 'bi bi-box-seam-fill',isMenuItem: false },
@@ -28,13 +24,17 @@ const menuItems = [
   { route: '/tax-invoice/add', displayName: 'Add Tax Invoice', icon: 'bi bi-file-earmark-text' },
   { route: '/tax-invoice/edit', displayName: 'Edit Tax Invoice', icon: 'bi bi-file-earmark-text' },
   
-  { route: '/vehicale-confirmation', displayName: 'Vehicle Confirmation', icon: 'bi bi-file-earmark-text', isMenuItem: true },
-  { route: '/vehicale-confirmation/add', displayName: 'Add Vehicle Confirmation', icon: 'bi bi-file-earmark-text' },
-  { route: '/vehicale-confirmation/edit', displayName: 'Edit Vehicle Confirmation', icon: 'bi bi-file-earmark-text' },
+  { route: '/vehicale-confirmation', displayName: 'Vehicle Details', icon: 'bi bi-file-earmark-text', isMenuItem: true },
+  { route: '/vehicale-confirmation/add', displayName: 'Add Vehicle', icon: 'bi bi-file-earmark-text' },
+  { route: '/vehicale-confirmation/edit', displayName: 'Edit Vehicle', icon: 'bi bi-file-earmark-text' },
 
   { route: '/daily-report', displayName: 'Daily Report', icon: 'bi bi-journal-text', isMenuItem: true },
   { route: '/daily-report/add', displayName: 'Add Daily Report', icon: 'bi bi-journal-plus' },
   { route: '/daily-report/edit', displayName: 'Edit Daily Report', icon: 'bi bi-journal-plus' },
+
+    { route: '/user-master', displayName: 'Users', icon: 'bi bi-person-badge', isMenuItem: true },
+  { route: '/user-master/add', displayName: 'Add User', icon: 'bi bi-person-plus' },
+  { route: '/user-master/edit', displayName: 'Edit User', icon: 'bi bi-pencil' },
 ];
 
 export default menuItems;

@@ -256,9 +256,15 @@ if(id)
           />
         </div> */}
 
-        <button className="w-100 btn btn-primary mt-3" type="submit">
+        {/* <button className="w-100 btn btn-primary mt-3" type="submit">
           Submit
+        </button> */}
+
+                        <div className="d-flex justify-content-end mt-3">
+        <button type="submit" className="btn btn-primary">
+          Save
         </button>
+      </div>
         <div className="d-flex gap-2 mt-2">
       
       

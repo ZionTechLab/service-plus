@@ -24,6 +24,10 @@ export default function transformDateFields(formData = {}, fields = {}) {
           result[key] = s.includes("T") ? s.split("T")[0] : s;
         }
       }
+      else if(meta && meta.type === "switch" && Object.prototype.hasOwnProperty.call(formData, key)) {
+        const val = formData[key];
+        result[key] = Boolean(val);
+      }
     } catch (e) {
       // on any unexpected error, leave the original value
       // (fail-safe: do not throw)

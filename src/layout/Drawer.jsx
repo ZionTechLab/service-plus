@@ -105,7 +105,7 @@ const Drawer = forwardRef(({ isOpen, onClose, isMinimized, isMobile }, ref) => {
           {isMobile && (
             <button
               onClick={onClose}
-              className="drawer-close-btn btn btn-dark"
+              className="drawer-close-btn btn "
               aria-label="Close menu"
             >
               <i className="bi bi-x-lg" aria-hidden="true"></i>

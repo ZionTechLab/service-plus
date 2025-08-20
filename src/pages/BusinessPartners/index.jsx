@@ -72,38 +72,12 @@ function BusinessPartners() {
     { header: "Contact Person", field: "contactPerson", class: "text-nowrap" },
     { header: "Email", field: "email" },
     { header: "Address", field: "address",class: "text-nowrap"  },
-    { header: "Phone", field: "phone" },
-    { header: "Customer",
-      isAction: true,
-      actionTemplate: (row) => (
-        <input type="checkbox" checked={row.isCustomer} readOnly />
-      ),
-      field: "isCustomer",
-    },
-    {
-      header: "Supplier",
-      isAction: true,
-      actionTemplate: (row) => (
-        <input type="checkbox" checked={row.isSupplier} readOnly />
-      ),
-      field: "isSupplier",
-    },
-    {
-      header: "Employee",
-      isAction: true,
-      actionTemplate: (row) => (
-        <input type="checkbox" checked={row.isEmployee} readOnly />
-      ),
-      field: "isEmployee",
-    },
-    {
-      header: "Active",
-      isAction: true,
-      actionTemplate: (row) => (
-        <input type="checkbox" checked={row.active} readOnly />
-      ),
-      field: "active",
-    },
+    { header: "Phone", field: "phone1", class: "text-nowrap" },
+    { header: "Customer", field: "isCustomer", class: "text-center", type: "boolean" },
+    { header: "Supplier", field: "isSupplier", class: "text-center", type: "boolean" },
+    { header: "Employee", field: "isEmployee", class: "text-center", type: "boolean" },
+    { header: "Active", field: "active", class: "text-center", type: "boolean" },
+    
   ];
 
 

@@ -227,6 +227,23 @@ const DataTable = ({ data = [], columns = [], name, children, onRowSelect }) => 
     return safeFilteredData.slice(start, start + pageSize);
   }, [filteredData, page]);
 
+const formatColumnValue = (col, row) => {
+  if (col.type === "boolean") {
+    return (
+      <>
+        <input className="text-center" type="checkbox" checked={row[col.field]} readOnly />
+      </>
+    );
+  } else if (col.type === "date") {
+    return <>{new Date(row[col.field]).toLocaleDateString()}</>;
+  } else if (col.isAction) {
+    return col.actionTemplate
+      ? col.actionTemplate(row)
+      : null;
+  }
+  return row[col.field];
+};
+
   return (
     <div className="">
       <div className="">
@@ -331,18 +348,12 @@ const DataTable = ({ data = [], columns = [], name, children, onRowSelect }) => 
                     >
                       {displayColumns.map((col, j) => (
                         <td key={j} className={` ${col.class || ""}`}>
-                         {col.type === 'date' ? (
-                           <>{new Date(row[col.field]).toLocaleDateString()}</>
-                         ) : (
-                          
-                      <>
-                          {!col.isAction
-                            ?(<>{row[col.field]}</>)
-                            : col.actionTemplate
-                            ? col.actionTemplate(row)
-                            : null}  </> )}
+                          <>
+                            {formatColumnValue(col, row)}
+                          </>
                         </td>
                       ))}
+                      
                     </tr>
                   );
                 })
