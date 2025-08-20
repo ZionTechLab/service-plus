@@ -53,12 +53,12 @@ function UserMaster() {
       )
     },
     { header: 'ID', field: 'id' },
-    { header: 'Username', field: 'userName' },
-    { header: 'Email', field: 'email' },
-    { header: 'Full Name', field: 'fullName' },
-    { header: 'Phone', field: 'phone' },
-    { header: 'Phone 2', field: 'phone2' },
-    { header: 'Status', field: 'status' },
+    { header: 'Username', field: 'userName', class:'text-nowrap'  },
+    { header: 'Email', field: 'email', class:'text-nowrap'  },
+    { header: 'Full Name', field: 'fullName', class:'text-nowrap'  },
+    { header: 'Phone', field: 'phone', class:'text-nowrap'  },
+    { header: 'Phone 2', field: 'phone2', class:'text-nowrap'  },
+    // { header: 'Status', field: 'status', class:'text-nowrap'  },
   ];
 
   return (

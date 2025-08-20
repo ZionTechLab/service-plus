@@ -44,7 +44,7 @@
 
 /* Desktop states */
 .drawer.expanded {
-  width: 280px;
+  width: 200px;
 }
 
 .drawer.minimized {
