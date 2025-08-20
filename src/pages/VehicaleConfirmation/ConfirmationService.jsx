@@ -35,26 +35,54 @@ class ConfirmationService {
 
   async update(param) {
     const { images, ...headerWithoutImages } = param.header;
-    const updatedParam = {
-      ...param,
-      header: headerWithoutImages,
-    };
-
-    const res = await axiosRequest(axios.post(`${this.apiBase}/update`, updatedParam));
+    const updatedParam = { ...param, header: headerWithoutImages };
+    // console.log(images, updatedParam);
+    const res = await axiosRequest(
+      axios.post(`${this.apiBase}/update`, updatedParam)
+    );
     if (res && res.success) {
       console.log("Update successful, executing additional operation...", res);
-      const formData = new FormData();
-      formData.append("image", images[0], images[0].name);
-      formData.append("id", res.data);
-      console.log("Form Data for image upload:", formData.values());
 
-      const res2 = await axiosRequest(
-        axios.post(`${this.apiBase}/images`, formData, {
-          headers: { "Content-Type": "multipart/form-data" },
-        })
-      );
-      console.log("Image upload response:", res2);
+      if (images && images.length > 0) {
+        const formData = new FormData();
+        images.forEach((img, idx) => {
+          console.log("Image:", img);
+          try {
+            formData.append("image", img, img.name || `image_${idx}`);
+          } catch (err) {
+            formData.append("image", img);
+          }
+        });
+        formData.append("id", res.data);
 
+        // Log file names for debugging without trying to iterate FormData on all runtimes
+        // try {
+        //   const names = images.map((i) => (i && i.name ? i.name : String(i)));
+        //   console.log("Uploading images:", names);
+        // } catch (e) {
+        //   console.log("Uploading images (names unavailable)", images.length);
+        // }
+
+        // Build upload headers: in browser let axios set Content-Type (do not set multipart boundary),
+        // in Node (form-data package) forward getHeaders()
+        let uploadHeaders = {};
+        if (
+          typeof window === "undefined" &&
+          typeof formData.getHeaders === "function"
+        ) {
+          uploadHeaders = formData.getHeaders();
+        }
+
+        const res2 = await axiosRequest(
+          axios.post(`${this.apiBase}/images`, formData, {
+            headers: uploadHeaders,
+          })
+        );
+        console.log("Image upload response:", res2);
+        return res2;
+      } else {
+        console.log("No images to upload");
+      }
     } else {
       console.error("Update failed:", res);
     }

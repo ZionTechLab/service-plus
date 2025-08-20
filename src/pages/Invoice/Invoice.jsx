@@ -8,6 +8,7 @@ import DataGrid from "../../components/DataGrid";
 import ApiService from "./InvoiceService";
 import SelectedBusinessPartnerBox from "../BusinessPartners/select-bp";
 import sanitizeAmountFields from "../../helpers/sanitizeAmountFields";
+import transformDateFields from "../../helpers/transformDateFields";
 import  "./Invoice.css";
 
 function Invoice() {
@@ -39,10 +40,9 @@ function Invoice() {
         if (response.success) {
           if (response.data) {
             const { lineItems, ...formData } = response.data;
-            formik.setValues({
-              ...formData,
-              txnDate: formData.txnDate ? formData.txnDate.split("T")[0] : "",
-            });
+            // normalize all date fields using the fields descriptor
+            const normalized = transformDateFields(formData, fields);
+            formik.setValues({ ...normalized });
             setLineItems(lineItems);
             dataGridRef.current.reset(lineItems);
           }

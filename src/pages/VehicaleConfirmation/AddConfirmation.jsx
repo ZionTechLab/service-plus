@@ -8,7 +8,7 @@ import ApiService from "./ConfirmationService";
 import SelectedBusinessPartnerBox from "../BusinessPartners/select-bp";
 // Multi-image selection is wired through InputField type "images"
 import config from '../../config/config';
-
+import transformDateFields from "../../helpers/transformDateFields";
 const AddConfirmation = () => {
   const { id } = useParams();
   const navigate = useNavigate();
@@ -366,9 +366,10 @@ const fields = {
             const f = await toFile(data.image);
             if (f) imageFiles = [f];
           }
-
+  const normalized = transformDateFields(data, fields);
+           
           formik.setValues({
-            ...data,
+            ...normalized,
             images: imageFiles,
           });
         }
@@ -379,32 +380,33 @@ const fields = {
   }, [id]);
 
   const handleSubmit = async (values, { resetForm }) => {
-    // console.log("Form Values:", values);
+
     const param = { 
       header: { ...values , id: parseInt(id ? id : 0)}, 
       isUpdate:id ? true : false
     };
+     console.log("Form Values:", values);
     const response = await ApiService.update({ ...param });
-console.log("Update Confirmation response:", response);
-//     if(id)
-// {
-//    MessageBoxService.show({
-//         message: "not available",
-//         type: "success",
-//         onClose: () => navigate("/vehicale-confirmation"),
-//       });
-//       return;
-// }
+    console.log("Update Confirmation response:", response);
 
- const v={ ...values , id: parseInt(id ? id : 0),isUpdate:id ? true : false }
+    if (response.success) {
+      MessageBoxService.show({
+        message: "Invoice saved successfully!",
+        type: "success",
+        onClose: () => navigate("/vehicale-confirmation"),
+      });
+      resetForm();
+
+    }
+//  const v={ ...values , id: parseInt(id ? id : 0),isUpdate:id ? true : false }
 // console.log(v)
 
 // console.log("Form Data:", formData);
     // Backward compatibility: send first image also as single 'image'
-    if (Array.isArray(v.images) && v.images.length > 0) {
-      const first = v.images[0];
-      if (first instanceof File) formData.append('image', first, first.name);
-    }
+    // if (Array.isArray(v.images) && v.images.length > 0) {
+    //   const first = v.images[0];
+    //   if (first instanceof File) formData.append('image', first, first.name);
+    // }
     // const response = await ApiService.create(formData);
 
     // if (response && response.success) {
