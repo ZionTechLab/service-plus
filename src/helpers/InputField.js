@@ -13,7 +13,7 @@ function InputField({
   onChange,
   error,
   touched,
-  dataBinding,children,disabled,
+  dataBinding,children,disabled,visible=true,
   labelOnTop=true
 }) {
 
@@ -225,6 +225,9 @@ function InputField({
       />
     );
   };
+if(!visible){
+  return null;
+}
 
   if (type === 'checkbox' ) {
     return (
@@ -246,6 +249,7 @@ function InputField({
 
   // Default return for other types
   return (
+   
     <div className={`form-group ${className}`}>
     {labelOnTop && type !== 'images' && (<label className="form-label text-nowrap ">{placeholder}</label>)}  
       <div className="input-group">

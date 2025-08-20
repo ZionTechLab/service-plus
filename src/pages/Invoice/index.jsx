@@ -1,6 +1,6 @@
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import DataTable from '../../components/DataTable';
-import InvoiceService from './InvoiceService';
+import ApiService from './InvoiceService';
 import { useEffect, useState } from 'react';
 import MessageBoxService from '../../services/MessageBoxService';
 
@@ -10,12 +10,12 @@ function InvoiceIndex() {
   const location = useLocation(); // Use React Router's useLocation hook
 
   useEffect(() => {
-    const fetchInvoices = async () => {
+    const fetchUi = async () => {
       setUiData((prev) => ({ ...prev, loading: true, error: '', data: [] }));
-      const data = await InvoiceService.getAll(location.pathname === '/tax-invoice'?1:0);
+      const data = await ApiService.getAll(location.pathname === '/tax-invoice'?1:0);
       setUiData((prev) => ({ ...prev, ...data, loading: false }));
     };
-    fetchInvoices();
+    fetchUi();
     // eslint-disable-next-line
   }, [location.pathname]);
 
@@ -69,10 +69,6 @@ function InvoiceIndex() {
 
   return (
     <div>
-    {/* <div className="mb-3">
-      <small className="text-muted">Current route: {location.pathname}</small>
-    </div> */}
-
       {!uiData.loading && !uiData.error && (
         <DataTable name="Invoice Export" data={uiData.data} columns={columns}>
           <Link to={location.pathname === '/tax-invoice' ? '/tax-invoice/add' : '/invoice/add'}>

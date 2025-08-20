@@ -1,30 +1,49 @@
 
-import { useNavigate } from 'react-router-dom';
+import {  useState,useEffect } from "react";
+import {useParams, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { useFormikBuilder } from '../../helpers/formikBuilder';
 import InputField from '../../helpers/InputField';
-import usePopupMessage from '../../components/PopupMessage';
-import UserService from './UserService';
+import ApiService from './UserService';
+import MessageBoxService from "../../services/MessageBoxService";
 
-import ImageInputField from '../../components/ImageInputField';
-
+function AddUser() {
+  const { id } = useParams();
+  const navigate = useNavigate();
+  const [uiData, setUiData] = useState({loading: false, success: false, error: '', data: {} });
 
 const fields = {
+  id: {
+    name: "id",
+    type: "text",
+    placeholder: "User Code",
+    initialValue: "<Auto>",
+    disabled: true,
+    visible:false
+  },
   userName: {
     name: "userName",
     type: "text",
-    placeholder: "Username",
+    placeholder: "User ID",
     initialValue: "",
-    validation: Yup.string().required("Username is required"),
-    className: "col-md-6"
+    validation: Yup.string().required("User ID is required"),
+    className: "col-md-3 col-sm-6 col-6"
   },
-  password_hash: {
-    name: "password_hash",
+  password: {
+    name: "password",
     type: "password",
     placeholder: "Password",
     initialValue: "",
     validation: Yup.string().required("Password is required"),
-    className: "col-md-6"
+    className: "col-md-3 col-sm-6 col-6"
+  },  
+  fullName: {
+    name: "fullName",
+    type: "text",
+    placeholder: "Full Name",
+    initialValue: "",
+    validation: Yup.string().required("Full name is required"),
+    className: "col-md-6 col-sm-6 col-12"
   },
   email: {
     name: "email",
@@ -32,14 +51,7 @@ const fields = {
     placeholder: "Email",
     initialValue: "",
     validation: Yup.string().email("Invalid email").required("Email is required"),
-    className: "col-md-12"
-  },
-  fullName: {
-    name: "fullName",
-    type: "text",
-    placeholder: "Full Name",
-    initialValue: "",
-    validation: Yup.string().required("Full name is required")
+    className: "col-md-6 col-sm-6 col-12"
   },
   phone: {
     name: "phone",
@@ -47,7 +59,7 @@ const fields = {
     placeholder: "Phone",
     initialValue: "",
     validation: Yup.string(),
-    className: "col-md-6"
+    className: "col-md-3 col-sm-6 col-6"
   },
   phone2: {
     name: "phone2",
@@ -55,60 +67,64 @@ const fields = {
     placeholder: "Phone",
     initialValue: "",
     validation: Yup.string(),
-    className: "col-md-6"
+    className: "col-md-3 col-sm-6 col-6"
   },
-  profile_picture: {
-    name: "profile_picture",
-    type: "text",
-    placeholder: "Profile Picture URL",
-    initialValue: "",
-    validation: Yup.string()
-  },
-  // New image field
-  profile_image: {
-    name: "profile_image",
-    type: "file",
-    placeholder: "Profile Image",
-    initialValue: null,
-    validation: Yup.mixed(),
-    className: "col-md-12"
-  },
-  role: {
-    name: "role",
-    type: "text",
+  roleId: {
+    name: "roleId",
+    type: "select",
     placeholder: "Role",
-    initialValue: "",
-    validation: Yup.string().required("Role is required")
+     dataBinding: {
+         data: uiData.data.Role,
+        keyField: "id",
+        valueField: "roleName",
+      },
+    validation: Yup.string().required("Role is required"),
+    className: "col-md-3 col-sm-6 col-6"
   },
-  status: {
-    name: "status",
-    type: "text",
-    placeholder: "Status",
-    initialValue: "",
-    validation: Yup.string()
-  }
+  active: {
+    name: "active",
+    type: "switch",
+    initialValue: true,
+    validation: Yup.boolean(),
+    placeholder: "Active",
+  },
 };
 
-function AddUser() {
-  const navigate = useNavigate();
-  const [ConfirmationDialog, confirm] = usePopupMessage();
+  useEffect(() => {
+   const fetchUi = async () => {
+      setUiData(prev => ({ ...prev, loading: true, error: '', data: {} }));
+      const data = await ApiService.getUi();
+      setUiData(prev => ({ ...prev, ...data , loading: false }));
+    };
+    fetchUi();
 
-  const handleSubmit = (values, { resetForm }) => {
-    // Convert image file to base64 if present
-    if (values.profile_image) {
-      const reader = new FileReader();
-      reader.onload = () => {
-        UserService.createUser({
-          ...values,
-          profile_picture: reader.result // store base64 string
-        });
-        confirm("User added successfully!").then(() => navigate('/user-master'));
-        resetForm();
+    if (id) {
+      const fetchTxn = async () => {
+        const response = await ApiService.get(id);
+        if (response.success) {
+          if (response.data) {
+            formik.setValues({ ...response.data});
+          }
+        }
       };
-      reader.readAsDataURL(values.profile_image);
-    } else {
-      UserService.createUser(values);
-      confirm("User added successfully!").then(() => navigate('/user-master'));
+      fetchTxn();
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
+  const handleSubmit = async (values, { resetForm }) => {
+    const param = { 
+      header: { ...values , id: parseInt(id ? id : 0)}, 
+      isUpdate:id ? true : false
+    };
+    const response = await ApiService.update({ ...param });
+
+    if (response.success) {
+      MessageBoxService.show({
+        message: "User saved successfully!",
+        type: "success",
+        onClose: () => navigate("/user-master"),
+      });
       resetForm();
     }
   };
@@ -116,19 +132,10 @@ function AddUser() {
   const formik = useFormikBuilder(fields, handleSubmit);
 
   return (
-    <div className="container py-4">
-      {ConfirmationDialog}
-      <form onSubmit={formik.handleSubmit} autoComplete="off">
-        <div className="row">
-          {Object.keys(fields).map((key) =>
-            key === "profile_image" ? (
-              <ImageInputField
-                key={key}
-                name={fields[key].name}
-                formik={formik}
-                className={fields[key].className}
-              />
-            ) : (
+    <div className="container p-3">
+      <form onSubmit={formik.handleSubmit} className=" g-3">
+        <div className="row g-2">
+          {Object.keys(fields).map((key) => (
               <InputField
                 key={key}
                 {...fields[key]}
@@ -138,12 +145,11 @@ function AddUser() {
             )
           )}
         </div>
-        <button type="submit" className="btn btn-primary">Save</button>
-        <button type="button" className="btn btn-secondary ms-2" onClick={() => navigate('/user-master')}>Cancel</button>
+        <button type="submit" className="w-100 btn btn-primary mt-3">Submit</button>
+
       </form>
     </div>
   );
 }
 
 export default AddUser;
-// ...existing code...

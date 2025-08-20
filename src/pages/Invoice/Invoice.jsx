@@ -196,9 +196,6 @@ if(id)
 
   return (
     <div className="container p-3">   
-     {/* <div className="mb-3">
-      <small className="text-muted">Current route: {location.pathname}</small>
-    </div> */}
       <form onSubmit={formik.handleSubmit} className=" g-3">
         <div className="row g-2">
           <InputField {...fields.id} formik={formik} className={isTaxInvoice ? "col-md-6 col-sm-6" : "col-md-3 col-sm-6"} />

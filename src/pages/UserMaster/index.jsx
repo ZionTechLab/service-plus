@@ -1,28 +1,35 @@
 import { Link, useNavigate } from 'react-router-dom';
 import DataTable from '../../components/DataTable';
 import { useEffect, useState } from 'react';
-import usePopupMessage from '../../components/PopupMessage';
-import UserService from './UserService';
+import ApiService from './UserService';
+import MessageBoxService from '../../services/MessageBoxService';
 
 function UserMaster() {
-  const [dataset, setDataset] = useState([]);
+  const [uiData, setUiData] = useState({loading: false, success: false, error: '', data: [] });
   const navigate = useNavigate();
-  const [ConfirmationDialog, confirm] = usePopupMessage();
 
   useEffect(() => {
-    const fetchUsers = async () => {
-      const storedUsers = await UserService.getAllUsers();
-      setDataset(storedUsers);
+    const fetchUi = async () => {
+      setUiData((prev) => ({ ...prev, loading: true, error: '', data: [] }));
+      const data = await ApiService.getAll();
+      setUiData((prev) => ({ ...prev, ...data, loading: false }));
     };
-    fetchUsers();
+    fetchUi();
+    // eslint-disable-next-line
   }, []);
 
   const handleDelete = async (id) => {
-    confirm('Are you sure you want to delete this user?', { confirmText: "Delete", cancelText: "Cancel", type: "danger" }).then((result) => {
-      if (result) {
-        const updated = UserService.deleteUser(id);
-        setDataset(updated);
-      }
+       MessageBoxService.show({
+      message: 'Are you sure you want to delete this invoice?',
+      type: 'danger',
+      confirmText: 'Delete',
+      cancelText: 'Cancel',
+      onConfirm: () => {
+        const updated = uiData.data.filter((data) => data.id !== id);
+        setUiData({ ...uiData, data: updated });
+        localStorage.setItem('invoices', JSON.stringify(updated));
+      },
+      onClose: null
     });
   };
 
@@ -46,27 +53,26 @@ function UserMaster() {
       )
     },
     { header: 'ID', field: 'id' },
-    { header: 'Username', field: 'username' },
+    { header: 'Username', field: 'userName' },
     { header: 'Email', field: 'email' },
-    { header: 'Full Name', field: 'full_name' },
+    { header: 'Full Name', field: 'fullName' },
     { header: 'Phone', field: 'phone' },
-    { header: 'Profile Picture', field: 'profile_picture' },
-    { header: 'Role', field: 'role' },
+    { header: 'Phone 2', field: 'phone2' },
     { header: 'Status', field: 'status' },
-    { header: 'Last Login', field: 'last_login' },
-    { header: 'Created At', field: 'created_at' },
-    { header: 'Updated At', field: 'updated_at' },
-    { header: 'Deleted At', field: 'deleted_at' }
   ];
 
   return (
     <div>
-      {ConfirmationDialog}
-      <DataTable name="User Master" data={dataset} columns={columns}>
-        <Link to="/user-master/add">
-          <button className="btn btn-primary">New</button>
-        </Link>
-      </DataTable>
+      {!uiData.loading && !uiData.error && (
+        <DataTable name="User Master" data={uiData.data} columns={columns}>
+          <Link to="/user-master/add">
+            <button className="btn btn-primary">New</button>
+          </Link>
+        </DataTable>
+      )}
+      {uiData.error && (
+        <div className="alert alert-danger mt-3">{uiData.error}</div>
+      )}
     </div>
   );
 }
