@@ -4,10 +4,10 @@ import {useParams, useNavigate } from 'react-router-dom';
 import * as Yup from 'yup';
 import { useFormikBuilder } from '../../helpers/formikBuilder';
 import InputField from '../../helpers/InputField';
-import ApiService from './UserService';
+import ApiService from './RefferanceService';
 import MessageBoxService from "../../services/MessageBoxService";
 
-function AddUser() {
+function AddRefferances() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [uiData, setUiData] = useState({loading: false, success: false, error: '', data: {} });
@@ -69,18 +69,18 @@ const fields = {
     validation: Yup.string(),
     className: "col-md-3 col-sm-6 col-6"
   },
-  roleId: {
-    name: "roleId",
-    type: "select",
-    placeholder: "Role",
-     dataBinding: {
-         data: uiData.data.Role,
-        keyField: "id",
-        valueField: "roleName",
-      },
-    validation: Yup.string().required("Role is required"),
-    className: "col-md-3 col-sm-6 col-6"
-  },
+  // roleId: {
+  //   name: "roleId",
+  //   type: "select",
+  //   placeholder: "Role",
+  //    dataBinding: {
+  //        data: uiData.data.Role,
+  //       keyField: "id",
+  //       valueField: "roleName",
+  //     },
+  //   validation: Yup.string().required("Role is required"),
+  //   className: "col-md-3 col-sm-6 col-6"
+  // },
   active: {
     name: "active",
     type: "switch",
@@ -91,12 +91,13 @@ const fields = {
 };
 
   useEffect(() => {
+    console.log("Fetching UI data...");
    const fetchUi = async () => {
       setUiData(prev => ({ ...prev, loading: true, error: '', data: {} }));
       const data = await ApiService.getUi();
       setUiData(prev => ({ ...prev, ...data , loading: false }));
     };
-    fetchUi();
+    // fetchUi();
 
     if (id) {
       const fetchTxn = async () => {
@@ -107,7 +108,7 @@ const fields = {
           }
         }
       };
-      fetchTxn();
+      // fetchTxn();
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
@@ -134,12 +135,6 @@ const fields = {
   return (
     <div className="container p-3">
       <form onSubmit={formik.handleSubmit} className=" g-3">
-
-  <div className="card mb-3">
-            {/* <div className="card-header">Purchase Details</div> */}
-            <div className="card-body">
-
-
         <div className="row g-2">
           {Object.keys(fields).map((key) => (
               <InputField
@@ -151,12 +146,11 @@ const fields = {
             )
           )}
         </div>
-       
         <button type="submit" className="w-100 btn btn-primary mt-3">Submit</button>
-</div> </div>
+
       </form>
     </div>
   );
 }
 
-export default AddUser;
+export default AddRefferances;

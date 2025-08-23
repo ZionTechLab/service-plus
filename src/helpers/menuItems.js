@@ -36,7 +36,7 @@ const menuItems = [
   { route: '/user-master/add', displayName: 'Add User', icon: 'bi bi-person-plus' },
   { route: '/user-master/edit', displayName: 'Edit User', icon: 'bi bi-pencil' },
 
-    { route: '/test', displayName: 'Edit User', icon: 'bi bi-pencil', isMenuItem: true },
+    { route: '/refferance', displayName: 'Edit User', icon: 'bi bi-pencil', isMenuItem: true },
 ];
 
 export default menuItems;

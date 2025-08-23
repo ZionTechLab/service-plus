@@ -37,7 +37,8 @@
     1) color-mix (modern browsers) using the CSS color variable
     2) rgba from an rgb CSS variable if available
     3) literal rgba fallback matching default --primary-color (#1976d2) */
-background-color: var(--bs-body-bg);
+background-color: var(--drawer-color);
+/* var(--bs-body-bg); */
 
 
   box-shadow: var(--elevation-1, 2px 0 5px rgba(0,0,0,0.2));
@@ -48,14 +49,14 @@ background-color: var(--bs-body-bg);
   border-right: 1px solid var(--bs-border-color);
   /* border-radius: 0 var(--radius-lg, 0) var(--radius-lg, 0) 0; */
 }
-.drawer-content{ height: calc(100vh - var(--theme-header-height, 60px));
+/* .drawer-content{ height: calc(100vh - var(--theme-header-height, 60px));
   background-color: color-mix(in srgb, var(--primary-color) 20%, transparent);
   background-color: rgba(var(--primary-color-rgb), 0.2);
-  background-color: rgba(25, 118, 210, 0.2); /* fallback for older browsers */
-}
+  background-color: rgba(25, 118, 210, 0.2); fallback for older browsers
+} */
 /* Desktop states */
 .drawer.expanded {
-  width: 200px;
+  width: var(--drawer-width);
 }
 
 .drawer.minimized {
@@ -108,14 +109,16 @@ background-color: var(--bs-body-bg);
 nav-link
 
 .drawer-nav .nav-link {
-  color: var(--bs-body-color);
+  /* color: var(--bs-body-color); */
   text-decoration: none;
   display: flex;
   align-items: center;
+
 }
 
 .list-group-item{
   background-color:transparent;
+    color:var(--text-primary);
 }
 .list-group-item:hover {
   background-color:rgba(240, 248, 255, 0.767);

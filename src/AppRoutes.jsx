@@ -15,6 +15,8 @@ import AddInvoice from "./pages/Invoice/Invoice";
 import DailyReportIndex from "./pages/DailyReport";
 import AddDailyReport from "./pages/DailyReport/AddReport";
 import Dashboard from "./pages/Dashboard";
+import Refferances from "./pages/Refferances";
+import AddRefferances from "./pages/Refferances/AddRefferances";
 // import AddBusinessPartner from "./pages/BusinessPartners/AddBusinessPartner";
 
 
@@ -95,6 +97,10 @@ const AppRoutes = ({ isLoggedIn }) => (
       <Route path="daily-report" element={<DailyReportIndex />} />
       <Route path="daily-report/add" element={<AddDailyReport />} />
       <Route path="daily-report/edit/:id" element={<AddDailyReport />} />
+
+      <Route path="refferance" element={<Refferances />} />
+      <Route path="refferance/add" element={<AddRefferances />} />
+      <Route path="refferance/edit/:id" element={<AddRefferances   />} />
        {dynamicRoutes.map((route, index) => (
         <Route key={index} path={route.path} element={route.element} />
       ))}

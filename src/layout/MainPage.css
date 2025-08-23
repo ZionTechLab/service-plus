@@ -15,7 +15,7 @@
 /* Desktop layout adjustments */
 @media (min-width: 992px) {
   .main-container.drawer-expanded {
-    margin-left: 200px;
+    margin-left: var(--drawer-width);
   }
 
   .main-container.drawer-minimized {

@@ -123,13 +123,13 @@ const Drawer = forwardRef(({ isOpen, onClose, isMinimized, isMobile }, ref) => {
                   title={isMinimized ? item.displayName : undefined}
                 >
                   <i className={`${item.icon} ${!isMinimized ? 'me-2' : ''}`} aria-hidden="true"></i>
-                  {!isMinimized && <span>{item.displayName}</span>}
+                  {!isMinimized && <span> {item.displayName}</span>}
                 </Link>
               </li>
             ))}
           </ul>
         </nav>
-{true?null:(
+{/* {true?null:( */}
         <div className="drawer-footer mt-auto p-3">
           <div className="d-flex flex-column gap-2">
             <div className="form-check form-switch m-0">
@@ -206,7 +206,8 @@ const Drawer = forwardRef(({ isOpen, onClose, isMinimized, isMobile }, ref) => {
               </div>
             )}
           </div>
-        </div>)}
+        </div>)
+        {/* } */}
 
  
  </div>
