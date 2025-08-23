@@ -378,7 +378,7 @@ export default function runAppMigrations() {
     localStorage.setItem("appVersion", appConfig.version);
 
         localStorage.setItem('theme', 'light');
-             localStorage.setItem('colorTheme', 'sky');
+             localStorage.setItem('colorTheme', 'neon');
               localStorage.setItem('uiTheme', 'glass');
     // localStorage.setItem("partners", JSON.stringify(defaultPartners));
     // localStorage.setItem("inquiries", JSON.stringify(defaultInquiries));

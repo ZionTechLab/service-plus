@@ -1,5 +1,5 @@
 const appConfig = {
-  version: "1.0.6" // Update this as needed
+  version: "1.0.7" // Update this as needed
 };
 
 export default appConfig;

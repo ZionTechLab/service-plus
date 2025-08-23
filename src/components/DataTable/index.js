@@ -251,7 +251,7 @@ const formatColumnValue = (col, row) => {
        <div className="card  "> 
         <div className="card-body row ">
           {children?
-          (<div className="col-sm-6"> {children}</div>):(<div className="col-sm-6"> '</div>)}
+          (<div className="col-sm-6"> {children}</div>):(<div className="col-sm-6"> </div>)}
           
           <div className="col-sm-6">
 

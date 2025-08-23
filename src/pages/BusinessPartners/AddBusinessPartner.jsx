@@ -1,4 +1,4 @@
-import { useRef, useState,useEffect } from "react";
+import {  useEffect } from "react";
 import * as Yup from "yup";
 import InputField from "../../helpers/InputField";
 import { useParams,useNavigate } from "react-router-dom";
@@ -102,7 +102,7 @@ const fields = {
 function AddBusinessPartner() {
   const { id } = useParams();
   const navigate = useNavigate();
-  const [uiData, setUiData] = useState({loading: false, success: false, error: '', data: {} });
+  // const [uiData, setUiData] = useState({loading: false, success: false, error: '', data: {} });
 
   useEffect(() => {
     if (id) {
