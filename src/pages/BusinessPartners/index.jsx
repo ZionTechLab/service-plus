@@ -1,22 +1,20 @@
 import { Link, useNavigate } from 'react-router-dom';
 import DataTable from '../../components/DataTable';
-import PartnerService from './PartnerService';
+import ApiService from './PartnerService';
 import { useEffect, useState } from 'react';
 import MessageBoxService from '../../services/MessageBoxService';
-import { useLoadingSpinner } from '../../hooks/useLoadingSpinner';
+// import { useLoadingSpinner } from '../../hooks/useLoadingSpinner';
 
-function BusinessPartners() {
+function BusinessPartnerIndex() {
   const [uiData, setUiData] = useState({loading: false, success: false, error: '', data: [] });
   const navigate = useNavigate();
-  const { showSpinner, hideSpinner } = useLoadingSpinner();
+  // const { showSpinner, hideSpinner } = useLoadingSpinner();
 
   useEffect(() => {
     const fetchInvoices = async () => {
       setUiData(prev => ({ ...prev, loading: true, error: '', data: [] }));
-      showSpinner();
-      const data = await PartnerService.getAllPartners();
+      const data = await ApiService.getAll();
       setUiData(prev => ({ ...prev, ...data , loading: false }));
-      hideSpinner();
     };
     fetchInvoices();
     // eslint-disable-next-line
@@ -97,4 +95,4 @@ function BusinessPartners() {
   );
 }
 
-export default BusinessPartners;
+export default BusinessPartnerIndex;

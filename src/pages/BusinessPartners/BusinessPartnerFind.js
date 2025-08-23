@@ -1,6 +1,6 @@
 import  { useEffect, useState } from "react";
 import DataTable from "../../components/DataTable";
-import PartnerService from "./PartnerService";
+import ApiService from "./PartnerService";
 import { useLoadingSpinner } from "../../hooks/useLoadingSpinner";
 
 function BusinessPartnerFind({ onCustomerSelect,  children }) {
@@ -11,7 +11,7 @@ function BusinessPartnerFind({ onCustomerSelect,  children }) {
     const fetchInvoices = async () => {
       setUiData(prev => ({ ...prev, loading: true, error: '', data: [] }));
       showSpinner();
-      const data = await PartnerService.getAllPartners();
+      const data = await ApiService.getAll();
       setUiData(prev => ({ ...prev, ...data , loading: false }));
       hideSpinner();
     };

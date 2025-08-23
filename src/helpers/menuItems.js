@@ -32,11 +32,13 @@ const menuItems = [
   { route: '/daily-report/add', displayName: 'Add Daily Report', icon: 'bi bi-journal-plus' },
   { route: '/daily-report/edit', displayName: 'Edit Daily Report', icon: 'bi bi-journal-plus' },
 
-    { route: '/user-master', displayName: 'Users', icon: 'bi bi-person-badge', isMenuItem: true },
+  { route: '/user-master', displayName: 'Users', icon: 'bi bi-person-badge', isMenuItem: true },
   { route: '/user-master/add', displayName: 'Add User', icon: 'bi bi-person-plus' },
   { route: '/user-master/edit', displayName: 'Edit User', icon: 'bi bi-pencil' },
 
-    { route: '/refferance', displayName: 'Edit User', icon: 'bi bi-pencil', isMenuItem: true },
+  { route: '/refferance', displayName: 'References', icon: 'bi bi-bookmarks', isMenuItem: true },
+  { route: '/refferance/add', displayName: 'Add Reference', icon: 'bi bi-bookmark-plus' },
+  { route: '/refferance/edit', displayName: 'Edit Reference', icon: 'bi bi-pencil-square' },
 ];
 
 export default menuItems;

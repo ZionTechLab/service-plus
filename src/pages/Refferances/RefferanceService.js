@@ -7,12 +7,12 @@ class RefferanceService {
   }
 
   	async getUi(category) {
-		const res = await axiosRequest(axios.get(`${this.apiBase}/get-ui`, { params: { category } }));
+		const res = await axiosRequest(axios.get(`${this.apiBase}/get-ui`, { params: { ...category } }));
 		return res;
 	}
 
-  async update(param, category) {
-    const res = await axiosRequest(axios.post(`${this.apiBase}/update`, { param, category }));
+  async update(param) {
+    const res = await axiosRequest(axios.post(`${this.apiBase}/update`, { ...param }));
     return res;
   }
 

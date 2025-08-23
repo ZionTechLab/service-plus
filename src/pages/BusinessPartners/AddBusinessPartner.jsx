@@ -1,15 +1,14 @@
-import {  useEffect } from "react";
+import { useRef, useState,useEffect } from "react";
 import * as Yup from "yup";
 import InputField from "../../helpers/InputField";
 import { useParams,useNavigate } from "react-router-dom";
 import { useFormikBuilder } from "../../helpers/formikBuilder";
 import ApiService from "./PartnerService";
-import usePopupMessage from "../../components/PopupMessage";
 import MessageBoxService from "../../services/MessageBoxService";
 import transformDateFields from "../../helpers/transformDateFields";
 
 const fields = {
-  ID: {
+  id: {
     name: "id",
     type: "text",
     placeholder: "ID",
@@ -100,16 +99,15 @@ const fields = {
   },
 };
 
-function AddBusinessPartner({ onCustomerCreated }) {
+function AddBusinessPartner() {
   const { id } = useParams();
   const navigate = useNavigate();
-  // const [uiData, setUiData] = useState({loading: false, success: false, error: '', data: {} });
-  const [ConfirmationDialog] = usePopupMessage();
+  const [uiData, setUiData] = useState({loading: false, success: false, error: '', data: {} });
 
   useEffect(() => {
     if (id) {
       const fetchTxn = async () => {
-        const response = await ApiService.getPartnerById(id);
+        const response = await ApiService.get(id);
         if (response.success) {
           if (response.data) {
               const normalized = transformDateFields(response.data, fields);
@@ -121,32 +119,21 @@ function AddBusinessPartner({ onCustomerCreated }) {
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, []);
-  // useEffect(() => {
-  //   if (id) {
-  //     const fetchInquiries = async () => {
-  //       const inquiries = await PartnerService.getPartnerById(id);
-  //       console.log("Fetched inquiries:", inquiries);
-  //       if (inquiries) {
-  //         formik.setValues({
-  //           ...inquiries,
-  //           isCustomer: inquiries.isCustomer ? true : false,
-  //           isSupplier: inquiries.isSupplier ? true : false,
-  //           isEmployee: inquiries.isEmployee ? true : false,
-  //           active: inquiries.active ? true : false,
-  //         });
-  //       }
-  //     };
-  //     fetchInquiries();
-  //   }
-  //   // eslint-disable-next-line react-hooks/exhaustive-deps
-  // }, [id]);
+
   const handleSubmit = async (values, { resetForm }) => {
 
-    const param = id ? { ...values, id: parseInt(id) } : { ...values, id: parseInt(0) };
-    const response = await ApiService.createPartner({...param});
+ const param = { 
+      header: { ...values , id: parseInt(id ? id : 0)}, 
+      isUpdate:id ? true : false
+    };console.log( param);
+    const response = await ApiService.update({ ...param });
+console.log("Response from API:", response);
+
+    // const param = id ? { ...values, id: parseInt(id) } : { ...values, id: parseInt(0) };
+    // const response = await ApiService.createPartner({...param});
     if (response.success) {
       MessageBoxService.show({
-        message: "Invoice saved successfully!",
+        message: "Business Partner saved successfully!",
         type: "success",
         onClose: () => navigate( "/business-partner"),
       });
@@ -163,12 +150,13 @@ function AddBusinessPartner({ onCustomerCreated }) {
 
   return (
     <div className="">
-      {ConfirmationDialog}
-      <div className="row g-5">
-        <div className="col-md-12 col-lg-12">
+      <div className="container p-3">
           <form onSubmit={formik.handleSubmit} >
+            <div className="card mb-3">
+
+            <div className="card-body">
             <div className="row g-2">
-              <InputField className="col-md-3 col-sm-6" {...fields.ID} formik={formik} />
+              <InputField className="col-md-3 col-sm-6" {...fields.id} formik={formik} />
               <InputField className="col-md-3 col-sm-6" {...fields.partnerCode} formik={formik} />
               <InputField className="col-sm-6" {...fields.partnerName} formik={formik} />
               <InputField className="col-sm-6" {...fields.contactPerson} formik={formik} />
@@ -189,14 +177,11 @@ function AddBusinessPartner({ onCustomerCreated }) {
           Save
         </button>
       </div>
-              {/* <button className="w-100 btn btn-primary btn-lg" type="submit" >
-                Save
-              </button> */}
-            </div>
+            </div></div></div>
           </form>
         </div>
       </div>
-    </div>
+    // </div>
   );
 }
 

@@ -6,18 +6,18 @@ class PartnerService {
     this.apiBase = config.apiBaseUrl+'business-partners';
   }
 
-  async createPartner(partnerData) {
-    const res = await axiosRequest(axios.post(this.apiBase, partnerData));
+  async update(param) {
+    const res = await axiosRequest(axios.post(`${this.apiBase}/update`, param));
     return res;
   }
 
-  async getPartnerById(id) {
-    const res = await axiosRequest(axios.get(`${this.apiBase}/${id}`));
+  async get(id) {
+    const res = await axiosRequest(axios.get(`${this.apiBase}/get`,{ params: { id } }));
     return res;
   }
 
-  async getAllPartners() {
-    const res = await axiosRequest(axios.get(this.apiBase));
+  async getAll() {
+    const res = await axiosRequest(axios.get(`${this.apiBase}/get-all`));
     return res;
   }
 }

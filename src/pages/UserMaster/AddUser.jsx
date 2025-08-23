@@ -136,7 +136,7 @@ const fields = {
       <form onSubmit={formik.handleSubmit} className=" g-3">
 
   <div className="card mb-3">
-            {/* <div className="card-header">Purchase Details</div> */}
+
             <div className="card-body">
 
 
