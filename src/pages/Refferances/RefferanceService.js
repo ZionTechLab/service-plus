@@ -25,13 +25,7 @@ class RefferanceService {
     const res = await axiosRequest(axios.get(`${this.apiBase}/get-all`, { params: { ...category } }));
     return res;
   }
-
-
-
-  
 }
-
-
 
 const RefferanceServiceInstance = new RefferanceService();
 export default RefferanceServiceInstance;

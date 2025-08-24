@@ -3,7 +3,6 @@ import { useDispatch } from "react-redux";
 import * as Yup from "yup";
 import { loginSuccess } from "../features/auth/authSlice";
 import InputField from "../helpers/InputField";
-// import "../components/LoginPage/LoginPage.css";
 import { useFormikBuilder } from "../helpers/formikBuilder";
 
 const fields = {
@@ -34,9 +33,13 @@ function LoginPage() {
 
   const handleInquirySubmit = (values) => {
     const userData = { name: values.fullName, id: "123" };
-    if (userData.name === "admin" && values.password === "admin")
+    if (values.fullName === "admin" && values.password === "admin") {
       dispatch(loginSuccess(userData));
-    navigate("/main/travel-assistant", { replace: true });
+      navigate("/", { replace: true });
+    } else {
+      // Handle invalid credentials
+      alert("Invalid credentials. Use admin/admin to login.");
+    }
   };
 
   const formik = useFormikBuilder(fields, handleInquirySubmit);
