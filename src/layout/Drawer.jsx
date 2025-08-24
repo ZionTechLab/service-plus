@@ -1,7 +1,10 @@
 import { forwardRef, useState, useEffect, useRef } from 'react';
+import { useSelector } from 'react-redux';
 import { Link } from 'react-router-dom';
 import './Drawer.css';
 import menuItems from '../helpers/menuItems';
+import buildCombinedMenuItems from '../helpers/buildMenuItems';
+import { selectInitData } from '../features/auth/authSlice';
 
 const Drawer = forwardRef(({ isOpen, onClose, isMinimized, isMobile }, ref) => {
   const [mode, setMode] = useState('light');
@@ -75,6 +78,9 @@ const Drawer = forwardRef(({ isOpen, onClose, isMinimized, isMobile }, ref) => {
     }
   }, [isOpen, isMobile]);
 
+  // Build dynamic menu from auth init data (must be before any early returns)
+  const initData = useSelector(selectInitData);
+  const combinedMenuItems = buildCombinedMenuItems(menuItems, initData);
   // For mobile, don't render if not open
   if (isMobile && !isOpen) {
     return null;
@@ -114,7 +120,7 @@ const Drawer = forwardRef(({ isOpen, onClose, isMinimized, isMobile }, ref) => {
         </div>
         <nav className="drawer-nav" aria-label="Main navigation">
           <ul className="list-group list-group-flush">
-            {menuItems.filter(item => item.isMenuItem).map(item => (
+            {combinedMenuItems.filter(item => item.isMenuItem).map(item => (
               <li className="list-group-item" key={item.route}>
                 <Link 
                   to={item.route} 

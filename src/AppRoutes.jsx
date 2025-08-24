@@ -98,9 +98,14 @@ const AppRoutes = ({ isLoggedIn }) => (
       <Route path="daily-report/add" element={<AddDailyReport />} />
       <Route path="daily-report/edit/:id" element={<AddDailyReport />} />
 
-      <Route path="refferance" element={<Refferances />} />
-      <Route path="refferance/add" element={<AddRefferances />} />
-      <Route path="refferance/edit/:id" element={<AddRefferances   />} />
+  {/* Backward-compatible routes */}
+  <Route path="refferance" element={<Refferances />} />
+  <Route path="refferance/add" element={<AddRefferances />} />
+  <Route path="refferance/edit/:id" element={<AddRefferances />} />
+  {/* New slug-based routes to use categoryName instead of ?type= */}
+  <Route path="refferance/:category" element={<Refferances />} />
+  <Route path="refferance/:category/add" element={<AddRefferances />} />
+  <Route path="refferance/:category/edit/:id" element={<AddRefferances />} />
        {dynamicRoutes.map((route, index) => (
         <Route key={index} path={route.path} element={route.element} />
       ))}

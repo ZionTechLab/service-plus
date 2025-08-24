@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import AuthService from './authService';
 
 // Load initial state from localStorage
 const loadAuthState = () => {
@@ -34,6 +35,13 @@ const authSlice = createSlice({
       localStorage.setItem('authState', JSON.stringify(state));
     },
 
+    // Store initialization data returned from auth init
+    initSuccess: (state, action) => {
+      state.initData = action.payload ?? null;
+      // Persist to localStorage so refresh keeps initData
+      localStorage.setItem('authState', JSON.stringify(state));
+    },
+
     logoutSuccess: (state) => {
       state.isLoggedIn = false;
       state.user = null;
@@ -45,6 +53,22 @@ const authSlice = createSlice({
 });
 
 export const { loginSuccess, initSuccess, logoutSuccess } = authSlice.actions;
+
+// Thunk: after login, call AuthService.init and store the init data
+export const loginSuccessWithInit = (user) => async (dispatch) => {
+  // First set logged-in state
+  dispatch(loginSuccess(user));
+  // Then attempt to initialize auth context
+  try {
+    const res = await AuthService.init();
+    // Support either axios-style { data } or direct payload
+    const initData = res && typeof res === 'object' && 'data' in res ? res.data : res;
+    dispatch(initSuccess(initData));
+  } catch (err) {
+    // Swallow errors to avoid blocking login; consider logging if needed
+    // console.error('Auth init failed', err);
+  }
+};
 
 // Selector to get the login status
 export const selectIsLoggedIn = (state) => state.auth.isLoggedIn;

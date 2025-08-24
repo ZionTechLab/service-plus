@@ -1,6 +1,8 @@
 
 import {  useState,useEffect } from "react";
 import {useParams, useNavigate } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { selectInitData } from '../../features/auth/authSlice';
 import * as Yup from 'yup';
 import { useFormikBuilder } from '../../helpers/formikBuilder';
 import InputField from '../../helpers/InputField';
@@ -12,7 +14,17 @@ function AddRefferances() {
   const { id } = useParams();
   const navigate = useNavigate();
   const [uiData, setUiData] = useState({loading: false, success: false, error: '', data: {} });
-const categoryType = 70;
+const { category } = useParams();
+const initData = useSelector(selectInitData);
+const slugify = (s) => String(s || '')
+  .toLowerCase()
+  .trim()
+  .replace(/[^a-z0-9\s-]/g, '')
+  .replace(/\s+/g, '-')
+  .replace(/-+/g, '-');
+const metaList = initData?.meta || [];
+const matched = category ? metaList.find(m => slugify(m.categoryName) === category) : null;
+const categoryType = matched?.categoryType || 70;
 
 const fields = {
   id: {
@@ -84,7 +96,7 @@ const fields = {
       MessageBoxService.show({
         message: "User saved successfully!",
         type: "success",
-        onClose: () => navigate("/refferance"),
+  onClose: () => navigate(category ? `/refferance/${category}` : "/refferance"),
       });
       resetForm();
     }

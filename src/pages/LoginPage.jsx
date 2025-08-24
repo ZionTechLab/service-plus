@@ -1,7 +1,7 @@
 import { useNavigate } from "react-router-dom";
 import { useDispatch } from "react-redux";
 import * as Yup from "yup";
-import { loginSuccess } from "../features/auth/authSlice";
+import { loginSuccessWithInit } from "../features/auth/authSlice";
 import InputField from "../helpers/InputField";
 import { useFormikBuilder } from "../helpers/formikBuilder";
 
@@ -34,7 +34,8 @@ function LoginPage() {
   const handleInquirySubmit = (values) => {
     const userData = { name: values.fullName, id: "123" };
     if (values.fullName === "admin" && values.password === "admin") {
-      dispatch(loginSuccess(userData));
+      // Dispatch thunk: sets auth state then calls AuthService.init
+      dispatch(loginSuccessWithInit(userData));
       navigate("/", { replace: true });
     } else {
       // Handle invalid credentials

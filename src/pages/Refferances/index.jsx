@@ -1,4 +1,6 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useParams } from 'react-router-dom';
+import { useSelector } from 'react-redux';
+import { selectInitData } from '../../features/auth/authSlice';
 import DataTable from '../../components/DataTable';
 import { useEffect, useState } from 'react';
 import ApiService from './RefferanceService';
@@ -7,18 +9,29 @@ import MessageBoxService from '../../services/MessageBoxService';
 function RefferanceListing() {
   const [uiData, setUiData] = useState({loading: false, success: false, error: '', data: [] });
   const navigate = useNavigate();
+  const { category } = useParams();
+  const initData = useSelector(selectInitData);
+  const slugify = (s) => String(s || '')
+    .toLowerCase()
+    .trim()
+    .replace(/[^a-z0-9\s-]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-');
+  const metaList = initData?.meta || [];
+  const matched = category ? metaList.find(m => slugify(m.categoryName) === category) : null;
+  const categoryType = matched?.categoryType || 70;
 
   useEffect(() => {
     const fetchUi = async () => {
       setUiData((prev) => ({ ...prev, loading: true, error: '', data: [] }));
-      const data = await ApiService.getAll({ categoryType: 70 });
+  const data = await ApiService.getAll({ categoryType });
 console.log(data);
 
       setUiData((prev) => ({ ...prev, ...data, loading: false }));
     };
     fetchUi();
     // eslint-disable-next-line
-  }, []);
+  }, [categoryType]);
 
   const handleDelete = async (id) => {
        MessageBoxService.show({
@@ -36,7 +49,8 @@ console.log(data);
   };
 
   const handleEdit = (id) => {
-    navigate(`/refferance/edit/${id}`);
+  const base = category ? `/refferance/${category}` : '/refferance';
+  navigate(`${base}/edit/${id}`);
   };
 
   const columns = [
@@ -64,8 +78,8 @@ console.log(data);
   return (
     <div>
       {!uiData.loading && !uiData.error && (
-        <DataTable name="User Master" data={uiData.data.data} columns={columns}>
-          <Link to="/refferance/add">
+        <DataTable name={uiData.data.meta?.metaName || 'References'} data={uiData.data.data} columns={columns}>
+          <Link to={category ? `/refferance/${category}/add` : '/refferance/add'}>
             <button className="btn btn-primary">New</button>
           </Link>
         </DataTable>
