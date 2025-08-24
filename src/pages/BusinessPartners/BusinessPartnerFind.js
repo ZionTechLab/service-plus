@@ -1,19 +1,16 @@
 import  { useEffect, useState } from "react";
 import DataTable from "../../components/DataTable";
 import ApiService from "./PartnerService";
-import { useLoadingSpinner } from "../../hooks/useLoadingSpinner";
 
-function BusinessPartnerFind({ onCustomerSelect,  children }) {
-  const { showSpinner, hideSpinner } = useLoadingSpinner();
+function BusinessPartnerFind({ onCustomerSelect,  children,type }) {
   const [uiData, setUiData] = useState({loading: false, success: false, error: '', data: [] });
 
   useEffect(() => {
     const fetchInvoices = async () => {
       setUiData(prev => ({ ...prev, loading: true, error: '', data: [] }));
-      showSpinner();
-      const data = await ApiService.getAll();
+      console.log(type);
+      const data = await ApiService.getAll(type);
       setUiData(prev => ({ ...prev, ...data , loading: false }));
-      hideSpinner();
     };
     fetchInvoices();
     // eslint-disable-next-line

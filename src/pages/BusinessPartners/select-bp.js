@@ -18,25 +18,20 @@ function SelectedBusinessPartnerBox({
   ...props
 }) {
   const [open, setOpen] = React.useState(formik.isOpen);
-  const [localSelectedPartner, setLocalSelectedPartner] =
-    React.useState(selectedPartner);
+  const [localSelectedPartner, setLocalSelectedPartner] = React.useState(selectedPartner);
   const [activeTab, setActiveTab] = React.useState("search");
   const [tabsInitialized, setTabsInitialized] = React.useState(false);
   const { showSpinner, hideSpinner } = useLoadingSpinner();
-  // console.log("SelectedBusinessPartnerBox rendered");
 
   React.useEffect(() => {
-    // console.log("Selected partner updated:");
+    
     setLocalSelectedPartner(selectedPartner);
   }, [selectedPartner]);
 
-  // React.useEffect(() => {
-  //   console.log("Selected partner updated:", localSelectedPartner);
-  // }, [localSelectedPartner]);
-
   React.useEffect(() => {
-    // console.log("Formik values changed:");
+    console.log(field.type)
     if (formik.values[field?.name]) {
+
       const fetchInquiries = async () => {
         showSpinner();
         try {
@@ -54,18 +49,15 @@ function SelectedBusinessPartnerBox({
     } else {
       setLocalSelectedPartner(null);
     }
-    // formik.setFieldTouched(field?.name, true);
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [formik.values[field?.name]]);
 
   const { openModal, closeModal } = useModalService();
 
   const handleCustomerSelect = (customer) => {
-    //  console.log("handleCustomerSelect", customer);
     setLocalSelectedPartner(customer);
     closeModal();
     formik.setFieldValue(field?.name, customer.id || "");
-    // console.log("Formik values after setFieldValue:", formik.values);
     if (onCustomerSelect) {
       onCustomerSelect(customer);
     }
@@ -98,6 +90,7 @@ function SelectedBusinessPartnerBox({
               <BusinessPartnerFind
                 onCustomerSelect={handleCustomerSelect}
                 onNewCustomer={handleNewCustomerClick}
+                type={field.type}
               />
             </>
           )}
@@ -120,8 +113,8 @@ function SelectedBusinessPartnerBox({
   };
 
   const tabs = [
-    { id: "search", label: "Search Customer", disabled: false },
-    { id: "add-customer", label: "Add New Customer", disabled: false },
+    { id: "search", label: `Search ${field.placeholder}`, disabled: false },
+    { id: "add-customer", label: `Add New ${field.placeholder}`, disabled: false },
   ];
 
   return (
@@ -228,7 +221,6 @@ function SelectedBusinessPartnerBox({
             <div className="">
               <div className="row">
                 <div className="col-md-6 mb-2">
-                  {/* <div className="small text-muted">Contact Person</div> */}
                   <div>
                     <i className="bi bi-person-fill text-primary"></i>{" "}
                     {localSelectedPartner?.contactPerson || "-"}
@@ -236,7 +228,6 @@ function SelectedBusinessPartnerBox({
                 </div>
 
                 <div className="col-md-6 mb-2">
-                  {/* <div className="small text-muted">Email</div> */}
                   <div>
                     <i className="bi bi-envelope-fill text-primary"></i>{" "}
                     {localSelectedPartner?.email ? (
@@ -253,7 +244,6 @@ function SelectedBusinessPartnerBox({
                 </div>
 
                 <div className="col-md-6 mb-2">
-                  {/* <div className="small text-muted">Address</div> */}
                   <div>
                     <i className="bi bi-geo-alt-fill text-primary"></i>{" "}
                     {localSelectedPartner?.address || "-"}
@@ -261,33 +251,18 @@ function SelectedBusinessPartnerBox({
                 </div>
 
                 <div className="col-md-6 mb-2">
-                  {/* <div className="small text-muted">Phone</div> */}
                   <div>
                     <i className="bi bi-telephone-fill text-primary"></i>{" "}
                     {localSelectedPartner?.phone1 ? (
-                      <a
-                        href={`tel:${localSelectedPartner.phone1}`}
-                        onClick={(e) => e.stopPropagation()}
-                      >
+                      <a href={`tel:${localSelectedPartner.phone1}`} onClick={(e) => e.stopPropagation()}>
                         {localSelectedPartner.phone1}
                       </a>
                     ) : (
                       "-"
                     )}
-                    {localSelectedPartner?.phone2
-                      ? ` | ${localSelectedPartner.phone2}`
-                      : ""}
+                    {localSelectedPartner?.phone2 ? ` | ${localSelectedPartner.phone2}` : ""}
                   </div>
                 </div>
-
-                {localSelectedPartner?.notes ? (
-                  <div className="col-12 mt-2">
-                    <div className="small text-muted">Notes</div>
-                    <div className="text-break">
-                      dd{localSelectedPartner.notes}
-                    </div>
-                  </div>
-                ) : null}
               </div>
 
             </div>

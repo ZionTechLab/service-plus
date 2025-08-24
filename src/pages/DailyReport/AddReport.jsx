@@ -54,7 +54,7 @@ function AddDailyReport() {
     },    
     partner: {
       name: "partner",
-      type: "partner-select",
+      type: "customer",
       placeholder: "Customer",
       initialValue: "",
       validation: Yup.string().required("Customer is required"),

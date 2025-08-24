@@ -16,8 +16,8 @@ class PartnerService {
     return res;
   }
 
-  async getAll() {
-    const res = await axiosRequest(axios.get(`${this.apiBase}/get-all`));
+  async getAll(type) {
+    const res = await axiosRequest(axios.get(`${this.apiBase}/get-all`, { params: { type } }));
     return res;
   }
 }
