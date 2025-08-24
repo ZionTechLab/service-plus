@@ -99,9 +99,9 @@ const AppRoutes = ({ isLoggedIn }) => (
       <Route path="daily-report/edit/:id" element={<AddDailyReport />} />
 
   {/* Backward-compatible routes */}
-  <Route path="refferance" element={<Refferances />} />
+  {/* <Route path="refferance" element={<Refferances />} />
   <Route path="refferance/add" element={<AddRefferances />} />
-  <Route path="refferance/edit/:id" element={<AddRefferances />} />
+  <Route path="refferance/edit/:id" element={<AddRefferances />} /> */}
   {/* New slug-based routes to use categoryName instead of ?type= */}
   <Route path="refferance/:category" element={<Refferances />} />
   <Route path="refferance/:category/add" element={<AddRefferances />} />

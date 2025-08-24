@@ -1,14 +1,17 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { logoutSuccess, selectUser } from '../features/auth/authSlice';
+import { logoutSuccess, selectUser, selectInitData } from '../features/auth/authSlice';
 import { useLocation, useNavigate } from 'react-router-dom';
 import "./topbar.css";
 import menuItems from '../helpers/menuItems';
+import buildCombinedMenuItems from '../helpers/buildMenuItems';
 
 function Navbar({ onToggleDrawer }) {
   const dispatch = useDispatch();
   const navigate = useNavigate();
   const user = useSelector(selectUser);
+  const initData = useSelector(selectInitData);
   const location = useLocation();
+  const combinedMenuItems = buildCombinedMenuItems(menuItems, initData);
 
   const handleLogout = () => {
     dispatch(logoutSuccess());
@@ -27,9 +30,20 @@ function Navbar({ onToggleDrawer }) {
   const getPageTitle = () => {
     const path = location.pathname;
     if (path === "/") return "Dashboard";
-    let found = menuItems.find((item) => item.route === path);
+    // Exact match first
+    let found = combinedMenuItems.find((item) => item.route === path);
     if (!found) {
-      // Support dynamic id segments like /edit/:id or /view/:id
+      // Longest-prefix match (handles nested like /foo/bar/edit/123)
+      const candidates = combinedMenuItems.filter((item) =>
+        path === item.route || path.startsWith(item.route + "/")
+      );
+      if (candidates.length) {
+        candidates.sort((a, b) => b.route.length - a.route.length);
+        found = candidates[0];
+      }
+    }
+    if (!found) {
+      // Legacy fallback for explicit edit/view/details bases
       const patterns = [
         /^(.*\/edit)\/[^/]+$/,
         /^(.*\/view)\/[^/]+$/,
@@ -38,7 +52,7 @@ function Navbar({ onToggleDrawer }) {
       for (const rx of patterns) {
         const m = path.match(rx);
         if (m && m[1]) {
-          found = menuItems.find((item) => item.route === m[1]);
+          found = combinedMenuItems.find((item) => item.route === m[1]);
           if (found) break;
         }
       }

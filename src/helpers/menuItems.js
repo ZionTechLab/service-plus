@@ -36,9 +36,9 @@ const menuItems = [
   { route: '/user-master/add', displayName: 'Add User', icon: 'bi bi-person-plus' },
   { route: '/user-master/edit', displayName: 'Edit User', icon: 'bi bi-pencil' },
 
-  { route: '/refferance', displayName: 'References', icon: 'bi bi-bookmarks', isMenuItem: true },
-  { route: '/refferance/add', displayName: 'Add Reference', icon: 'bi bi-bookmark-plus' },
-  { route: '/refferance/edit', displayName: 'Edit Reference', icon: 'bi bi-pencil-square' },
+  // { route: '/refferance', displayName: 'References', icon: 'bi bi-bookmarks', isMenuItem: true },
+  // { route: '/refferance/add', displayName: 'Add Reference', icon: 'bi bi-bookmark-plus' },
+  // { route: '/refferance/edit', displayName: 'Edit Reference', icon: 'bi bi-pencil-square' },
 ];
 
 export default menuItems;
