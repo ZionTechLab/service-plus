@@ -455,7 +455,7 @@ const filterGrade = () => {
   return (
     <form onSubmit={formik.handleSubmit} className="p-3">
       <div className="row">
-        {isUpdate?(
+        {/* {isUpdate?( */}
         <div className="col-sm-6">
           <div className="card mb-3">
             <div className="card-header">Vehicle Photos</div>
@@ -465,7 +465,8 @@ const filterGrade = () => {
               </div>
             </div>
           </div>
-        </div>):null}
+        </div>
+        {/* ):null} */}
 
         <div className="col-sm-6">
           <div className="card mb-3">
@@ -491,7 +492,7 @@ const filterGrade = () => {
       {/* </div>
 
       <div className="row"> */}
-        <div className={isUpdate ? "col-sm-12" : "col-sm-6"}>
+        <div className= "col-sm-12" >
           <div className="card mb-3">
             <div className="card-header">Description</div>
             <div className="card-body">
