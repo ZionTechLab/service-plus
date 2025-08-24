@@ -82,14 +82,20 @@ const fields = {
     validation: Yup.boolean(),
     placeholder: "Supplier",
   },
-  isEmployee: {
-    name: "isEmployee",
+  isDriver: {
+    name: "isDriver",
     type: "switch",
     initialValue: false,
     validation: Yup.boolean(),
-    placeholder: "Employee",
+    placeholder: "Driver",
   },
-
+  isHelper: {
+    name: "isHelper",
+    type: "switch",
+    initialValue: false,
+    validation: Yup.boolean(),
+    placeholder: "Helper",
+  },
   active: {
     name: "active",
     type: "switch",
@@ -108,10 +114,25 @@ function AddBusinessPartner() {
     if (id) {
       const fetchTxn = async () => {
         const response = await ApiService.get(id);
+
         if (response.success) {
-          if (response.data) {
-              const normalized = transformDateFields(response.data, fields);
+          if (response.data) { 
+              console.log(response.data);
+              const {partnerType,...rest } = response.data;
+
+              const normalized = transformDateFields(rest, fields);
             formik.setValues({ ...normalized });
+
+            if (partnerType) {
+              const partnerTypes = partnerType;
+              console.log("Partner Types:", partnerTypes);
+              formik.setFieldValue("isCustomer", partnerTypes.includes("C"));
+              formik.setFieldValue("isSupplier", partnerTypes.includes("S"));
+              formik.setFieldValue("isDriver", partnerTypes.includes("D"));
+              formik.setFieldValue("isHelper", partnerTypes.includes("H"));
+            }
+
+         
           }
         }
       };
@@ -122,11 +143,22 @@ function AddBusinessPartner() {
 
   const handleSubmit = async (values, { resetForm }) => {
 
+
+
+ const { isCustomer, isSupplier, isDriver, isHelper, ...rest } = values;
+
  const param = { 
-      header: { ...values , id: parseInt(id ? id : 0)}, 
+      header: { ...rest , id: parseInt(id ? id : 0)}, 
+      detail: [
+        isCustomer ? { type: 'C' } : null,
+        isSupplier ? { type: 'S' } : null,
+        isDriver ? { type: 'D' } : null,
+        isHelper ? { type: 'H' } : null,
+      ].filter(Boolean),
       isUpdate:id ? true : false
-    };console.log( param);
-    const response = await ApiService.update({ ...param });
+    };
+    console.log( param);
+    const response=await ApiService.update({ ...param });
 console.log("Response from API:", response);
 
     // const param = id ? { ...values, id: parseInt(id) } : { ...values, id: parseInt(0) };
@@ -167,9 +199,10 @@ console.log("Response from API:", response);
               <InputField className="col-sm-12" {...fields.address} formik={formik} />
            
               <div className="col-sm-6 row g-2">
-                <InputField className="col-4" {...fields.isCustomer} formik={formik} />
-                <InputField className="col-4" {...fields.isSupplier} formik={formik} />
-                <InputField className="col-4" {...fields.isEmployee} formik={formik} />
+                <InputField className="col-3" {...fields.isCustomer} formik={formik} />
+                <InputField className="col-3" {...fields.isSupplier} formik={formik} />
+                <InputField className="col-3" {...fields.isDriver} formik={formik} />
+                 <InputField className="col-3" {...fields.isHelper} formik={formik} />
               </div>
               <InputField className="col-sm-6" {...fields.active} formik={formik} />
                   <div className="d-flex justify-content-end">

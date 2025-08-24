@@ -71,9 +71,10 @@ function BusinessPartnerIndex() {
     { header: "Email", field: "email" },
     { header: "Address", field: "address",class: "text-nowrap"  },
     { header: "Phone", field: "phone1", class: "text-nowrap" },
-    { header: "Customer", field: "isCustomer", class: "text-center", type: "boolean" },
-    { header: "Supplier", field: "isSupplier", class: "text-center", type: "boolean" },
-    { header: "Employee", field: "isEmployee", class: "text-center", type: "boolean" },
+        { header: "Type", field: "partnerTypes", class: "text-nowrap" },
+    // { header: "Customer", field: "isCustomer", class: "text-center", type: "boolean" },
+    // { header: "Supplier", field: "isSupplier", class: "text-center", type: "boolean" },
+    // { header: "Employee", field: "isEmployee", class: "text-center", type: "boolean" },
     { header: "Active", field: "active", class: "text-center", type: "boolean" },
     
   ];

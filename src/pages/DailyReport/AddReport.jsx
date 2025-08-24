@@ -160,6 +160,9 @@ function AddDailyReport() {
   return (
     <div className="container p-3">
       <form onSubmit={formik.handleSubmit} >
+         <div className="card mb-3">
+
+            <div className="card-body">
         <div className="row g-2">
         <InputField {...fields.id} formik={formik} className="col-md-3 col-sm-6"/>
         <InputField {...fields.txnDate} formik={formik} className="col-md-3 col-sm-6"/>
@@ -186,6 +189,7 @@ function AddDailyReport() {
         <InputField {...fields.certifiedHours} formik={formik} className="col-md-6"/></div>
         </div></div>
         <button type="submit" className="btn btn-primary">Save Report</button>
+    </div></div>
       </form>
     </div>
   );
