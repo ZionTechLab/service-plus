@@ -243,7 +243,7 @@ if(id)
             className="col-md-6 text-end"
           />
         </div>
-        {/* <div className="row g-3 mt-2">
+        <div className="row g-3 mt-2">
           <InputField
             {...fields.preparedBy}
             formik={formik}
@@ -254,11 +254,11 @@ if(id)
             formik={formik}
             className="col-md-6"
           />
-        </div> */}
-
-        {/* <button className="w-100 btn btn-primary mt-3" type="submit">
+        </div> 
+{/* 
+      <button className="w-100 btn btn-primary mt-3" type="submit">
           Submit
-        </button> */}
+        </button>  */}
 
                         <div className="d-flex justify-content-end mt-3">
         <button type="submit" className="btn btn-primary">
@@ -268,26 +268,27 @@ if(id)
         <div className="d-flex gap-2 mt-2">
       
       
-     {true?null:    (<> <button
+    (<> <button
             type="button"
             className="btn btn-outline-secondary"
             onClick={() => setShowPreview((s) => !s)}
           >
             {showPreview ? "Hide Preview" : "Print Preview"}
           </button>
-          <button
+          {/* <button
             type="button"
             className="btn btn-success"
             onClick={() => window.print()}
           >
             Print
-          </button></>)}
+          </button> */}
+          </>)
         </div>
       </form>
 
   {/* Modal-based preview */}
       <Modal show={showPreview} onClose={() => setShowPreview(false)} title="Invoice Preview">
-        <InvoicePrintView formikValues={formik.values} lineItems={lineItems} isTaxInvoice={isTaxInvoice} />
+        <InvoicePrintView formikValues={formik.values} lineItems={lineItems} isTaxInvoice={isTaxInvoice} id={id} fields={fields} />
         <div className="mt-3 d-flex justify-content-end">
           <button className="btn btn-secondary me-2" onClick={() => setShowPreview(false)}>Close</button>
           <button className="btn btn-primary" onClick={() => window.print()}>Print</button>

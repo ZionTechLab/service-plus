@@ -21,6 +21,11 @@ class InvoiceService {
     return res;
   }
 
+  async getPrint(id,isTaxInvoice) {
+      const res = await axiosRequest(axios.get(`${this.apiBase}/get-print`, { params: { id,isTaxInvoice } }));
+    return res;
+  }
+
   async getAll(isTaxInvoice) {
     const res = await axiosRequest(axios.get(`${this.apiBase}/get-all`, { params: { isTaxInvoice } }));
     return res;

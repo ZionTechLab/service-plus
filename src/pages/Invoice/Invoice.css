@@ -1,35 +1,47 @@
 /* legacy styles removed */
 
 /* Printable invoice styles */
-.invoice-print-wrapper{
+/* .invoice-print-wrapper{
   display:none;
-}
-.invoice-print-wrapper.preview{
+} */
+/* .invoice-print-wrapper.preview{
   display:block;
   background: #fff;
   padding: 20px;
   margin-top: 20px;
   border: 1px solid #ddd;
-}
+} */
 .invoice-print-layout{
   width: 100%;
-  max-width: 900px;
+  /* max-width: 900px; */
   margin: 0 auto;
   font-family: Arial, Helvetica, sans-serif;
-  color: #163b70; /* blue similar to template */
+  color: #163b70; 
 }
-.inv-header{ text-align:center; margin-bottom: 8px; }
-.inv-title{ font-size:34px; margin:0; color:#1e4aa1 }
-.inv-sub{ font-size:12px; margin-top:4px }
-.inv-contact{ font-size:12px; margin-top:2px }
+.invoice-print-layout h1{
+  font-size:34px;
+ font: bold 34px/1.2 Arial, Helvetica, sans-serif;
+}
+.invoice-print-layout p{
+font-size:12px; margin-top:4px;margin-bottom: 0px;
+}
+
+.invoice-print-layout td{
+font-size:12px;vertical-align:top;
+}
+/* .inv-header{ text-align:center; margin-bottom: 8px; } */
+
+/* .inv-title{ font-size:34px; margin:0; color:#1e4aa1 } */
+/* .inv-sub{ font-size:12px; margin-top:4px } */
+/* .inv-contact{ font-size:12px; margin-top:2px } */
 .inv-box{ display:inline-block; border:2px solid #1e4aa1; padding:6px 10px; margin-top:8px; font-weight:700 }
-.inv-meta{ display:flex; justify-content:space-between; margin-top:12px; margin-bottom:8px }
-.inv-underline{ display:inline-block; min-width:180px; border-bottom:1px dashed #999; padding-left:6px }
+/* .inv-meta{ display:flex; justify-content:space-between; margin-top:12px; margin-bottom:8px } */
+/* .inv-underline{ display:inline-block; min-width:180px; border-bottom:1px dashed #999; padding-left:6px } */
 .inv-table table{ width:100%; border-collapse:collapse; border:1px solid #b6d0f0 }
 .inv-table th, .inv-table td{ border-bottom:1px solid #e6eefc; padding:8px }
 .inv-table thead th{ background:#eef6ff; color:#163b70; font-weight:700 }
-.inv-table .desc{ width:75%; text-align:left }
-.inv-table .amt{ width:25%; text-align:right }
+/* .inv-table .desc{ width:75%; text-align:left } */
+/* .inv-table .amt{ width:25%; text-align:right } */
 .inv-km{ margin-top:6px; border-top:2px solid #b6d0f0; padding-top:6px }
 .inv-bottom{ display:flex; justify-content:space-between; margin-top:12px }
 .inv-bottom .left{ width:60% }
