@@ -4,14 +4,14 @@ import * as Yup from "yup";
 import InputField from "../../helpers/InputField";
 import { useFormikBuilder } from "../../helpers/formikBuilder";
 import MessageBoxService from "../../services/MessageBoxService";
-import DataGrid from "../../components/DataGrid";
+// import DataGrid from "../../components/DataGrid";
 import ApiService from "./InvoiceService";
 import SelectedBusinessPartnerBox from "../BusinessPartners/select-bp";
-import sanitizeAmountFields from "../../helpers/sanitizeAmountFields";
+// import sanitizeAmountFields from "../../helpers/sanitizeAmountFields";
 import transformDateFields from "../../helpers/transformDateFields";
 import  "./Invoice.css";
-import Modal from "../../components/Modal";
-import InvoicePrintView from "./InvoicePrintView";
+// import Modal from "../../components/Modal";
+// import InvoicePrintView from "./InvoicePrintView";
 
 function Invoice() {
   const { id } = useParams();
@@ -20,14 +20,15 @@ function Invoice() {
   const [lineItems, setLineItems] = useState([]);
   const [uiData, setUiData] = useState({loading: false, success: false, error: '', data: {} });
   const location = useLocation(); 
-  const [isTaxInvoice, setIsTaxInvoice] = useState(0);
-  const [showPreview, setShowPreview] = useState(false);
+  const [isAdvance, setIsAdvance] = useState(0);
+  // const [showPreview, setShowPreview] = useState(false);
+
 
   useEffect(() => {
-   let isTaxInvoice_ = 0;
-    if(location.pathname.includes('tax-invoice')) {
-      isTaxInvoice_=1
-      setIsTaxInvoice(1)
+   let isAdvance_ = 0;
+    if(location.pathname.includes('advance')) {
+      isAdvance_=1
+      setIsAdvance(1)
     }
 
    const fetchUi = async () => {
@@ -39,15 +40,15 @@ function Invoice() {
 
     if (id) {
       const fetchTxn = async () => {
-        const response = await ApiService.get(id,isTaxInvoice_?'TAX':'NT');
+        const response = await ApiService.get(id,isAdvance_?'ADV':'PAY' );
         if (response.success) {
           if (response.data) {
             const { lineItems, ...formData } = response.data;
             // normalize all date fields using the fields descriptor
             const normalized = transformDateFields(formData, fields);
             formik.setValues({ ...normalized });
-            setLineItems(lineItems);
-            dataGridRef.current.reset(lineItems);
+            // setLineItems(lineItems);
+            // dataGridRef.current.reset(lineItems);
           }
         }
       };
@@ -75,11 +76,18 @@ function Invoice() {
     partner: {
       name: "partner",
       type: "partner-select",
-      placeholder: "Customer",
+      placeholder: "Employee",
       initialValue: "",
-      validation: Yup.string().required("Customer is required"),
+      validation: Yup.string().required("Employee is required"),
       isOpen: false,
     },
+       remarks: {
+      name: "remarks",
+      type: "textarea",
+      placeholder: "Description",
+      initialValue: "",
+      validation: Yup.string().required("Description is required"),
+    }, 
     ref1: {
       name: "ref1",
       type: "select",
@@ -90,7 +98,7 @@ function Invoice() {
         valueField: "value",
       },
 
-      validation: isTaxInvoice ? undefined : Yup.number().required("Type of Vehicle is required")
+      validation: isAdvance ? undefined : Yup.number().required("Type of Vehicle is required")
     },
     amount: {
       name: "amount",
@@ -100,45 +108,45 @@ function Invoice() {
       validation: Yup.number()
         .typeError("Amount must be a number")
         .positive("Amount must be greater than 0"),
-      disabled: true,
+      // disabled: true,
       labelOnTop: false,
     },
-    taxAmount: {
-      name: "taxAmount",
-      type: "amount",
-      placeholder: "Vat (18 %)",
-      initialValue: 0,
-      validation: Yup.number()
-        .typeError("Vat must be a number"),
-        // .positive("Vat must be greater than 0"),
-      disabled: true,
-      labelOnTop: false,
-    },
-    advance: {
-      name: "advance",
-      type: "amount",
-      placeholder: "Advance",
-      initialValue: 0,
-      validation: Yup.number().typeError("Advance must be a number"),
-      labelOnTop: false,
-    },
-    totalAmount: {
-      name: "totalAmount",
-      type: "amount",
-      placeholder: "Total Amount",
-      initialValue: 0,
-      validation: Yup.number()
-      .typeError("Total Amount must be a number")
-      .positive("Amount must be greater than 0"),
-      disabled: true,
-      labelOnTop: false,
-    },
+    // taxAmount: {
+    //   name: "taxAmount",
+    //   type: "amount",
+    //   placeholder: "Vat (18 %)",
+    //   initialValue: 0,
+    //   validation: Yup.number()
+    //     .typeError("Vat must be a number"),
+    //     // .positive("Vat must be greater than 0"),
+    //   disabled: true,
+    //   labelOnTop: false,
+    // },
+    // advance: {
+    //   name: "advance",
+    //   type: "amount",
+    //   placeholder: "Advance",
+    //   initialValue: 0,
+    //   validation: Yup.number().typeError("Advance must be a number"),
+    //   labelOnTop: false,
+    // },
+    // totalAmount: {
+    //   name: "totalAmount",
+    //   type: "amount",
+    //   placeholder: "Total Amount",
+    //   initialValue: 0,
+    //   validation: Yup.number()
+    //   .typeError("Total Amount must be a number")
+    //   .positive("Amount must be greater than 0"),
+    //   disabled: true,
+    //   labelOnTop: false,
+    // },
   };
 
-  const lineItemColumns = [
-    { header: "Description", field: "description", type: "text", placeholder: "Description" },
-    { header: "Amount", field: "amount", type: "amount", placeholder: "Amount", width: "25%" },
-  ];
+  // const lineItemColumns = [
+  //   { header: "Description", field: "description", type: "text", placeholder: "Description" },
+  //   { header: "Amount", field: "amount", type: "amount", placeholder: "Amount", width: "25%" },
+  // ];
 
   const handleSubmit = async (values, { resetForm } ) => {
 if(id)
@@ -146,24 +154,24 @@ if(id)
    MessageBoxService.show({
         message: "not available",
         type: "success",
-        onClose: () => navigate(isTaxInvoice ? "/tax-invoice" : "/invoice"),
+        onClose: () => navigate(isAdvance ? "/advance" : "/payment"),
       });
       return;
 }
-    const sanitizedLineItems = sanitizeAmountFields(lineItems, lineItemColumns);
+    // const sanitizedLineItems = sanitizeAmountFields(lineItems, lineItemColumns);
     const param = { 
       header: { ...values , id: parseInt(id ? id : 0)}, 
-      lineItems: sanitizedLineItems,
+      // lineItems: sanitizedLineItems,
       isUpdate:id ? true : false
-      , isTaxInvoice
+      , isAdvance
     };
-    const response = await ApiService.update({ ...param });
+    const response = await ApiService.update_advance({ ...param });
 
     if (response.success) {
       MessageBoxService.show({
-        message: "Invoice saved successfully!",
+        message: `${isAdvance ? "Advance" : "payment"} saved successfully!`,
         type: "success",
-        onClose: () => navigate(isTaxInvoice ? "/tax-invoice" : "/invoice"),
+        onClose: () => navigate(isAdvance ? "/advance" : "/payment"),
       });
       resetForm();
       dataGridRef.current.reset();
@@ -189,7 +197,7 @@ if(id)
     
     console.log(total);
     formik.setFieldValue("amount", total);
-    const taxAmount = isTaxInvoice ? total * 0.18 : 0;
+    const taxAmount = isAdvance ? total * 0.18 : 0;
     formik.setFieldValue("taxAmount", taxAmount);
     formik.setFieldValue(
       "totalAmount",
@@ -200,50 +208,53 @@ if(id)
   return (
     <div className="container p-3">   
       <form onSubmit={formik.handleSubmit} className=" g-3">
+          <div className="card mb-3">
+
+            <div className="card-body">
         <div className="row g-2">
-          <InputField {...fields.id} formik={formik} className={isTaxInvoice ? "col-md-6 col-sm-6" : "col-md-3 col-sm-6"} />
-          <InputField {...fields.txnDate} formik={formik} className={isTaxInvoice ? "col-md-6 col-sm-6" : "col-md-3 col-sm-6"}/>
-        {isTaxInvoice?null:(  <InputField {...fields.ref1} formik={formik} className="col-sm-6" /> )}
+          <InputField {...fields.id} formik={formik} className={isAdvance ? "col-md-6 col-sm-6" : "col-md-3 col-sm-6"} />
+          <InputField {...fields.txnDate} formik={formik} className={isAdvance ? "col-md-6 col-sm-6" : "col-md-3 col-sm-6"}/>
+        {isAdvance?null:(  <InputField {...fields.ref1} formik={formik} className="col-sm-6" /> )}
           <SelectedBusinessPartnerBox field={fields.partner} formik={formik} />
-         
-            <DataGrid
+         <InputField {...fields.remarks} formik={formik} />
+            {/* <DataGrid
               ref={dataGridRef}
               initialItems={lineItems}
               columns={lineItemColumns}
               onItemsChange={setLineItems}
-            />
+            /> */}
             </div>
-        <div className="row  justify-content-end">
+        <div className="row  justify-content-end mt-3">
           <InputField
             {...fields.amount}
             formik={formik}
             className="col-md-6 text-end "
           />
         </div>
-{isTaxInvoice?(   <div className="row  justify-content-end">
+{/* {isAdvance?(   <div className="row  justify-content-end">
           <InputField
             {...fields.taxAmount}
             formik={formik}
             className="col-md-6 text-end"
           />
-        </div>):null}
+        </div>):null} */}
 
-       {isTaxInvoice?null:(
+       {/* {isAdvance?null:(
         <div className="row  justify-content-end">
           <InputField
             {...fields.advance}
             formik={formik}
             className="col-md-6 text-end"
           />
-        </div>)}
-        <div className="row  justify-content-end">
+        </div>)} */}
+        {/* <div className="row  justify-content-end">
           <InputField
             {...fields.totalAmount}
             formik={formik}
             className="col-md-6 text-end"
           />
-        </div>
-        <div className="row g-3 mt-2">
+        </div> */}
+        {/* <div className="row g-3 mt-2">
           <InputField
             {...fields.preparedBy}
             formik={formik}
@@ -254,7 +265,7 @@ if(id)
             formik={formik}
             className="col-md-6"
           />
-        </div> 
+        </div>  */}
 {/* 
       <button className="w-100 btn btn-primary mt-3" type="submit">
           Submit
@@ -268,32 +279,26 @@ if(id)
         <div className="d-flex gap-2 mt-2">
       
       
-    (<> <button
+    {/* (<> <button
             type="button"
             className="btn btn-outline-secondary"
             onClick={() => setShowPreview((s) => !s)}
           >
             {showPreview ? "Hide Preview" : "Print Preview"}
           </button>
-          {/* <button
-            type="button"
-            className="btn btn-success"
-            onClick={() => window.print()}
-          >
-            Print
-          </button> */}
-          </>)
-        </div>
+      
+          </>) */}
+        </div></div></div>
       </form>
 
   {/* Modal-based preview */}
-      <Modal show={showPreview} onClose={() => setShowPreview(false)} title="Invoice Preview">
-        <InvoicePrintView formikValues={formik.values} lineItems={lineItems} isTaxInvoice={isTaxInvoice} id={id} fields={fields} />
+      {/* <Modal show={showPreview} onClose={() => setShowPreview(false)} title="Invoice Preview">
+        <InvoicePrintView formikValues={formik.values} lineItems={lineItems} isTaxInvoice={isAdvance} id={id} fields={fields} />
         <div className="mt-3 d-flex justify-content-end">
           <button className="btn btn-secondary me-2" onClick={() => setShowPreview(false)}>Close</button>
           <button className="btn btn-primary" onClick={() => window.print()}>Print</button>
         </div>
-      </Modal>
+      </Modal> */}
     </div>
   );
 }

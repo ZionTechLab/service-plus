@@ -39,7 +39,7 @@ function Invoice() {
 
     if (id) {
       const fetchTxn = async () => {
-        const response = await ApiService.get(id,isTaxInvoice_?'TAX':'NT');
+        const response = await ApiService.get(id,isTaxInvoice_);
         if (response.success) {
           if (response.data) {
             const { lineItems, ...formData } = response.data;
@@ -199,7 +199,9 @@ if(id)
 
   return (
     <div className="container p-3">   
-      <form onSubmit={formik.handleSubmit} className=" g-3">
+      <form onSubmit={formik.handleSubmit} className=" g-3">        <div className="card mb-3">
+
+            <div className="card-body">
         <div className="row g-2">
           <InputField {...fields.id} formik={formik} className={isTaxInvoice ? "col-md-6 col-sm-6" : "col-md-3 col-sm-6"} />
           <InputField {...fields.txnDate} formik={formik} className={isTaxInvoice ? "col-md-6 col-sm-6" : "col-md-3 col-sm-6"}/>
@@ -283,7 +285,7 @@ if(id)
             Print
           </button> */}
           </>)
-        </div>
+        </div></div></div>
       </form>
 
   {/* Modal-based preview */}

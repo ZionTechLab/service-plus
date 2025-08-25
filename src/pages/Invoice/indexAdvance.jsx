@@ -4,15 +4,18 @@ import ApiService from './InvoiceService';
 import { useEffect, useState } from 'react';
 import MessageBoxService from '../../services/MessageBoxService';
 
-function InvoiceIndex() {
+function AdvanceIndex() {
   const [uiData, setUiData] = useState({loading: false, success: false, error: '', data: [] });
   const navigate = useNavigate();
   const location = useLocation(); // Use React Router's useLocation hook
+  const [isAdvance, setIsAdvance] = useState(false);
 
   useEffect(() => {
+    setIsAdvance(location.pathname === '/advance');
     const fetchUi = async () => {
       setUiData((prev) => ({ ...prev, loading: true, error: '', data: [] }));
-      const data = await ApiService.getAll(location.pathname === '/tax-invoice'?'TAX':'NT');
+      const data = await ApiService.getAll(location.pathname === '/advance'?'ADV':'PAY');
+      // const data = await ApiService.getAll('ADV');
       setUiData((prev) => ({ ...prev, ...data, loading: false }));
     };
     fetchUi();
@@ -21,7 +24,7 @@ function InvoiceIndex() {
 
   const handleDelete = (id) => {
     MessageBoxService.show({
-      message: 'Are you sure you want to delete this invoice?',
+      message: 'Are you sure you want to delete this Advance?',
       type: 'danger',
       confirmText: 'Delete',
       cancelText: 'Cancel',
@@ -61,9 +64,10 @@ function InvoiceIndex() {
         </div>
       ),
     },  
-    { header: 'Invoice No', field: 'txnNoDisplay',class:'text-nowrap' },
+    { header: isAdvance ? 'Advance No' : 'Payment No', field: 'txnNoDisplay',class:'text-nowrap' },
     { header: 'Date', field: 'txnDate',class:'text-nowrap' ,type: 'date'},
-    { header: 'Customer', field: 'partnerName',class:'text-nowrap' },
+    !isAdvance? { header: 'Vehicle', field: 'Vehicle',class:'text-nowrap' }: {},
+    { header: 'Employee', field: 'partnerName',class:'text-nowrap' },
     { header: 'Total Amount', field: 'totalAmount',class:'text-nowrap text-end' },
   ];
 
@@ -71,7 +75,7 @@ function InvoiceIndex() {
     <div>
       {!uiData.loading && !uiData.error && (
         <DataTable name="Invoice Export" data={uiData.data} columns={columns}>
-          <Link to={location.pathname === '/tax-invoice' ? '/tax-invoice/add' : '/invoice/add'}>
+          <Link to={location.pathname === '/advance' ? '/advance/add' : '/payment/add'}>
             <button className="btn btn-primary">New</button>
           </Link>
         </DataTable>
@@ -83,4 +87,4 @@ function InvoiceIndex() {
   );
 }
 
-export default InvoiceIndex;
+export default AdvanceIndex;

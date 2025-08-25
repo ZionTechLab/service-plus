@@ -17,14 +17,14 @@ import AddDailyReport from "./pages/DailyReport/AddReport";
 import Dashboard from "./pages/Dashboard";
 import Refferances from "./pages/Refferances";
 import AddRefferances from "./pages/Refferances/AddRefferances";
-// import AddBusinessPartner from "./pages/BusinessPartners/AddBusinessPartner";
-
+import Reports from "./pages/Reports";
 
 import ItemMaster from "./pages/ItemMaster";
 import AddItem from "./pages/ItemMaster/AddItem";
 import ItemCategory from "./pages/ItemCategory";
 
-
+import AdvanceIndex from "./pages/Invoice/indexAdvance";
+import AddAdvance from "./pages/Invoice/AddAdvance";
 
 import Profile from "./pages/Profile";
 import Grn from "./pages/Grn";
@@ -97,6 +97,19 @@ const AppRoutes = ({ isLoggedIn }) => (
       <Route path="daily-report" element={<DailyReportIndex />} />
       <Route path="daily-report/add" element={<AddDailyReport />} />
       <Route path="daily-report/edit/:id" element={<AddDailyReport />} />
+
+      <Route path="reports" element={<Reports />} /> 
+
+      <Route path="advance" element={<AdvanceIndex />} />
+      <Route path="advance/add" element={<AddAdvance />} />
+      <Route path="advance/edit/:id" element={<AddAdvance />} />
+
+      <Route path="payment" element={<AdvanceIndex />} />
+      <Route path="payment/add" element={<AddAdvance />} />
+      <Route path="payment/edit/:id" element={<AddAdvance />} />
+
+      {/* <Route path="daily-report/add" element={<AddDailyReport />} />
+      <Route path="daily-report/edit/:id" element={<AddDailyReport />} /> */}
 
   {/* Backward-compatible routes */}
   {/* <Route path="refferance" element={<Refferances />} />

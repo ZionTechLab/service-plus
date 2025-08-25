@@ -16,12 +16,8 @@ class InvoiceService {
     return res;
   }
 
-    async update_advance(param) {
-    const res = await axiosRequest(axios.post(`${this.apiBase}/update-advance`, param));
-    return res;
-  }
-  async get(id,txnType) {
-      const res = await axiosRequest(axios.get(`${this.apiBase}/get`, { params: { id,txnType } }));
+  async get(id,isTaxInvoice) {
+      const res = await axiosRequest(axios.get(`${this.apiBase}/get`, { params: { id,isTaxInvoice } }));
     return res;
   }
 
@@ -30,8 +26,8 @@ class InvoiceService {
     return res;
   }
 
-  async getAll(txnType) {
-    const res = await axiosRequest(axios.get(`${this.apiBase}/get-all`, { params: { txnType } }));
+  async getAll(isTaxInvoice) {
+    const res = await axiosRequest(axios.get(`${this.apiBase}/get-all`, { params: { isTaxInvoice } }));
     return res;
   }
 }

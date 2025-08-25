@@ -145,8 +145,9 @@ const DataTable = ({ data = [], columns = [], name, children, onRowSelect }) => 
 
   const filterableCols = useMemo(
     () => {
+      console.log(columns)
       const safeColumns = Array.isArray(columns) ? columns : [];
-      return safeColumns.filter((c) => !c.isAction);
+      return safeColumns.filter((c) => !c.isAction );
     },
     [columns]
   );
@@ -286,6 +287,8 @@ const formatColumnValue = (col, row) => {
 
  
         </div>
+    {true?null:
+      (
                  <div className=" ">
             <button
               className="btn settings-btn"
@@ -301,7 +304,8 @@ const formatColumnValue = (col, row) => {
               isOpen={showColumnModal}
               onClose={() => setShowColumnModal(false)}
             />
-          </div>
+          </div>)
+}
 </div>
 <div className="mt-3 card">
         <div className=" table-responsive ">

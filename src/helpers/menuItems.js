@@ -23,7 +23,15 @@ const menuItems = [
   { route: '/tax-invoice', displayName: 'Tax Invoice', icon: 'bi bi-file-earmark-text', isMenuItem: true },
   { route: '/tax-invoice/add', displayName: 'Add Tax Invoice', icon: 'bi bi-file-earmark-text' },
   { route: '/tax-invoice/edit', displayName: 'Edit Tax Invoice', icon: 'bi bi-file-earmark-text' },
-  
+     
+  { route: '/advance', displayName: 'Advance', icon: 'bi bi-person-badge', isMenuItem: true },
+      { route: '/advance/add', displayName: 'Add Advance', icon: 'bi bi-file-earmark-text' },
+  { route: '/advance/edit', displayName: 'Edit Advance', icon: 'bi bi-file-earmark-text' },
+
+   { route: '/payment', displayName: 'Payment', icon: 'bi bi-person-badge', isMenuItem: true },
+      { route: '/payment/add', displayName: 'Add Payment', icon: 'bi bi-file-earmark-text' },
+      
+  { route: '/payment/edit', displayName: 'Edit Payment', icon: 'bi bi-file-earmark-text' },
   { route: '/vehicale-confirmation', displayName: 'Vehicle Details', icon: 'bi bi-file-earmark-text', isMenuItem: true },
   { route: '/vehicale-confirmation/add', displayName: 'Add Vehicle', icon: 'bi bi-file-earmark-text' },
   { route: '/vehicale-confirmation/edit', displayName: 'Edit Vehicle', icon: 'bi bi-file-earmark-text' },
@@ -35,6 +43,8 @@ const menuItems = [
   { route: '/user-master', displayName: 'Users', icon: 'bi bi-person-badge', isMenuItem: true },
   { route: '/user-master/add', displayName: 'Add User', icon: 'bi bi-person-plus' },
   { route: '/user-master/edit', displayName: 'Edit User', icon: 'bi bi-pencil' },
+  { route: '/reports', displayName: 'Reports', icon: 'bi bi-person-badge', isMenuItem: true },
+
 
   // { route: '/refferance', displayName: 'References', icon: 'bi bi-bookmarks', isMenuItem: true },
   // { route: '/refferance/add', displayName: 'Add Reference', icon: 'bi bi-bookmark-plus' },

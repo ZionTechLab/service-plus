@@ -12,7 +12,7 @@ function InvoiceIndex() {
   useEffect(() => {
     const fetchUi = async () => {
       setUiData((prev) => ({ ...prev, loading: true, error: '', data: [] }));
-      const data = await ApiService.getAll(location.pathname === '/tax-invoice'?'TAX':'NT');
+      const data = await ApiService.getAll(location.pathname === '/tax-invoice'?1:0);
       setUiData((prev) => ({ ...prev, ...data, loading: false }));
     };
     fetchUi();
