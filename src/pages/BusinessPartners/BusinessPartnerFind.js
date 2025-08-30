@@ -9,6 +9,7 @@ function BusinessPartnerFind({ onCustomerSelect,  children,type }) {
     const fetchInvoices = async () => {
       setUiData(prev => ({ ...prev, loading: true, error: '', data: [] }));
       console.log(type);
+      // console.log(ApiService.getAll(type));
       const data = await ApiService.getAll(type);
       setUiData(prev => ({ ...prev, ...data , loading: false }));
     };

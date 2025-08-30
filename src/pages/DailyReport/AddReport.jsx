@@ -60,6 +60,22 @@ function AddDailyReport() {
       validation: Yup.string().required("Customer is required"),
       isOpen: false,
     },
+       operator: {
+      name: "operator",
+      type: "operator",
+      placeholder: "Operator",
+      initialValue: "",
+      validation: Yup.string().required("Operator is required"),
+      isOpen: false,
+    },
+           helper: {
+      name: "helper",
+      type: "helper",
+      placeholder: "Helper",
+      initialValue: "",
+      validation: Yup.string().required("Helper is required"),
+      isOpen: false,
+    },
     vehicleNo: {
       name: "vehicleNo",
       type: "text",
@@ -74,19 +90,19 @@ function AddDailyReport() {
       initialValue: "",
       validation: Yup.string().required("Type of Machine is required"),
     },
-    operator: {
-      name: "operator",
-      type: "text",
-      placeholder: "Operator",
-      initialValue: "",
-      validation: Yup.string().required("Operator is required"),
-    },
-    helper: {
-      name: "helper",
-      type: "text",
-      placeholder: "Helper",
-      initialValue: "",
-    },
+    // operator: {
+    //   name: "operator",
+    //   type: "text",
+    //   placeholder: "Operator",
+    //   initialValue: "",
+    //   validation: Yup.string().required("Operator is required"),
+    // },
+    // helper: {
+    //   name: "helper",
+    //   type: "text",
+    //   placeholder: "Helper",
+    //   initialValue: "",
+    // },
     remarks: {
       name: "remarks",
       type: "textarea",
@@ -167,10 +183,13 @@ function AddDailyReport() {
         <InputField {...fields.id} formik={formik} className="col-md-3 col-sm-6"/>
         <InputField {...fields.txnDate} formik={formik} className="col-md-3 col-sm-6"/>
         <SelectedBusinessPartnerBox field={fields.partner} formik={formik} className="col-sm-6"/>
+       
         <InputField {...fields.vehicleNo} formik={formik} className="col-md-3 col-sm-6"/>
         <InputField {...fields.typeOfMachine} formik={formik} className="col-md-3 col-sm-6"/>
-        <InputField {...fields.operator} formik={formik} className="col-md-3 col-sm-6"/>
-        <InputField {...fields.helper} formik={formik} className="col-md-3 col-sm-6"/>
+           <SelectedBusinessPartnerBox field={fields.operator} formik={formik} className="col-md-3 col-sm-6"/>
+             <SelectedBusinessPartnerBox field={fields.helper} formik={formik} className="col-md-3 col-sm-6"/>
+        {/* <InputField {...fields.operator} formik={formik} className="col-md-3 col-sm-6"/>
+        <InputField {...fields.helper} formik={formik} className="col-md-3 col-sm-6"/> */}
         <div className="col-md-12">
           <DataGrid
             ref={dataGridRef}

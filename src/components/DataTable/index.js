@@ -171,7 +171,7 @@ const DataTable = ({
   const pageSize = 10;
 
   const filterableCols = useMemo(() => {
-    console.log(columns);
+    // console.log(columns);
     const safeColumns = Array.isArray(columns) ? columns : [];
     return safeColumns.filter((c) => !c.isAction);
   }, [columns]);
