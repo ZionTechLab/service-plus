@@ -74,6 +74,11 @@ function InvoiceIndex() {
     };
     fetchUi();
   }, []);
+
+ useEffect(() => {
+   setReportData(prev => ({ ...prev, data:{} }));
+ }, [formik.values]);
+
   const handleClear = () => {
     formik.resetForm();  
      setReportData(prev => ({ ...prev, data:{} }));
@@ -93,14 +98,14 @@ function InvoiceIndex() {
               ))}
 
             <div className="d-flex justify-content-end mt-3">
-              <button  className="btn btn-secondary me-2"  onClick={() => handleClear()}>Clear</button> 
+              <button type="button" className="btn btn-secondary me-2" onClick={() => handleClear()}>Clear</button>
               <button type="submit" className="btn btn-primary">View Report</button>
             </div>
           </form>
         </div>
       </div>
 
-      { reportData.data && !reportData.loading && !reportData.error && (
+      { reportData.data.result && !reportData.loading && !reportData.error && (
         <DataTable name="Invoice Report" data={reportData.data.result} columns={reportData.data.columns} showHeader={false} />
       )}
       {reportData.error && <div className="alert alert-danger mt-3">{reportData.error}</div>}
