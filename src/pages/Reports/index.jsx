@@ -1,9 +1,7 @@
 import DataTable from '../../components/DataTable';
 import ApiService from './InvoiceService';
 import { useEffect, useState } from 'react';
-import InputField from '../../helpers/InputField';
-import { useFormikBuilder } from '../../helpers/formikBuilder';
-import SelectedBusinessPartnerBox from "../BusinessPartners/select-bp";
+import { useFormikBuilder, FieldsRenderer } from '../../helpers/formikBuilder';
 
 function InvoiceIndex() {
   const [uiData, setUiData] = useState({loading: false, success: false, error: '', data: {} });
@@ -89,13 +87,7 @@ function InvoiceIndex() {
       <div className="card mb-3">
         <div className="card-body">
           <form onSubmit={formik.handleSubmit} className="row g-2">
-            {Object.keys(fields).map((key) => (
-              fields[key].type !== 'partner-select' ? (
-                <InputField key={key} {...fields[key]} formik={formik} autocomplete="off"/>
-                ) : (
-                  <SelectedBusinessPartnerBox field={fields.partner} formik={formik} className={fields[key].className} />
-                )
-              ))}
+            <FieldsRenderer fields={fields} formik={formik} inputProps={{ autocomplete: 'off' }} />
 
             <div className="d-flex justify-content-end mt-3">
               <button type="button" className="btn btn-secondary me-2" onClick={() => handleClear()}>Clear</button>
