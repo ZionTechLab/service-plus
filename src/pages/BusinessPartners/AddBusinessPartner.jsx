@@ -1,6 +1,6 @@
 import {  useEffect } from "react";
 import * as Yup from "yup";
-import InputField from "../../helpers/InputField";
+// import InputField from "../../helpers/InputField";
 import { useParams,useNavigate } from "react-router-dom";
 import { useFormikBuilder,FieldsRenderer } from "../../helpers/formikBuilder";
 import ApiService from "./PartnerService";
