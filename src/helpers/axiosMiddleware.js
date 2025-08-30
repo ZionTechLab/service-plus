@@ -3,22 +3,32 @@ import MessageBoxService from "../services/MessageBoxService";
 import LoadingSpinnerService from "../services/LoadingSpinnerService";
 
 export function handleAxiosError(error) {
-   
   let message;
+  let type = "danger";
+
   if (error.response) {
-    message = ` ${
-      error.response.data?.error ||
-      error.response.statusText ||
-      "API error occurred."
-    }`;
+    const { status, data, statusText } = error.response;
+
+    if (status === 409) {
+      // Handle conflict separately with a clearer, non-fatal tone.
+      type = "warning";
+      message = ` ${
+        data?.message ||
+        data?.error 
+       
+      }`;
+    } else {
+      message = ` ${data?.error || statusText || "API error occurred."}`;
+    }
   } else if (error.request) {
     message = ` ${error.message || "Network error occurred."}`;
   } else {
     message = `Error: ${error.message}`;
   }
+
   MessageBoxService.show({
     message,
-    type: "danger",
+    type,
     onClose: null,
   });
   return message;

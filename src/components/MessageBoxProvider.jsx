@@ -20,8 +20,8 @@ export function MessageBoxProvider({ children }) {
           <div className="modal fade show" style={{ display: 'block', zIndex: 2000 }} tabIndex="-1" role="dialog">
             <div className="modal-dialog modal-dialog-centered">
               <div className="modal-content">
-                <div className={`modal-header bg-${options.type} text-white`}>
-                  <h5 className="modal-title">{options.type === 'danger' ? 'Oops!' : 'Success'}</h5>
+                <div className={`modal-header bg-${options.type} text-black`}>
+                  <h5 className="modal-title">{options.type === 'danger' ? 'Oops!' : options.type}</h5>
                 </div>
                 <div className="modal-body">
                   <p>{options.message}</p>

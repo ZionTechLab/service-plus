@@ -36,7 +36,7 @@ const fields = {
     type: "text",
     placeholder: "Contact Person",
     initialValue: "",className: "col-sm-6",
-    validation: Yup.string().required("Contact Person is required"),
+    // validation: Yup.string().required("Contact Person is required"),
   },
   br: {
    
@@ -48,9 +48,9 @@ const fields = {
     type: "email",
     placeholder: "Email",
     initialValue: "",className: "col-md-6 col-sm-12",
-    validation: Yup.string()
-      .email("Invalid email address")
-      .required("Email is required"),
+    // validation: Yup.string()
+    //   .email("Invalid email address")
+    //   .required("Email is required"),
   },
  
   phone1: {
@@ -65,14 +65,14 @@ const fields = {
     type: "phone",
     placeholder: "Phone 2",
     initialValue: "",className: "col-sm-3",
-    validation: Yup.string().required("Phone number is required"),
+    // validation: Yup.string().required("Phone number is required"),
   },
  address: {
     name: "address",
     type: "text",
     placeholder: "Address",className: "col-sm-12",
     initialValue: "",
-    validation: Yup.string().required("Address is required"),
+    // validation: Yup.string().required("Address is required"),
   },
   isCustomer: {
     name: "isCustomer",
