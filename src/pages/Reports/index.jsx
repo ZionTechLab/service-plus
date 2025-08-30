@@ -1,84 +1,109 @@
-import { Link, useNavigate, useLocation } from 'react-router-dom';
 import DataTable from '../../components/DataTable';
 import ApiService from './InvoiceService';
 import { useEffect, useState } from 'react';
-import MessageBoxService from '../../services/MessageBoxService';
+import InputField from '../../helpers/InputField';
+import { useFormikBuilder } from '../../helpers/formikBuilder';
+import SelectedBusinessPartnerBox from "../BusinessPartners/select-bp";
 
 function InvoiceIndex() {
-  const [uiData, setUiData] = useState({loading: false, success: false, error: '', data: [] });
-  const navigate = useNavigate();
-  const location = useLocation(); // Use React Router's useLocation hook
+  const [uiData, setUiData] = useState({loading: false, success: false, error: '', data: {} });
+  const [reportData, setReportData] = useState({loading: false, success: false, error: '', data: {} });
 
+  const fields = {
+    txnType: {
+      name: 'txnType',
+      type: 'select',
+      placeholder: 'Report Type',
+      initialValue: 'NT',
+      className: "col-md-4 col-sm-6",
+      dataBinding: {
+        data: uiData.data?.reports,
+        keyField: "txnType",
+        valueField: "txnTypename",
+      },
+    },
+    fromDate: {
+      name: 'fromDate',
+      type: 'date',
+      placeholder: 'From Date',className: "col-md-4 col-sm-6",
+      initialValue: new Date(new Date().getFullYear(), new Date().getMonth(), 1)
+        .toISOString()
+        .split('T')[0],
+    },
+    toDate: {
+      name: 'toDate',
+      type: 'date',
+      placeholder: 'To Date',
+      initialValue: new Date().toISOString().split('T')[0],
+      className: "col-md-4 col-sm-6",
+    },
+    partner: {
+      name: 'partner',
+      type: 'partner-select',
+      placeholder: 'Partner',
+      initialValue: '',
+      className: "col-md-8 col-sm-6",
+    },
+    ref1: {
+      name: 'ref1',
+      type: 'select',
+      placeholder: 'Vehicle Type',
+      initialValue: '',
+      className: "col-md-4 col-sm-6",
+      dataBinding: {
+        data: uiData.data?.vehicleType,
+        keyField: "id",
+        valueField: "value",
+      },
+    },
+  };
+
+  const handleSubmit = async (values, { resetForm } ) => {
+    setReportData(prev => ({ ...prev, loading: true, error: '', data: {} }));
+    const response = await ApiService.getReport({ ...values });
+    setReportData(prev => ({ ...prev, ...response , loading: false }));
+  };
+  
+  const formik = useFormikBuilder(fields, handleSubmit);
+    
   useEffect(() => {
     const fetchUi = async () => {
-      setUiData((prev) => ({ ...prev, loading: true, error: '', data: [] }));
-      const data = await ApiService.getAll(location.pathname === '/tax-invoice'?1:0);
-      setUiData((prev) => ({ ...prev, ...data, loading: false }));
+      setUiData(prev => ({ ...prev, loading: true, error: '', data: {} }));
+      const data = await ApiService.getUi();
+      setUiData(prev => ({ ...prev, ...data , loading: false }));
     };
     fetchUi();
-    // eslint-disable-next-line
-  }, [location.pathname]);
-
-  const handleDelete = (id) => {
-    MessageBoxService.show({
-      message: 'Are you sure you want to delete this invoice?',
-      type: 'danger',
-      confirmText: 'Delete',
-      cancelText: 'Cancel',
-      onConfirm: () => {
-        const updated = uiData.data.filter((data) => data.id !== id);
-        setUiData({ ...uiData, data: updated });
-        localStorage.setItem('invoices', JSON.stringify(updated));
-      },
-      onClose: null
-    });
+  }, []);
+  const handleClear = () => {
+    formik.resetForm();  
+     setReportData(prev => ({ ...prev, data:{} }));
   };
-
-  const handleEdit = (id) => {
-    navigate(`${location.pathname}/edit/${id}`);
-  };
-
-  const columns = [
-    {
-      header: 'Actions',
-      isAction: true,
-      actionTemplate: (row) => (
-        <div className="d-flex gap-2 justify-content-center">
-          <button
-            className="btn btn-outline-primary btn-icon btn-sm"
-            title="Edit"
-            onClick={() => handleEdit(row.id)}
-          >
-            <i className="bi bi-pencil"></i>
-          </button>
-          <button
-            className="btn btn-outline-danger btn-icon btn-sm"
-            title="Delete"
-            onClick={() => handleDelete(row.id)}
-          >
-            <i className="bi bi-trash"></i>
-          </button>
-        </div>
-      ),
-    },  
-    { header: 'Invoice No', field: 'txnNoDisplay',class:'text-nowrap' },
-    { header: 'Date', field: 'txnDate',class:'text-nowrap' ,type: 'date'},
-    { header: 'Customer', field: 'partnerName',class:'text-nowrap' },
-    { header: 'Total Amount', field: 'totalAmount',class:'text-nowrap text-end' },
-  ];
 
   return (
     <div>
-      {!uiData.loading && !uiData.error && (
-        <DataTable name="Invoice Export" data={uiData.data} columns={columns}>
-          <Link to={location.pathname === '/tax-invoice' ? '/tax-invoice/add' : '/invoice/add'}>
-            <button className="btn btn-primary">New</button>
-          </Link>
-        </DataTable>
+      <div className="card mb-3">
+        <div className="card-body">
+          <form onSubmit={formik.handleSubmit} className="row g-2">
+            {Object.keys(fields).map((key) => (
+              fields[key].type !== 'partner-select' ? (
+                <InputField key={key} {...fields[key]} formik={formik} autocomplete="off"/>
+                ) : (
+                  <SelectedBusinessPartnerBox field={fields.partner} formik={formik} className={fields[key].className} />
+                )
+              ))}
+
+            <div className="d-flex justify-content-end mt-3">
+              <button  className="btn btn-secondary me-2"  onClick={() => handleClear()}>Clear</button> 
+              <button type="submit" className="btn btn-primary">View Report</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+      { reportData.data && !reportData.loading && !reportData.error && (
+        <DataTable name="Invoice Report" data={reportData.data.result} columns={reportData.data.columns} showHeader={false} />
       )}
-      {uiData.error && (
-        <div className="alert alert-danger mt-3">{uiData.error}</div>
-      )}
+      {reportData.error && <div className="alert alert-danger mt-3">{reportData.error}</div>}
     </div>
   );
 }
