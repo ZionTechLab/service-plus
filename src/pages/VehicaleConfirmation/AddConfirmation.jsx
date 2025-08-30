@@ -13,8 +13,8 @@ const AddConfirmation = () => {
   const { id } = useParams();
   const navigate = useNavigate();
   const [uiData, setUiData] = useState({loading: false, success: false, error: '', data: {} });
-  const [uiDataFiltered, setuiDataFiltered] = useState( {Make:  [],Model:  [],Grade:  [],Colour:  []} );
-  const [ setIsUpdate] = useState(false);
+  const [uiDataFiltered, setuiDataFiltered] = useState({ Make: [], Model: [], Grade: [], Colour: [], FuelType: [], Transmission: [] });
+  const [, setIsUpdate] = useState(false);
 
 const fields = {
     id: {
