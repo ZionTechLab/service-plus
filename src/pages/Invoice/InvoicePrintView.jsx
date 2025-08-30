@@ -41,7 +41,7 @@ const InvoicePrintView = ({ formikValues, lineItems = [], isTaxInvoice,id,fields
           Thambarawila, Waikkala. Tel : 031 2278 365 / 0777 712 213 / 0777 880
           989
         </p>
-        <div className="inv-box">INVOICE</div>
+        <div className="inv-box">{isTaxInvoice ? "TAX INVOICE" : "INVOICE"}</div>
       </header>
       <div className="row g-2 p-3">
         <div className="col-6">
@@ -53,6 +53,7 @@ const InvoicePrintView = ({ formikValues, lineItems = [], isTaxInvoice,id,fields
                 {ReportData.partnerName || ""} <br /> {ReportData.address || ""}
               </div>
           </div>
+          {!isTaxInvoice && (
             <div className="row">
               <div className="col-5 text-end">
                 <b>Type of Vehicle :</b>
@@ -60,7 +61,7 @@ const InvoicePrintView = ({ formikValues, lineItems = [], isTaxInvoice,id,fields
               <div className="col-7 text-start">
                 {ReportData.vType || ""}
               </div>
-          </div>
+          </div>)}
         </div>
         <div className="col-6">
           <div className="row">
@@ -141,6 +142,12 @@ const InvoicePrintView = ({ formikValues, lineItems = [], isTaxInvoice,id,fields
             <div className="tot-row">
               <span>Advance</span>
               <span>{values.advance}</span>
+            </div>
+          )}
+             {isTaxInvoice && (
+            <div className="tot-row">
+              <span>Vat</span>
+              <span>{values.taxAmount}</span>
             </div>
           )}
           <div className="tot-row total">

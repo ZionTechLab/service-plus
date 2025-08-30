@@ -13,7 +13,7 @@ import  "./Invoice.css";
 import Modal from "../../components/Modal";
 import InvoicePrintView from "./InvoicePrintView";
 
-function Invoice() {
+function AddInvoice() {
   const { id } = useParams();
   const navigate = useNavigate();
   const dataGridRef = useRef();
@@ -43,7 +43,6 @@ function Invoice() {
         if (response.success) {
           if (response.data) {
             const { lineItems, ...formData } = response.data;
-            // normalize all date fields using the fields descriptor
             const normalized = transformDateFields(formData, fields);
             formik.setValues({ ...normalized });
             setLineItems(lineItems);
@@ -62,7 +61,6 @@ function Invoice() {
       type: "text",
       placeholder: "Transaction No",
       initialValue: "<Auto>",
-      // validation: Yup.string().required("Transaction No is required"),
       disabled: true,
     },
     txnDate: {
@@ -110,7 +108,6 @@ function Invoice() {
       initialValue: 0,
       validation: Yup.number()
         .typeError("Vat must be a number"),
-        // .positive("Vat must be greater than 0"),
       disabled: true,
       labelOnTop: false,
     },
@@ -173,8 +170,6 @@ if(id)
 
   const formik = useFormikBuilder(fields, handleSubmit);
 
-
-
   useEffect(() => {
     calculateTotal();
     // eslint-disable-next-line
@@ -186,7 +181,6 @@ if(id)
       0
     );
 
-    
     console.log(total);
     formik.setFieldValue("amount", total);
     const taxAmount = isTaxInvoice ? total * 0.18 : 0;
@@ -199,94 +193,53 @@ if(id)
 
   return (
     <div className="container p-3">   
-      <form onSubmit={formik.handleSubmit} className=" g-3">
-        <div className="row g-2">
-          <InputField {...fields.id} formik={formik} className={isTaxInvoice ? "col-md-6 col-sm-6" : "col-md-3 col-sm-6"} />
-          <InputField {...fields.txnDate} formik={formik} className={isTaxInvoice ? "col-md-6 col-sm-6" : "col-md-3 col-sm-6"}/>
-        {isTaxInvoice?null:(  <InputField {...fields.ref1} formik={formik} className="col-sm-6" /> )}
-          <SelectedBusinessPartnerBox field={fields.partner} formik={formik} />
-         
-            <DataGrid
+      <div className="card mb-3">
+        <div className="card-body">
+          <form onSubmit={formik.handleSubmit} className=" g-3">
+            <div className="row g-2">
+              <InputField {...fields.id} formik={formik} className={isTaxInvoice ? "col-md-6 col-sm-6" : "col-md-3 col-sm-6"} />
+              <InputField {...fields.txnDate} formik={formik} className={isTaxInvoice ? "col-md-6 col-sm-6" : "col-md-3 col-sm-6"}/>
+              {isTaxInvoice?null:(  <InputField {...fields.ref1} formik={formik} className="col-sm-6" /> )}
+              <SelectedBusinessPartnerBox field={fields.partner} formik={formik} />
+
+              <DataGrid
               ref={dataGridRef}
               initialItems={lineItems}
               columns={lineItemColumns}
               onItemsChange={setLineItems}
             />
+            </div> <div className="row  justify-content-end">
+              <InputField {...fields.amount} formik={formik} className="col-md-6 text-end " />
             </div>
-        <div className="row  justify-content-end">
-          <InputField
-            {...fields.amount}
-            formik={formik}
-            className="col-md-6 text-end "
-          />
-        </div>
-{isTaxInvoice?(   <div className="row  justify-content-end">
-          <InputField
-            {...fields.taxAmount}
-            formik={formik}
-            className="col-md-6 text-end"
-          />
-        </div>):null}
-
-       {isTaxInvoice?null:(
-        <div className="row  justify-content-end">
-          <InputField
-            {...fields.advance}
-            formik={formik}
-            className="col-md-6 text-end"
-          />
-        </div>)}
-        <div className="row  justify-content-end">
-          <InputField
-            {...fields.totalAmount}
-            formik={formik}
-            className="col-md-6 text-end"
-          />
-        </div>
-        <div className="row g-3 mt-2">
-          <InputField
-            {...fields.preparedBy}
-            formik={formik}
-            className="col-md-6"
-          />
-          <InputField
-            {...fields.receivedBy}
-            formik={formik}
-            className="col-md-6"
-          />
-        </div> 
-{/* 
-      <button className="w-100 btn btn-primary mt-3" type="submit">
-          Submit
-        </button>  */}
-
-                        <div className="d-flex justify-content-end mt-3">
-        <button type="submit" className="btn btn-primary">
-          Save
-        </button>
-      </div>
-        <div className="d-flex gap-2 mt-2">
-      
-      
-    (<> <button
-            type="button"
-            className="btn btn-outline-secondary"
+            {isTaxInvoice?(<div className="row  justify-content-end">
+              <InputField {...fields.taxAmount} formik={formik} className="col-md-6 text-end" />
+            </div>):null}
+            {isTaxInvoice?null:(
+              <div className="row  justify-content-end">
+                <InputField {...fields.advance} formik={formik} className="col-md-6 text-end" />
+              </div>)}
+            <div className="row  justify-content-end">
+              <InputField {...fields.totalAmount} formik={formik} className="col-md-6 text-end" />
+            </div>
+            <div className="d-flex justify-content-end mt-3">
+              <button type="submit" className="btn btn-primary">Save</button>
+            </div>
+            
+        {id?( <div className="d-flex gap-2 mt-2">
+              <button
+                  type="button"
+                  className="btn btn-outline-secondary"
             onClick={() => setShowPreview((s) => !s)}
           >
             {showPreview ? "Hide Preview" : "Print Preview"}
           </button>
-          {/* <button
-            type="button"
-            className="btn btn-success"
-            onClick={() => window.print()}
-          >
-            Print
-          </button> */}
-          </>)
-        </div>
-      </form>
 
-  {/* Modal-based preview */}
+       
+        </div>):('')} 
+          
+
+      </form>
+</div></div>
       <Modal show={showPreview} onClose={() => setShowPreview(false)} title="Invoice Preview">
         <InvoicePrintView formikValues={formik.values} lineItems={lineItems} isTaxInvoice={isTaxInvoice} id={id} fields={fields} />
         <div className="mt-3 d-flex justify-content-end">
@@ -298,4 +251,4 @@ if(id)
   );
 }
 
-export default Invoice;
+export default AddInvoice;

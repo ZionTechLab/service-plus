@@ -11,7 +11,7 @@ import Inquary from "./pages/Inquary";
 import AddInquary from "./pages/Inquary/AddInquary";
 import InquiryView from "./pages/Inquary/InquiryView";
 import Invoice from "./pages/Invoice";
-import AddInvoice from "./pages/Invoice/Invoice";
+import AddInvoice from "./pages/Invoice/AddInvoice";
 import DailyReportIndex from "./pages/DailyReport";
 import AddDailyReport from "./pages/DailyReport/AddReport";
 import Dashboard from "./pages/Dashboard";
