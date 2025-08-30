@@ -29,6 +29,9 @@ export const FieldsRenderer = ({ fields, formik, components = {}, inputProps = {
       {Object.keys(fields).map((key) => {
         const field = fields[key];
         // Built-in support for partner-select
+        if(field?.type === 'br') {
+          return (<div style={{height: '0px'}}><br/></div>  );
+        }
         if (field?.type === 'partner-select') {
           return (
             <SelectedBusinessPartnerBox
